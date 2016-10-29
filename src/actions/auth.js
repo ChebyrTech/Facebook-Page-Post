@@ -1,4 +1,3 @@
-import * as Config from '../config';
 import { error } from './general';
 
 /**
