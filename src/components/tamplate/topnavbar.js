@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Navbar, Nav, NavDropdown, MenuItem } from 'react-bootstrap';
 import * as A from '../../actions/auth';
-import * as Config from '../../config';
 
 class TopNavbar extends Component {
 
