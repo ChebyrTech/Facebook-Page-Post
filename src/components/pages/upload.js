@@ -1,14 +1,12 @@
 import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
-import { connect } from 'react-redux';
-import * as G from '../../actions/general';
 import * as P from '../../actions/photos';
 import { Modal, Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 
 class Upload extends React.Component {
 
   hide = () => {
-    this.props.dispatch(G.uploadHide());
+    this.props.dispatch(P.uploadHide());
   };
 
   upload = () => {
@@ -57,15 +55,9 @@ class Upload extends React.Component {
   }
 }
 
-
 Upload.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  show: PropTypes.bool.isRequired,
 };
 
-function mapStateToProps(state) {
-  return {
-    show: state.general.uploadShow,
-  };
-}
-
-export default connect(mapStateToProps)(Upload);
+export default Upload;

@@ -2,11 +2,13 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import rootReducer from '../reducers';
+import { hashHistory } from 'react-router'
+import { routerMiddleware } from 'react-router-redux'
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const finalCreateStore = composeEnhancers(
-  applyMiddleware(thunk, logger())
+  applyMiddleware(thunk, logger(), routerMiddleware(hashHistory))
   //DevTools.instrument()
 )(createStore);
 

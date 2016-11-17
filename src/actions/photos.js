@@ -1,4 +1,4 @@
-import { error } from './general';
+import * as G from './general';
 import { postImage } from '../helpers/fb-upload';
 
 /**
@@ -10,7 +10,7 @@ export function loadPhotos() {
     FB.api('/' + Config.FACEBOOK_PAGE_ID + '/photos',
       {fields: 'images, name', type: 'uploaded', limit: Config.PHOTOS_LIMIT}, (result) => {
         if (result.error) {
-          dispatch(error(result.error.message));
+          dispatch(G.error(result.error.message));
         } else {
           dispatch({
             type: 'LOAD_PHOTOS_OK',
@@ -32,7 +32,7 @@ export function upload({image, description}) {
   return (dispatch, getState) => {
 
     if ( ! getState().auth.page.access_token) {
-      dispatch(error('Page access token is not loaded'));
+      dispatch(G.error('Page access token is not loaded'));
 
       return;
     }
@@ -51,7 +51,7 @@ export function upload({image, description}) {
         dispatch(loadPhotos());
       },
       error: (response) => {
-        dispatch(error(response.message));
+        dispatch(G.error(response.message));
       }
     });
 
@@ -59,4 +59,18 @@ export function upload({image, description}) {
       type: 'UPLOAD_PHOTO',
     });
   }
+}
+
+/**
+ * Show upload window
+ */
+export function uploadShow() {
+  return { type: 'UPLOAD_SHOW' };
+}
+
+/**
+ * Hide upload window
+ */
+export function uploadHide() {
+  return { type: 'UPLOAD_HIDE' };
 }

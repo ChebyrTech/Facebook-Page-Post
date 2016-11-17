@@ -3,13 +3,16 @@ import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import App from './app';
+import Routes from './routes';
+import { hashHistory } from 'react-router';
+import { syncHistoryWithStore } from 'react-router-redux';
 import configureStore from './store/configure';
 
 const store = configureStore();
+const history = syncHistoryWithStore(hashHistory, store);
 
 ReactDOM.render(
   <Provider store={store}>
-      <App />
+    <Routes history={history} />
   </Provider>
   , document.getElementById('root'));

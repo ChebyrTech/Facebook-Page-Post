@@ -1,6 +1,6 @@
 
 /**
- * Trigger error
+ * Show error
  */
 export function error(message) {
   return dispatch => {
@@ -21,15 +21,18 @@ export function error(message) {
 }
 
 /**
- * Show upload window
+ * Show notification
  */
-export function uploadShow() {
-  return { type: 'UPLOAD_SHOW' };
-}
-
-/**
- * Hide upload window
- */
-export function uploadHide() {
-  return { type: 'UPLOAD_HIDE' };
+export function notify(message) {
+  return dispatch => {
+    if (message) {
+      dispatch({
+        type: 'GROWLER__SHOW',
+        growler: {
+          text: message,
+          type: 'growler--success',
+        }
+      });
+    }
+  }
 }

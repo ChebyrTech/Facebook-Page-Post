@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import PhotosPage from '../pages/photos';
-import LoginPage from '../pages/login';
-import TopNavbar from './topnavbar';
+import TopNavbar from './_blocks/topnavbar';
 import Spinner from 'react-spinkit';
+import { GrowlerContainer } from 'flash-notification-react-redux';
 
 class Template extends Component {
   render() {
@@ -11,7 +10,7 @@ class Template extends Component {
       <div>
         <TopNavbar />
         <div className="container">
-          {this.props.user ? <PhotosPage /> : <LoginPage />}
+          {this.props.children}
         </div>
         <div className={'main-spinner' + (this.props.loading ? ' active' : '')}>
           <div className="middle">
@@ -20,6 +19,7 @@ class Template extends Component {
             </div>
           </div>
         </div>
+        <GrowlerContainer />
       </div>
     );
   }

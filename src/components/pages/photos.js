@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import * as P from '../../actions/photos';
-import * as G from '../../actions/general';
 import Photo from './photos/photo';
 import Masonry from 'react-masonry-component';
 import Upload from './upload';
@@ -22,7 +21,7 @@ class Photos extends React.Component {
 
   upload = (e) => {
     e.preventDefault();
-    this.props.dispatch(G.uploadShow());
+    this.props.dispatch(P.uploadShow());
 
   };
 
@@ -82,9 +81,9 @@ class Photos extends React.Component {
           disableImagesLoaded={false} // default false
           updateOnEachImageLoad={true} // default false and works only if disableImagesLoaded is false
         >
-        {this.renderPhotos()}
+          {this.renderPhotos()}
         </Masonry>
-        <Upload />
+        <Upload show={this.props.uploadShow} dispatch={this.props.dispatch} />
       </div>
     );
   }
@@ -92,11 +91,14 @@ class Photos extends React.Component {
 
 Photos.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  photos: PropTypes.array.isRequired,
+  uploadShow: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
-    photos: state.photos.photos
+    photos: state.photos.photos,
+    uploadShow: state.photos.uploadShow,
   };
 }
 

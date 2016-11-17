@@ -1,4 +1,5 @@
-import { error } from './general';
+import * as G from './general';
+import { push } from 'react-router-redux';
 
 /**
  * Login status
@@ -18,6 +19,7 @@ export function loginStatus() {
       FB.getLoginStatus((response) => {
 
         if (response.status === 'connected') {
+          dispatch({type: 'LOADING'});
           // Logged into your app and Facebook.
           FB.api('/me', { fields: 'id, name' }, (user) => {
             dispatch({
@@ -26,10 +28,11 @@ export function loginStatus() {
             });
 
             dispatch(loadPage());
+            dispatch(push('/photos'));
           });
         } else {
           // Failed to login
-          dispatch(error('Failed to login'));
+          dispatch(G.notify('Please login'));
         }
 
       });
@@ -59,10 +62,11 @@ export function login() {
           }));
 
           dispatch(loadPage());
+          dispatch(push('/photos'));
         });
       } else {
         // Failed to login
-        dispatch(error('Failed to login.'));
+        dispatch(G.error('Failed to login.'));
       }
 
     }, { scope: 'public_profile, email, user_photos, publish_actions, manage_pages, publish_pages' });
@@ -87,6 +91,8 @@ export function logout() {
     dispatch({
       type: 'LOGOUT'
     });
+
+    dispatch(push('/'));
   };
 }
 
@@ -97,7 +103,7 @@ export function loadPage() {
   return dispatch => {
     FB.api('/' + Config.FACEBOOK_PAGE_ID + '/', { fields: 'name, access_token' }, (response) => {
       if (response.error) {
-        dispatch(error(response.error.message));
+        dispatch(G.error(response.error.message));
       } else {
         dispatch(dispatch({
           type: 'LOAD_PAGE_OK',
@@ -105,7 +111,7 @@ export function loadPage() {
         }));
 
         if ( ! response.access_token) {
-          dispatch(error('Can\'t get page access_token, please check for manage_pages and publish_pages permissions.'))
+          dispatch(G.error('Can\'t get page access_token, please check for manage_pages and publish_pages permissions.'))
         }
       }
     });
