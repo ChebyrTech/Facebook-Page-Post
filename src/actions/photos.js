@@ -8,7 +8,7 @@ export function loadPhotos() {
   return (dispatch, getState) => {
 
     FB.api('/' + Config.FACEBOOK_PAGE_ID + '/photos',
-      {fields: 'images, name', type: 'uploaded', limit: Config.PHOTOS_LIMIT}, (result) => {
+      {fields: 'images, name, permalink_url', type: 'uploaded', limit: Config.PHOTOS_LIMIT}, (result) => {
         if (result.error) {
           dispatch(G.error(result.error.message));
         } else {

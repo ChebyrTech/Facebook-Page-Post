@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import * as P from '../../actions/photos';
 import Photo from './photos/photo';
+import EmbeddedPhoto from './photos/embedded-photo';
 import Masonry from 'react-masonry-component';
 import Upload from './upload';
 
@@ -40,12 +41,18 @@ class Photos extends React.Component {
         || (photo.name && photo.name.toLowerCase().indexOf(this.state.filterText.toLowerCase()) !== -1);
     });
 
+    console.log(photos)
+
     if ( ! photos.length) {
       return (<div className="col-xs-12">No photos</div>);
     }
 
+    // return photos.map((photo) => {
+    //   return <Photo photo={photo} key={photo.id} />;
+    // });
+
     return photos.map((photo) => {
-      return <Photo photo={photo} key={photo.id} />;
+      return <EmbeddedPhoto photo={photo} key={photo.id} />;
     });
   }
 
