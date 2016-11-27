@@ -19,6 +19,7 @@
  */
 .middle { width: 100%; height: 100%; display: table; }
 .middle .middle-inner { width: 100%; height: 100%; display: table-cell; vertical-align: middle; text-align: center; }
+.embed-responsive-1by1 { padding-bottom: 100%; }
 
 /**
  * Fixes
@@ -26,3 +27,7 @@
 .thumbnail .caption{ text-overflow: ellipsis; overflow: hidden; }
 .btn{ line-height: 1.42858; }
 .input-group-btn:last-child > .btn, .input-group-btn:last-child > .btn-group { margin-left: -2px; }
+
+.fb_iframe_widget { width: 100%; }
+.fb_iframe_widget span{ width: 100% !important; }
+.fb_iframe_widget iframe { width: 100% !important; }

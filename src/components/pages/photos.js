@@ -35,6 +35,10 @@ class Photos extends React.Component {
     this.props.dispatch(P.loadPhotos());
   }
 
+  componentDidUpdate() {
+    FB.XFBML.parse();
+  }
+
   renderPhotos() {
     const photos = this.props.photos.filter((photo) => {
       return ! this.state.filterText
