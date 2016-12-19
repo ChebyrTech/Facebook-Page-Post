@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import TopNavbar from './_blocks/topnavbar';
+import TopNavbar from './partials/topnavbar';
 import Spinner from 'react-spinkit';
 import { GrowlerContainer } from 'flash-notification-react-redux';
 
@@ -31,7 +31,6 @@ Template.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    user: state.auth.user,
     loading: state.general.loading,
   };
 }

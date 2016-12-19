@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import * as P from '../../actions/photos';
-import Photo from './photos/photo';
-import EmbeddedPhoto from './photos/embedded-photo';
+import * as P from '../../../actions/fb-photos';
+import Photo from './partials/photo';
+import EmbeddedPhoto from './partials/embedded-photo';
 import Masonry from 'react-masonry-component';
 import Upload from './upload';
 
@@ -17,12 +17,12 @@ class Photos extends React.Component {
 
   refresh = (e) => {
     e.preventDefault();
-    this.props.dispatch(P.loadPhotos());
+    this.props.dispatch(P.fbLoadPhotos());
   };
 
   upload = (e) => {
     e.preventDefault();
-    this.props.dispatch(P.uploadShow());
+    this.props.dispatch(P.fbUploadShow());
 
   };
 
@@ -32,11 +32,11 @@ class Photos extends React.Component {
   };
 
   componentDidMount() {
-    this.props.dispatch(P.loadPhotos());
+    this.props.dispatch(P.fbLoadPhotos());
   }
 
   componentDidUpdate() {
-    FB.XFBML.parse();
+    // FB.XFBML.parse();
   }
 
   renderPhotos() {
@@ -45,19 +45,17 @@ class Photos extends React.Component {
         || (photo.name && photo.name.toLowerCase().indexOf(this.state.filterText.toLowerCase()) !== -1);
     });
 
-    console.log(photos)
-
     if ( ! photos.length) {
       return (<div className="col-xs-12">No photos</div>);
     }
 
-    // return photos.map((photo) => {
-    //   return <Photo photo={photo} key={photo.id} />;
-    // });
-
     return photos.map((photo) => {
-      return <EmbeddedPhoto photo={photo} key={photo.id} />;
+      return <Photo photo={photo} key={photo.id} />;
     });
+
+    // return photos.map((photo) => {
+    //   return <EmbeddedPhoto photo={photo} key={photo.id} />;
+    // });
   }
 
   render() {
@@ -108,8 +106,8 @@ Photos.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    photos: state.photos.photos,
-    uploadShow: state.photos.uploadShow,
+    photos: state.fb.photos.photos,
+    uploadShow: state.fb.photos.uploadShow,
   };
 }
 

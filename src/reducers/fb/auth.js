@@ -12,22 +12,22 @@ const initialState = {
 export function auth(state = initialState, action) {
   switch (action.type) {
 
-    case 'LOGIN_STATUS_OK':
+    case 'FB_LOGIN_STATUS_OK':
       return merge({}, state, initialState, {
         user: action.user,
       });
 
-    case 'LOGIN_OK':
+    case 'FB_LOGIN_OK':
       return merge({}, state, {
         user: action.user,
       });
 
-    case 'LOGOUT_OK':
+    case 'FB_LOGOUT_OK':
       return merge({}, state, {
         user: null,
       });
 
-    case 'LOAD_PAGE_OK':
+    case 'FB_LOAD_PAGE_OK':
       return merge({}, state, {
         page: action.page,
       });

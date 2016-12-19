@@ -1,14 +1,12 @@
 import { combineReducers } from 'redux';
 import { routerReducer as routing } from 'react-router-redux';
-import { auth } from './auth';
+import fb from './fb/index';
 import { general } from './general';
-import { photos } from './photos';
 import { GrowlerReducer } from 'flash-notification-react-redux';
 
 export default combineReducers({
   routing,
-  auth,
   general,
-  photos,
+  fb,
   growler: GrowlerReducer,
 });

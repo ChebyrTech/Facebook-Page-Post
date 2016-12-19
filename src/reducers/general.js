@@ -8,17 +8,17 @@ export function general(state = initialState, action) {
   switch (action.type) {
 
     case 'LOADING':
-    case 'LOGIN':
-    case 'LOAD_PHOTOS':
-    case 'UPLOAD_PHOTO':
+    case 'FB_LOGIN':
+    case 'FB_LOAD_PHOTOS':
+    case 'FB_UPLOAD_PHOTO':
       return merge({}, state, { loading: true });
 
     case 'STOP_LOADING':
     case 'ERROR':
-    case 'LOGIN_STATUS_OK':
-    case 'LOGIN_OK':
-    case 'LOAD_PHOTOS_OK':
-    case 'UPLOAD_PHOTO_OK':
+    case 'FB_LOGIN_STATUS_OK':
+    case 'FB_LOGIN_OK':
+    case 'FB_LOAD_PHOTOS_OK':
+    case 'FB_UPLOAD_PHOTO_OK':
       return merge({}, state, { loading: false });
 
     default: return state;

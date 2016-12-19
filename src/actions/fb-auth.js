@@ -4,43 +4,32 @@ import { push } from 'react-router-redux';
 /**
  * Login status
  */
-export function loginStatus() {
+export function fbLoginStatus() {
   return dispatch => {
 
-    window.fbAsyncInit = function() {
+    FB.getLoginStatus((response) => {
 
-      FB.init({
-        appId: Config.FACEBOOK_APP_ID,
-        cookie: true,  // enable cookies to allow the server to access
-        xfbml: true,  // parse social plugins on this page
-        version: 'v2.8'
-      });
-
-      FB.getLoginStatus((response) => {
-
-        if (response.status === 'connected') {
-          dispatch({type: 'LOADING'});
-          // Logged into your app and Facebook.
-          FB.api('/me', { fields: 'id, name' }, (user) => {
-            dispatch({
-              type: 'LOGIN_STATUS_OK',
-              user
-            });
-
-            dispatch(loadPage());
-            dispatch(push('/photos'));
+      if (response.status === 'connected') {
+        dispatch({type: 'LOADING'});
+        // Logged into your app and Facebook.
+        FB.api('/me', { fields: 'id, name' }, (user) => {
+          dispatch({
+            type: 'FB_LOGIN_STATUS_OK',
+            user
           });
-        } else {
-          // Failed to login
-          dispatch(G.notify('Please login'));
-        }
 
-      });
+          dispatch(fbLoadPage());
+          dispatch(push('/fb/photos'));
+        });
+      } else {
+        // Failed to login
+        dispatch(G.notify('Please login'));
+      }
 
-    }.bind(this);
+    });
 
     dispatch({
-      type: 'LOGIN_STATUS',
+      type: 'FB_LOGIN_STATUS',
     });
   };
 }
@@ -48,8 +37,9 @@ export function loginStatus() {
 /**
  * Login
  */
-export function login() {
+export function fbLogin() {
   return dispatch => {
+
     FB.login((response) => {
 
       if (response.authResponse) {
@@ -57,12 +47,12 @@ export function login() {
         FB.api('/me', { fields: 'id, name' }, (user) => {
           user.accessToken = response.authResponse.accessToken;
           dispatch(dispatch({
-            type: 'LOGIN_OK',
+            type: 'FB_LOGIN_OK',
             user,
           }));
 
-          dispatch(loadPage());
-          dispatch(push('/photos'));
+          dispatch(fbLoadPage());
+          dispatch(push('/fb/photos'));
         });
       } else {
         // Failed to login
@@ -72,7 +62,7 @@ export function login() {
     }, { scope: 'public_profile, email, user_photos, publish_actions, manage_pages, publish_pages' });
 
     dispatch({
-      type: 'LOGIN'
+      type: 'FB_LOGIN'
     });
   };
 }
@@ -80,16 +70,17 @@ export function login() {
 /**
  * Logout
  */
-export function logout() {
+export function fbLogout() {
   return dispatch => {
+
     FB.logout(function(response) {
       dispatch({
-        type: 'LOGOUT_OK'
+        type: 'FB_LOGOUT_OK'
       });
     });
 
     dispatch({
-      type: 'LOGOUT'
+      type: 'FB_LOGOUT'
     });
 
     dispatch(push('/'));
@@ -99,14 +90,15 @@ export function logout() {
 /**
  * Load page data
  */
-export function loadPage() {
+export function fbLoadPage() {
   return dispatch => {
+
     FB.api('/' + Config.FACEBOOK_PAGE_ID + '/', { fields: 'name, access_token' }, (response) => {
       if (response.error) {
         dispatch(G.error(response.error.message));
       } else {
         dispatch(dispatch({
-          type: 'LOAD_PAGE_OK',
+          type: 'FB_LOAD_PAGE_OK',
           page: response,
         }));
 
@@ -117,7 +109,7 @@ export function loadPage() {
     });
 
     dispatch({
-      type: 'LOAD_PAGE',
+      type: 'FB_LOAD_PAGE',
     });
   };
 }

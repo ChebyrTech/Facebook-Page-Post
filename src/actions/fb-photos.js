@@ -4,7 +4,7 @@ import { postImage } from '../helpers/fb-upload';
 /**
  * Load photos
  */
-export function loadPhotos() {
+export function fbLoadPhotos() {
   return (dispatch, getState) => {
 
     FB.api('/' + Config.FACEBOOK_PAGE_ID + '/photos',
@@ -13,14 +13,14 @@ export function loadPhotos() {
           dispatch(G.error(result.error.message));
         } else {
           dispatch({
-            type: 'LOAD_PHOTOS_OK',
+            type: 'FB_LOAD_PHOTOS_OK',
             photos: result.data,
           });
         }
       });
 
     dispatch({
-      type: 'LOAD_PHOTOS',
+      type: 'FB_LOAD_PHOTOS',
     });
   }
 }
@@ -28,7 +28,7 @@ export function loadPhotos() {
 /**
  * Upload photo
  */
-export function upload({image, description}) {
+export function fbUploadPhoto({image, description}) {
   return (dispatch, getState) => {
 
     if ( ! getState().auth.page.access_token) {
@@ -44,11 +44,11 @@ export function upload({image, description}) {
       description,
       success: (result) => {
         dispatch({
-          type: 'UPLOAD_PHOTO_OK',
+          type: 'FB_UPLOAD_PHOTO_OK',
         });
 
         dispatch({type: 'UPLOAD_HIDE'});
-        dispatch(loadPhotos());
+        dispatch(fbLoadPhotos());
       },
       error: (response) => {
         dispatch(G.error(response.message));
@@ -56,7 +56,7 @@ export function upload({image, description}) {
     });
 
     dispatch({
-      type: 'UPLOAD_PHOTO',
+      type: 'FB_UPLOAD_PHOTO',
     });
   }
 }
@@ -64,13 +64,13 @@ export function upload({image, description}) {
 /**
  * Show upload window
  */
-export function uploadShow() {
-  return { type: 'UPLOAD_SHOW' };
+export function fbUploadShow() {
+  return { type: 'FB_UPLOAD_SHOW' };
 }
 
 /**
  * Hide upload window
  */
-export function uploadHide() {
-  return { type: 'UPLOAD_HIDE' };
+export function fbUploadHide() {
+  return { type: 'FB_UPLOAD_HIDE' };
 }

@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
-import * as P from '../../actions/photos';
+import * as P from '../../../actions/fb-photos';
 import { Modal, Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 
 class Upload extends React.Component {
 
   hide = () => {
-    this.props.dispatch(P.uploadHide());
+    this.props.dispatch(P.fbUploadHide());
   };
 
   upload = () => {
@@ -16,7 +16,7 @@ class Upload extends React.Component {
       reader.onload = function (e) {
         var contents = e.target.result;
         // Fire Action
-        this.props.dispatch(P.upload({
+        this.props.dispatch(P.fbUploadPhoto({
           image: new Blob([contents], { type: file.type }),
           description: ReactDOM.findDOMNode(this.refs.description).value || '',
         }));
