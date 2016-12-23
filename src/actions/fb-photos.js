@@ -31,7 +31,7 @@ export function fbLoadPhotos() {
 export function fbUploadPhoto({image, description}) {
   return (dispatch, getState) => {
 
-    if ( ! getState().auth.page.access_token) {
+    if ( ! getState().fb.auth.page.access_token) {
       dispatch(G.error('Page access token is not loaded'));
 
       return;
@@ -39,7 +39,7 @@ export function fbUploadPhoto({image, description}) {
 
     postImage({
       apiUrl: '/' + Config.FACEBOOK_PAGE_ID + '/photos',
-      accessToken: getState().auth.page.access_token,
+      accessToken: getState().fb.auth.page.access_token,
       image,
       description,
       success: (result) => {
@@ -47,7 +47,7 @@ export function fbUploadPhoto({image, description}) {
           type: 'FB_UPLOAD_PHOTO_OK',
         });
 
-        dispatch({type: 'UPLOAD_HIDE'});
+        dispatch({type: 'FB_UPLOAD_HIDE'});
         dispatch(fbLoadPhotos());
       },
       error: (response) => {
