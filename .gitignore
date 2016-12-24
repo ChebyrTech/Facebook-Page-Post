@@ -1,2 +1,9 @@
+.gitignore
+package.json
 /.idea/
 node_modules/
+/.vs/Facebook-Page-Post/v14/.suo
+/Facebook-Page-Post.sln
+/Facebook-Page-Post.njsproj
+/dist/bundle.js.map
+/dist/vendor.js.map
