@@ -1,9 +1,18 @@
-.gitignore
-package.json
+# IDE specific files
 /.idea/
-node_modules/
-/.vs/Facebook-Page-Post/v14/.suo
-/Facebook-Page-Post.sln
+/.vs/
 /Facebook-Page-Post.njsproj
+/Facebook-Page-Post.sln
+
+# Generated files
+/dist/bundle.js
+/dist/vendor.js
 /dist/bundle.js.map
 /dist/vendor.js.map
+
+# Facebook app specific configuration
+/dist/config.js
+
+# Temporarily manual update during development till dependencies versions are frozen
+package.json
+node_modules/
