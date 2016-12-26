@@ -12,7 +12,7 @@ const store = configureStore();
 const history = syncHistoryWithStore(hashHistory, store);
 
 ReactDOM.render(
-  <Provider store={store}>
-    <Routes history={history} />
-  </Provider>
-  , document.getElementById('root'));
+    <Provider store={store}>
+        <Routes history={history} />
+    </Provider>
+    , document.getElementById('root'));

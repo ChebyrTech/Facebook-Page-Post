@@ -3,14 +3,14 @@ import { Link } from 'react-router';
 
 export default class AboutUs extends React.Component {
 
-  render() {
-    return (
-      <div>
-        <h1>About us page</h1>
-        <hr/>
-        <p>This is an example page</p>
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div>
+                <h1>About us page</h1>
+                <hr/>
+                <p>This is an example page</p>
+            </div>
+        );
+    }
 }
 

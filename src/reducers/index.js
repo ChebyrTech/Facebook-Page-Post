@@ -5,8 +5,8 @@ import { general } from './general';
 import { GrowlerReducer } from 'flash-notification-react-redux';
 
 export default combineReducers({
-  routing,
-  general,
-  fb,
-  growler: GrowlerReducer,
+    routing,
+    general,
+    fb,
+    growler: GrowlerReducer,
 });

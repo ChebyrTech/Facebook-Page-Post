@@ -6,9 +6,9 @@ import { routerMiddleware } from 'react-router-redux'
 
 
 const finalCreateStore = compose(
-  applyMiddleware(thunk, routerMiddleware(hashHistory))
+    applyMiddleware(thunk, routerMiddleware(hashHistory))
 )(createStore);
 
 export default function configureStore(initialState) {
-  return finalCreateStore(rootReducer, initialState);
+    return finalCreateStore(rootReducer, initialState);
 }

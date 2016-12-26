@@ -12,47 +12,47 @@ import AboutUs from './components/pages/about-us';
 
 class Routes extends Component {
 
-  shouldComponentUpdate() {
-    // Disable component re-render caused by redux state change (Routes are static)
-    return false;
-  }
-
-  checkFbAuth = (nextState, replace) => {
-    if ( ! this.props.fb_user) {
-      replace('/fb/');
+    shouldComponentUpdate() {
+        // Disable component re-render caused by redux state change (Routes are static)
+        return false;
     }
-  };
 
-  render() {
-    return (
-      <Router history={this.props.history}>
-        <Route path="/" component={Template}>
-          <IndexRoute component={Home} />
-          <Route path="about-us" component={AboutUs} />
+    checkFbAuth = (nextState, replace) => {
+        if (!this.props.fb_user) {
+            replace('/fb/');
+        }
+    };
 
-          <Route path="fb" component={FbParent}>
-            <IndexRoute component={LoginPage} />
-            <Route path="privacy-policy" component={FbPrivacyPolicy} />
-            <Route path="photos" component={PhotosPage} onEnter={this.checkFbAuth}  />
-          </Route>
+    render() {
+        return (
+            <Router history={this.props.history}>
+                <Route path="/" component={Template}>
+                    <IndexRoute component={Home} />
+                    <Route path="about-us" component={AboutUs} />
 
-          <Route path='*' component={Page404} />
-        </Route>
-      </Router>
-    );
-  }
+                    <Route path="fb" component={FbParent}>
+                        <IndexRoute component={LoginPage} />
+                        <Route path="privacy-policy" component={FbPrivacyPolicy} />
+                        <Route path="photos" component={PhotosPage} onEnter={this.checkFbAuth}  />
+                    </Route>
+
+                    <Route path='*' component={Page404} />
+                </Route>
+            </Router>
+        );
+    }
 }
 
 Routes.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  user: PropTypes.object,
-  history: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    user: PropTypes.object,
+    history: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
-  return {
-    fb_user: state.fb.auth.user,
-  };
+    return {
+        fb_user: state.fb.auth.user,
+    };
 }
 
 export default connect(mapStateToProps)(Routes);

@@ -5,34 +5,34 @@ import Spinner from 'react-spinkit';
 import { GrowlerContainer } from 'flash-notification-react-redux';
 
 class Template extends Component {
-  render() {
-    return (
-      <div>
-        <TopNavbar />
-        <div className="container">
-          {this.props.children}
-        </div>
-        <div className={'main-spinner' + (this.props.loading ? ' active' : '')}>
-          <div className="middle">
-            <div className="middle-inner">
-              <Spinner spinnerName='three-bounce' noFadeIn />
+    render() {
+        return (
+            <div>
+                <TopNavbar />
+                <div className="container">
+                    {this.props.children}
+                </div>
+                <div className={'main-spinner' + (this.props.loading ? ' active' : '') }>
+                    <div className="middle">
+                        <div className="middle-inner">
+                            <Spinner spinnerName='three-bounce' noFadeIn />
+                        </div>
+                    </div>
+                </div>
+                <GrowlerContainer />
             </div>
-          </div>
-        </div>
-        <GrowlerContainer />
-      </div>
-    );
-  }
+        );
+    }
 }
 
 Template.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
-  return {
-    loading: state.general.loading,
-  };
+    return {
+        loading: state.general.loading,
+    };
 }
 
 export default connect(mapStateToProps)(Template);
