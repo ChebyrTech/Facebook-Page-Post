@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import * as A from '../../../actions/fb/auth';
+import * as A from '../../../store/actions/fb/auth';
 import { Link } from 'react-router';
 
 class Login extends React.Component {

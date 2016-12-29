@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import * as I from '../../../actions/fb/init';
-import * as A from '../../../actions/fb/auth';
+import * as I from '../../../store/actions/fb/init';
+import * as A from '../../../store/actions/fb/auth';
 import { push } from 'react-router-redux';
 
 class FbParent extends Component {

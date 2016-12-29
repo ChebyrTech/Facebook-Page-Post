@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Navbar, Nav, NavDropdown, MenuItem } from 'react-bootstrap';
-import * as A from '../../../actions/fb/auth';
+import * as A from '../../../store/actions/fb/auth';
 import { LinkContainer, IndexLinkContainer } from 'react-router-bootstrap';
 
 class TopNavbar extends Component {

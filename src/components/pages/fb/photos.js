@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import * as P from '../../../actions/fb/photos';
+import * as P from '../../../store/actions/fb/photos';
 import Photo from './partials/photo';
 import EmbeddedPhoto from './partials/embedded-photo';
 import Masonry from 'react-masonry-component';

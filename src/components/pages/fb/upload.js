@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
-import * as P from '../../../actions/fb/photos';
+import * as P from '../../../store/actions/fb/photos';
 import { Modal, Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 
 class Upload extends React.Component {

@@ -1,14 +1,15 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Router, Route, IndexRoute } from 'react-router';
-import PhotosPage from './components/pages/fb/photos';
-import LoginPage from './components/pages/fb/login';
-import Template from './components/template/template';
-import Home from './components/pages/home';
-import FbParent from './components/pages/fb/fb-parent';
-import Page404 from './components/pages/page404';
-import FbPrivacyPolicy from './components/pages/fb/privacy-policy';
-import AboutUs from './components/pages/about-us';
+
+import PhotosPage from './pages/fb/photos';
+import LoginPage from './pages/fb/login';
+import Template from './template/template';
+import Home from './pages/home';
+import FbParent from './pages/fb/fb-parent';
+import Page404 from './pages/page404';
+import FbPrivacyPolicy from './pages/fb/privacy-policy';
+import AboutUs from './pages/about-us';
 
 class Routes extends Component {
 
