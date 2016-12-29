@@ -1,5 +1,5 @@
-import * as G from './general';
-import { postImage } from '../helpers/fb-upload';
+import * as G from '../general';
+//import { postImage } from 'fb-upload';
 
 /**
  * Load photos

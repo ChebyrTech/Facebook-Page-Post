@@ -1,12 +1,13 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import thunk from 'redux-thunk';
+import sagaMiddleware from 'redux-saga';
+import rootSaga from '../sagas';
 import rootReducer from '../reducers';
 import { hashHistory } from 'react-router'
 import { routerMiddleware } from 'react-router-redux'
 
 
 const finalCreateStore = compose(
-    applyMiddleware(thunk, routerMiddleware(hashHistory))
+    applyMiddleware(sagaMiddleware(rootSaga), routerMiddleware(hashHistory))
 )(createStore);
 
 export default function configureStore(initialState) {

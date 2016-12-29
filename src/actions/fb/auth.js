@@ -1,4 +1,4 @@
-import * as G from './general';
+import * as G from '../general';
 import { push } from 'react-router-redux';
 
 /**
