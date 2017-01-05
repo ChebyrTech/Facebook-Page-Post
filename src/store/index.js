@@ -1,39 +1,40 @@
-﻿import { createStore, applyMiddleware, compose } from 'redux';
+﻿import React from 'react';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import { hashHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import { routerMiddleware } from 'react-router-redux'
-import sagaMiddleware from 'redux-saga';
+import createSagaMiddleware from 'redux-saga';
 import logger from 'redux-logger';
 
 import rootSaga from './sagas';
 import rootReducer from './reducers';
 import Routes from '../components/routes';
 
-class Store {
+export default class StoreClass {
     constructor() {
-        this.store = configureStore();
-        this.history = syncHistoryWithStore(hashHistory, store);
+        this.sagaMiddleware = createSagaMiddleware();
+        if (process.env.NODE_ENV === 'production') {
+            this.configureProd();
+        }
+        else {
+            this.configureDev();
+        }
+        this.sagaMiddleware.run(rootSaga);
+
+        this.history = syncHistoryWithStore(hashHistory, this.store);
 
         this.provider = (
-            <Provider store={store}>
-            <Routes history={history} />
+            <Provider store={this.store}>
+            <Routes history={this.history} />
             </Provider>)
             ;
     }
 
-    configureStore(initialState) {
-        if (process.env.NODE_ENV === 'production') {
-            return configureProd(initialState);
-        } else {
-            return configureDev(initialState);
-        }
-    }
-
-    configureDev(initialState) {
+    configureDev() {
         const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-        store = createStore(rootReducer, applyMiddleware(sagaMiddleware(rootSaga), logger(), routerMiddleware(hashHistory)));
+        this.store = createStore(rootReducer, applyMiddleware(this.sagaMiddleware, logger(), routerMiddleware(hashHistory)));
 
         if (module.hot) {
             // Enable Webpack hot module replacement for reducers
@@ -42,15 +43,13 @@ class Store {
                 store.replaceReducer(nextRootReducer);
             });
         }
-
     }
 
-    configureProd(initialState) {
-        store = createStore(rootReducer, applyMiddleware(sagaMiddleware(rootSaga), routerMiddleware(hashHistory)));
-        return store;
+    configureProd() {
+        this.store = createStore(rootReducer, applyMiddleware(this.sagaMiddleware, routerMiddleware(hashHistory)));
     }
 
     getProvider() {
-        return provider;
+        return this.provider;
     }
 }

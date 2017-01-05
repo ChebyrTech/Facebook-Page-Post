@@ -4,6 +4,9 @@ export const LOADING = 'LOADING';
 export const STOP_LOADING = 'STOP_LOADING';
 export const ERROR = 'ERROR';
 
+
+export const FB_LOAD_SDK = 'FB_LOAD_SDK';
+
 export const FB_INIT = 'FB_INIT';
 export const FB_INIT_OK = 'FB_INIT_OK';
 

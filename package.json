@@ -10,7 +10,6 @@
   "author": "Vedmant <vedmant@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "babel-loader": "^6.2.10",
     "babel-polyfill": "^6.20.0",
     "es6-promise": "^3.3.1",
     "flash-notification-react-redux": "^1.0.5",

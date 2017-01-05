@@ -1,5 +1,7 @@
-﻿import facebookSaga from './fb';
+﻿import {fork} from 'redux-saga/effects';
 import { browserHistory } from 'react-router';
+import facebookSaga from './fb';
+
 
 // the middleware support for passing multiple sagas is a just a convenience. 
 // If you need to control top Sagas (like cancelling them) you should use a single root Saga.
@@ -13,6 +15,6 @@ export default function* rootSaga() {
 }
 
 // path = '/chat'
-function navigateTo(path) {
+function* navigateTo(path) {
     yield apply(browserHistory, browserHistory.push, [path]);
 }

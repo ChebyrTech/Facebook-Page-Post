@@ -4,18 +4,18 @@ import React from 'react';
 import {Component} from 'react';
 import ReactDOM from 'react-dom';
 
-import Store from './store';
+import StoreClass from './store';
 
 export default class App extends Component {
 
     constructor() {
         super();
 
-        this.storeclass = new Store();
+        this.storeclass = new StoreClass();
     }
 
     render() {
-        return ReactDOM.render(storeclass.getProvider(), document.getElementById('root'));
+        return ReactDOM.render(this.storeclass.getProvider(), document.getElementById('root'));
     }
 }
 

@@ -15,15 +15,15 @@ class Routes extends Component {
 
     constructor() {
         super();
-        const HOME = '/';
-        const FACEBOOK_HOME = '/fb/';
+        this.HOME = '/';
+        this.FACEBOOK_HOME = '/fb/';
 
-        const FACEBOOK_CHILD = 'fb';
-        const FACEBOOK_PRIVACY_POLICY = 'privacy-policy';
-        const FACEBOOK_PHOTOS = 'photos';
+        this.FACEBOOK_CHILD = 'fb';
+        this.FACEBOOK_PRIVACY_POLICY = 'privacy-policy';
+        this.FACEBOOK_PHOTOS = 'photos';
 
-        const ABOUT_US = 'about-us';
-        const UNKNOWN = '*';
+        this.ABOUT_US = 'about-us';
+        this.UNKNOWN = '*';
     }
 
     shouldComponentUpdate() {
@@ -40,17 +40,17 @@ class Routes extends Component {
     render() {
         return (
             <Router history={this.props.history}>
-                <Route path= {HOME} component={Template}>
+                <Route path= {this.HOME} component={Template}>
                     <IndexRoute component={Home} />
-                    <Route path={ABOUT_US} component={AboutUs} />
+                    <Route path={this.ABOUT_US} component={AboutUs} />
 
-                    <Route path={FACEBOOK_CHILD} component={FbParent}>
+                    <Route path={this.FACEBOOK_CHILD} component={FbParent}>
                         <IndexRoute component={LoginPage} />
-                        <Route path={FACEBOOK_PRIVACY_POLICY} component={FbPrivacyPolicy} />
-                        <Route path={FACEBOOK_PHOTOS} component={PhotosPage} onEnter={this.checkFbAuth}  />
+                        <Route path={this.FACEBOOK_PRIVACY_POLICY} component={FbPrivacyPolicy} />
+                        <Route path={this.FACEBOOK_PHOTOS} component={PhotosPage} onEnter={this.checkFbAuth}  />
                     </Route>
 
-                    <Route path={UNKNOWN} component={Page404} />
+                    <Route path={this.UNKNOWN} component={Page404} />
                 </Route>
             </Router>
         );

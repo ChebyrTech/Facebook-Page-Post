@@ -1,6 +1,6 @@
 ﻿import Facebook from 'api/facebook';
 
-export function* initSaga() {
+export default function* initSaga() {
     Facebook.loadSDK();
 
     // Wait till Facebook SDK is Loaded
