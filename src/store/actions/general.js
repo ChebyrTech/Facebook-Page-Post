@@ -15,7 +15,7 @@ export function error(message) {
         }
 
         dispatch({
-            type: 'ERROR',
+            type: A.ERROR,
         });
     }
 }

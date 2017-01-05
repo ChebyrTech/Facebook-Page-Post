@@ -1,10 +1,9 @@
-﻿import { combineSagas } from 'redux-saga';
-import { init } from './init';
-import { auth } from './auth';
-import { photos } from './photos';
-
-export default combineSagas({
-    init,
-    auth,
-    photos,
-});
+﻿
+// setup multiple watchers on the same place
+export default function* facebookSaga() {
+    yield [
+        takeEvery(ActionTypes.FB_LOAD_SDK, initSaga),
+        takeEvery("ANOTHER_ACTION", authSaga),
+        takeEvery("ANOTHER_ACTION", photosSaga),
+    ];
+}

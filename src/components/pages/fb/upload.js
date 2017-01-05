@@ -1,25 +1,24 @@
 import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
-import * as P from '../../../store/actions/fb/photos';
+import * as PhotoActions from 'store/actions/fb/photos';
 import { Modal, Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
 class Upload extends React.Component {
 
-    hide = () => {
-        this.props.dispatch(P.fbUploadHide());
-    };
-
-    upload = () => {
+    upload () {
         const file = ReactDOM.findDOMNode(this.refs.photo).files[0];
+        const description = ReactDOM.findDOMNode(this.refs.description).value || '';
         if (file) {
             const reader = new FileReader();
             reader.onload = function (e) {
                 var contents = e.target.result;
                 // Fire Action
-                this.props.dispatch(P.fbUploadPhoto({
+                PhotoActions.fbUploadPhoto({
                     image: new Blob([contents], { type: file.type }),
-                    description: ReactDOM.findDOMNode(this.refs.description).value || '',
-                }));
+                    description: description,
+                });
 
             }.bind(this);
             reader.readAsArrayBuffer(file);
@@ -28,7 +27,7 @@ class Upload extends React.Component {
 
     render() {
         return (
-            <Modal show={this.props.show} onHide={this.hide}>
+            <Modal show={this.props.show} onHide={PhotoActions.fbUploadHide()}>
                 <Modal.Header>
                     <Modal.Title>New Photo</Modal.Title>
                 </Modal.Header>
@@ -46,7 +45,7 @@ class Upload extends React.Component {
                 </Modal.Body>
 
                 <Modal.Footer>
-                    <Button onClick={this.hide}>Close</Button>
+                    <Button onClick={PhotoActions.fbUploadHide()}>Close</Button>
                     <Button bsStyle="primary" onClick={this.upload}>Upload</Button>
                 </Modal.Footer>
 
@@ -60,4 +59,13 @@ Upload.propTypes = {
     show: PropTypes.bool.isRequired,
 };
 
-export default Upload;
+function mapStateToProps(state) {
+    return {
+    }
+}
+
+function mapActionCreatorsToProps(dispatch) {
+    return bindActionCreators(PhotoActions, dispatch);
+}
+
+export default connect(mapStateToProps, mapActionCreatorsToProps)(Upload)

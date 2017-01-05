@@ -42,7 +42,13 @@ module.exports = {
     context: __dirname,
 
     entry: {
-        app: ['./src/index.js'],
+        app: [
+            // Set up an ES6-ish environment
+            'babel-polyfill',
+
+            // Add your application's scripts below
+            './src/index.js'
+        ],
         vendor: [
             'react',
             'react-dom',
@@ -64,13 +70,16 @@ module.exports = {
 
     resolve: {
         extensions: ['', '.js', '.jsx'],
+        root: [
+            path.resolve('./src')
+        ]
     },
 
     module: {
         loaders: [
             {
                 test: /\.jsx?$/,
-                loaders: DEBUG ? ['react-hot', 'babel'] : ['babel'],
+                loaders: DEBUG ? ['react-hot', 'babel-loader'] : ['babel-loader'],
                 include: [
                     path.resolve(__dirname, 'src'),
                     path.resolve(__dirname, 'node_modules/flash-notification-react-redux')

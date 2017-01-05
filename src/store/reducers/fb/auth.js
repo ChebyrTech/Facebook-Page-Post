@@ -1,4 +1,5 @@
 import merge from 'lodash/merge';
+import * as ActionTypes from 'store/actions/types';
 
 const initialState = {
     user: null,
@@ -12,22 +13,22 @@ const initialState = {
 export function auth(state = initialState, action) {
     switch (action.type) {
 
-        case 'FB_LOGIN_STATUS_OK':
+        case ActionTypes.FB_LOGIN_STATUS_OK:
             return merge({}, state, initialState, {
                 user: action.user,
             });
 
-        case 'FB_LOGIN_OK':
+        case ActionTypes.FB_LOGIN_OK:
             return merge({}, state, {
                 user: action.user,
             });
 
-        case 'FB_LOGOUT_OK':
+        case ActionTypes.FB_LOGOUT_OK:
             return merge({}, state, {
                 user: null,
             });
 
-        case 'FB_LOAD_PAGE_OK':
+        case ActionTypes.FB_LOAD_PAGE_OK:
             return merge({}, state, {
                 page: action.page,
             });

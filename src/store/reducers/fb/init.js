@@ -1,5 +1,6 @@
 ﻿import * as G from './general';
 import { push } from 'react-router-redux';
+import * as ActionTypes from 'store/actions/types';
 
 /**
  * Login status
@@ -14,7 +15,7 @@ export function fbInit() {
                 // Logged into your app and Facebook.
                 FB.api('/me', { fields: 'id, name' }, (user) => {
                     dispatch({
-                        type: 'FB_INIT_OK',
+                        type: ActionTypes.FB_INIT_OK,
                         user
                     });
 
@@ -29,7 +30,7 @@ export function fbInit() {
         });
 
         dispatch({
-            type: 'FB_INIT',
+            type: ActionTypes.FB_INIT,
         });
     };
 }

@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import * as P from '../../../store/actions/fb/photos';
+import ActionCreator from 'store/actions/creator';
 import Photo from './partials/photo';
 import EmbeddedPhoto from './partials/embedded-photo';
 import Masonry from 'react-masonry-component';
@@ -15,24 +15,24 @@ class Photos extends React.Component {
         };
     }
 
-    refresh = (e) => {
+    refresh (e) {
         e.preventDefault();
-        this.props.dispatch(P.fbLoadPhotos());
+        dispatch(ActionCreator.fbLoadPhotos());
     };
 
-    upload = (e) => {
+    upload (e) {
         e.preventDefault();
-        this.props.dispatch(P.fbUploadShow());
+        dispatch(ActionCreator.fbUploadShow());
 
     };
 
-    filter = (e) => {
+    filter (e) {
         e.preventDefault();
         this.setState({ filterText: this.refs.filter.value })
     };
 
     componentDidMount() {
-        this.props.dispatch(P.fbLoadPhotos());
+        dispatch(ActionCreator.fbLoadPhotos());
     }
 
     componentDidUpdate() {
@@ -111,4 +111,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(Photos);
+export default connect(mapStateToProps)(Photos)

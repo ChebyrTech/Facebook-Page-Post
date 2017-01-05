@@ -1,4 +1,5 @@
 import * as G from '../general';
+import ActionCreator from 'store/actions/creator';
 //import { postImage } from 'fb-upload';
 
 /**
@@ -12,16 +13,11 @@ export function fbLoadPhotos() {
                 if (result.error) {
                     dispatch(G.error(result.error.message));
                 } else {
-                    dispatch({
-                        type: 'FB_LOAD_PHOTOS_OK',
-                        photos: result.data,
-                    });
+                    dispatch(ActionCreator.fbLoadPhotosOK(result.data));
                 }
             });
 
-        dispatch({
-            type: 'FB_LOAD_PHOTOS',
-        });
+        dispatch(ActionCreator.fbLoadPhotos());
     }
 }
 
@@ -43,11 +39,9 @@ export function fbUploadPhoto({image, description}) {
             image,
             description,
             success: (result) => {
-                dispatch({
-                    type: 'FB_UPLOAD_PHOTO_OK',
-                });
+                dispatch(ActionCreator.fbUploadPhotoOK());
 
-                dispatch({ type: 'FB_UPLOAD_HIDE' });
+                dispatch(ActionCreator.fbUploadHide());
                 dispatch(fbLoadPhotos());
             },
             error: (response) => {
@@ -55,22 +49,7 @@ export function fbUploadPhoto({image, description}) {
             }
         });
 
-        dispatch({
-            type: 'FB_UPLOAD_PHOTO',
-        });
+        dispatch(ActionCreator.fbUploadPhoto());
     }
 }
 
-/**
- * Show upload window
- */
-export function fbUploadShow() {
-    return { type: 'FB_UPLOAD_SHOW' };
-}
-
-/**
- * Hide upload window
- */
-export function fbUploadHide() {
-    return { type: 'FB_UPLOAD_HIDE' };
-}

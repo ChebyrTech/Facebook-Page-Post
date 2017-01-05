@@ -1,13 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Navbar, Nav, NavDropdown, MenuItem } from 'react-bootstrap';
-import * as A from '../../../store/actions/fb/auth';
+import ActionCreator from 'store/actions/creator';
 import { LinkContainer, IndexLinkContainer } from 'react-router-bootstrap';
 
 class TopNavbar extends Component {
 
-    logoout = () => {
-        this.props.dispatch(A.fbLogout());
+    logoout () {
+        this.props.dispatch(ActionCreator.fbLogout());
     };
 
     render() {

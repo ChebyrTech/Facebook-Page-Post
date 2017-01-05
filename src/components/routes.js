@@ -13,31 +13,44 @@ import AboutUs from './pages/about-us';
 
 class Routes extends Component {
 
+    constructor() {
+        super();
+        const HOME = '/';
+        const FACEBOOK_HOME = '/fb/';
+
+        const FACEBOOK_CHILD = 'fb';
+        const FACEBOOK_PRIVACY_POLICY = 'privacy-policy';
+        const FACEBOOK_PHOTOS = 'photos';
+
+        const ABOUT_US = 'about-us';
+        const UNKNOWN = '*';
+    }
+
     shouldComponentUpdate() {
         // Disable component re-render caused by redux state change (Routes are static)
         return false;
     }
 
-    checkFbAuth = (nextState, replace) => {
+    checkFbAuth (nextState, replace) {
         if (!this.props.fb_user) {
-            replace('/fb/');
+            replace(FACEBOOK_HOME);
         }
     };
 
     render() {
         return (
             <Router history={this.props.history}>
-                <Route path="/" component={Template}>
+                <Route path= {HOME} component={Template}>
                     <IndexRoute component={Home} />
-                    <Route path="about-us" component={AboutUs} />
+                    <Route path={ABOUT_US} component={AboutUs} />
 
-                    <Route path="fb" component={FbParent}>
+                    <Route path={FACEBOOK_CHILD} component={FbParent}>
                         <IndexRoute component={LoginPage} />
-                        <Route path="privacy-policy" component={FbPrivacyPolicy} />
-                        <Route path="photos" component={PhotosPage} onEnter={this.checkFbAuth}  />
+                        <Route path={FACEBOOK_PRIVACY_POLICY} component={FbPrivacyPolicy} />
+                        <Route path={FACEBOOK_PHOTOS} component={PhotosPage} onEnter={this.checkFbAuth}  />
                     </Route>
 
-                    <Route path='*' component={Page404} />
+                    <Route path={UNKNOWN} component={Page404} />
                 </Route>
             </Router>
         );
