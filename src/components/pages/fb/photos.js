@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import ActionCreator from 'store/actions/creator';
+import FacebookActions from 'store/actions/facebook';
 import Photo from './partials/photo';
 import EmbeddedPhoto from './partials/embedded-photo';
 import Masonry from 'react-masonry-component';
@@ -17,12 +17,12 @@ class Photos extends React.Component {
 
     refresh (e) {
         e.preventDefault();
-        dispatch(ActionCreator.fbLoadPhotos());
+        dispatch(FacebookActions.fbLoadPhotos());
     };
 
     upload (e) {
         e.preventDefault();
-        dispatch(ActionCreator.fbUploadShow());
+        dispatch(FacebookActions.fbUploadShow());
 
     };
 
@@ -32,7 +32,7 @@ class Photos extends React.Component {
     };
 
     componentDidMount() {
-        dispatch(ActionCreator.fbLoadPhotos());
+        dispatch(FacebookActions.fbLoadPhotos());
     }
 
     componentDidUpdate() {

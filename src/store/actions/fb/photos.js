@@ -1,5 +1,5 @@
 import * as G from '../general';
-import ActionCreator from 'store/actions/creator';
+import FacebookActions from 'store/actions/facebook';
 //import { postImage } from 'fb-upload';
 
 /**
@@ -13,11 +13,11 @@ export function fbLoadPhotos() {
                 if (result.error) {
                     dispatch(G.error(result.error.message));
                 } else {
-                    dispatch(ActionCreator.fbLoadPhotosOK(result.data));
+                    dispatch(FacebookActions.fbLoadPhotosOK(result.data));
                 }
             });
 
-        dispatch(ActionCreator.fbLoadPhotos());
+        dispatch(FacebookActions.fbLoadPhotos());
     }
 }
 
@@ -39,9 +39,9 @@ export function fbUploadPhoto({image, description}) {
             image,
             description,
             success: (result) => {
-                dispatch(ActionCreator.fbUploadPhotoOK());
+                dispatch(FacebookActions.fbUploadPhotoOK());
 
-                dispatch(ActionCreator.fbUploadHide());
+                dispatch(FacebookActions.fbUploadHide());
                 dispatch(fbLoadPhotos());
             },
             error: (response) => {
@@ -49,7 +49,7 @@ export function fbUploadPhoto({image, description}) {
             }
         });
 
-        dispatch(ActionCreator.fbUploadPhoto());
+        dispatch(FacebookActions.fbUploadPhoto());
     }
 }
 

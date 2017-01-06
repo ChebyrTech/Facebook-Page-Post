@@ -1,5 +1,5 @@
 ﻿
-export class Facebook {
+export default class Facebook {
 
     static loadSDK() {
         (function (d, s, id) {

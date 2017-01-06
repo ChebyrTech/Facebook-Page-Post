@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import ActionCreator from 'store/actions/creator';
+import FacebookActions from 'store/actions/facebook';
 
 import { push } from 'react-router-redux';
 
@@ -10,7 +10,7 @@ class FbParent extends Component {
 
         if (!this.props.user) {
             // Initialie FB SDK and check login
-            dispatch(ActionCreator.loadFacebookSDK());
+            this.props.dispatch(FacebookActions.loadFacebookSDK());
         }
         else {
             // Redirect to photos

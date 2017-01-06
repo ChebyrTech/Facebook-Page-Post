@@ -14,8 +14,11 @@ export default class App extends Component {
         this.storeclass = new StoreClass();
     }
 
-    render() {
-        return ReactDOM.render(this.storeclass.getProvider(), document.getElementById('root'));
+    render()
+    {
+        const provider = this.storeclass.getProvider();
+        const docRoot = document.getElementById('root');
+        return ReactDOM.render(provider, docRoot);
     }
 }
 

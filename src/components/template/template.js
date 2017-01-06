@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import TopNavbar from './partials/topnavbar';
 import Spinner from 'react-spinkit';
-import { GrowlerContainer } from 'flash-notification-react-redux';
+import Notifs from './Notifs';
 
 class Template extends Component {
     render() {
@@ -19,7 +19,7 @@ class Template extends Component {
                         </div>
                     </div>
                 </div>
-                <GrowlerContainer />
+                <Notifs/>
             </div>
         );
     }

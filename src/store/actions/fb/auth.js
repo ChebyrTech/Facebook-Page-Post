@@ -1,5 +1,5 @@
 import * as G from '../general';
-import ActionCreator from 'store/actions/creator';
+import FacebookActions from 'store/actions/facebook';
 import { push } from 'react-router-redux';
 
 /**
@@ -13,7 +13,7 @@ export function fbLoginStatus() {
 
         });
 
-        dispatch(ActionCreator.fbLoginStatus());
+        dispatch(FacebookActions.fbLoginStatus());
     };
 }
 
@@ -29,7 +29,7 @@ export function fbLogin() {
                 // If logged in successfully, get user data
                 FB.api('/me', { fields: 'id, name' }, (user) => {
                     user.accessToken = response.authResponse.accessToken;
-                    dispatch(dispatch(ActionCreator.fbLoginOK(user)));
+                    dispatch(dispatch(FacebookActions.fbLoginOK(user)));
 
                     dispatch(fbLoadPage());
                     dispatch(push('/fb/photos'));
@@ -41,7 +41,7 @@ export function fbLogin() {
 
         }, { scope: 'public_profile, email, user_photos, publish_actions, manage_pages, publish_pages' });
 
-        dispatch(ActionCreator.fbLogin());
+        dispatch(FacebookActions.fbLogin());
     };
 }
 
@@ -56,7 +56,7 @@ export function fbLoadPage() {
             if (response.error) {
                 dispatch(G.error(response.error.message));
             } else {
-                dispatch(dispatch(ActionCreator.fbLoadPageOK()));
+                dispatch(dispatch(FacebookActions.fbLoadPageOK()));
 
                 if (!response.access_token) {
                     dispatch(G.error('Can\'t get page access_token, please check for manage_pages and publish_pages permissions.'))
@@ -64,6 +64,6 @@ export function fbLoadPage() {
             }
         });
 
-        dispatch(ActionCreator.fbLoadPage());
+        dispatch(FacebookActions.fbLoadPage());
     };
 }

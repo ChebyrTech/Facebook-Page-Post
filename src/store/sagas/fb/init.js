@@ -1,13 +1,15 @@
-﻿import Facebook from 'api/facebook';
+﻿import {call, put, delay} from 'redux-saga/effects';
+import Facebook from 'api/facebook';
 
 export default function* initSaga() {
+    // Load Facebook SDK asynchronously
     Facebook.loadSDK();
 
     // Wait till Facebook SDK is Loaded
     while (!Facebook.isSDKLoaded())
         yield call(delay, 500);
 
-    yield put(ActionCreator.fbInit());
+    yield put(FacebookActions.fbInit());
 
     // Initialize Facebook app
     Facebook.initialize();
@@ -16,7 +18,7 @@ export default function* initSaga() {
     while (!Facebook.apiKeyValid())
         yield call(delay, 500);
 
-    yield put(ActionCreator.fbLoginStatus());
+    yield put(FacebookActions.fbLoginStatus());
 
     yield* fbGetLoginStatus();
 }

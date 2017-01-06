@@ -1,20 +1,20 @@
 ﻿import {put, take} from 'redux-saga/effects';
 import * as ActionTypes from 'store/actions/types';
-import ActionCreator from 'store/actions/creator';
+import FacebookActions from 'store/actions/facebook';
 import Facebook from 'api/facebook';
 
 export function* fbGetLoginStatus() {
     response = yield call(Facebook, Facebook.getLoginStatus());
 
     if (response.status === 'connected') {
-        yield put(ActionCreator.fbLoading());
+        yield put(FacebookActions.fbLoading());
 
         // Logged into your app and Facebook.
 
         user = yield call(Facebook, Facebook.getUserProfile());
 
         if (user) {
-            yield put(ActionCreator.fbLoginStatusOK(user));
+            yield put(FacebookActions.fbLoginStatusOK(user));
 
             yield put(fbLoadPage());
             yield put(push('/fb/photos'));
@@ -34,7 +34,7 @@ export function* watchForLoginStatus() {
 
         var response = Facebook.logout();
         if (response) {
-            yield put(ActionCreator.fbLogoutOK(response));
+            yield put(FacebookActions.fbLogoutOK(response));
             yield put(push('/'));
         }
     }
@@ -46,7 +46,7 @@ export function* watchForLogin() {
 
         var response = Facebook.logout();
         if (response) {
-            yield put(ActionCreator.fbLogoutOK(response));
+            yield put(FacebookActions.fbLogoutOK(response));
             yield put(push('/'));
         }
     }
@@ -59,7 +59,7 @@ export function* watchForLogout() {
         var response = Facebook.logout();
         if(response)
         {
-            yield put(ActionCreator.fbLogoutOK(response));
+            yield put(FacebookActions.fbLogoutOK(response));
             yield put(push('/'));
         }
     }

@@ -27,4 +27,9 @@ export const FB_LOAD_PAGE_OK = 'FB_LOAD_PAGE_OK';
 export const FB_UPLOAD_SHOW = 'FB_UPLOAD_SHOW';
 export const FB_UPLOAD_HIDE = 'FB_UPLOAD_HIDE';
 
+// Notifications
+export const NOTIF_SEND = 'NOTIF_SEND';
+export const NOTIF_DISMISS = 'NOTIF_DISMISS';
+export const NOTIF_CLEAR = 'NOTIF_CLEAR';
+
 

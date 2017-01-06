@@ -1,6 +1,7 @@
 ﻿import {fork} from 'redux-saga/effects';
 import { browserHistory } from 'react-router';
 import facebookSaga from './fb';
+import notifySaga from './notify';
 
 
 // the middleware support for passing multiple sagas is a just a convenience. 
@@ -9,7 +10,7 @@ import facebookSaga from './fb';
 export default function* rootSaga() {
     yield [
         fork(facebookSaga),
-        //fork(secondSaga),
+        fork(notifySaga),
         //fork(thirdSaga),
     ];
 }
