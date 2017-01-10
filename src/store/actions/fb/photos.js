@@ -1,6 +1,6 @@
 import * as G from '../general';
 import FacebookActions from 'store/actions/facebook';
-// import { postImage } from 'fb-upload';
+import { postImage } from './upload';
 
 /**
  * Load photos
@@ -28,8 +28,10 @@ export function fbLoadPhotos() {
  * Upload photo
  */
 export function fbUploadPhoto({ image, description }) {
-    return (dispatch, getState) => {
-        if (!getState().fb.auth.page.access_token) {
+    return (dispatch, getState) =>
+    {
+        if (!getState().fb.auth.page.access_token)
+        {
             dispatch(G.error('Page access token is not loaded'));
 
             return;
@@ -40,18 +42,20 @@ export function fbUploadPhoto({ image, description }) {
             accessToken: getState().fb.auth.page.access_token,
             image,
             description,
-            success: (result) => {
+            success: (result) =>
+            {
                 dispatch(FacebookActions.fbUploadPhotoOK());
 
                 dispatch(FacebookActions.fbUploadHide());
                 dispatch(fbLoadPhotos());
             },
-            error: (response) => {
+            error: (response) =>
+            {
                 dispatch(G.error(response.message));
-            }
+            },
         });
 
         dispatch(FacebookActions.fbUploadPhoto());
-    }
+    };
 }
 

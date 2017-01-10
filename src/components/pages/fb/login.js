@@ -4,20 +4,22 @@ import FacebookActions from 'store/actions/facebook';
 
 import { Link } from 'react-router';
 
-class Login extends React.Component {
-
-    login(e) {
+class Login extends React.Component
+{
+    login(e)
+    {
         e.preventDefault();
         this.props.dispatch(FacebookActions.fbLogin());
     }
 
-    render() {
+    render()
+    {
         return (
             <div>
                 <h1>Login</h1>
                 <hr />
                 <p>
-                    <a href="#" className="btn btn-primary" onClick={(e) => { this.login(e) }}>Login with Facebook</a>
+                    <a href="#" className="btn btn-primary" onClick={(e) => { this.login(e); }}>Login with Facebook</a>
                 </p>
                 <p>
                     <Link to="/fb/privacy-policy">Privacy Policy</Link>

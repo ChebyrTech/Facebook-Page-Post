@@ -6,7 +6,7 @@ const initialState = {
     page: {
         id: null,
         name: null,
-        access_token: null
+        access_token: null,
     },
 };
 

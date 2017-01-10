@@ -63,7 +63,7 @@ class Photos extends React.Component {
         return (
             <div>
                 <h1>Photos</h1>
-                <hr/>
+                <hr />
                 <div className="row">
                     <div className="col-sm-4">
                         <a href="#" className="btn btn-default" onClick={this.refresh}>Refresh</a>
@@ -85,12 +85,12 @@ class Photos extends React.Component {
                     </div>
                 </div>
 
-                <hr/>
+                <hr />
                 <Masonry
                     className={'row'} // default ''
-                    disableImagesLoaded={false} // default false
-                    updateOnEachImageLoad={true} // default false and works only if disableImagesLoaded is false
-                    >
+                    disableImagesLoaded="false" // default false
+                    updateOnEachImageLoad="true" // default false and works only if disableImagesLoaded is false
+                >
                     {this.renderPhotos() }
                 </Masonry>
                 <Upload show={this.props.uploadShow} dispatch={this.props.dispatch} />
@@ -112,4 +112,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(Photos)
+export default connect(mapStateToProps)(Photos);

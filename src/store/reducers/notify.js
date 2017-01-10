@@ -18,7 +18,7 @@ export default function notifs(state = initialState, action)
         case ActionTypes.NOTIF_DISMISS:
             return state.filter(notif =>
             {
-                notif.id !== action.payload
+                return (notif.id !== action.payload);
             });
         case ActionTypes.NOTIF_CLEAR:
             return [];

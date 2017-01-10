@@ -4,10 +4,10 @@ import FacebookActions from 'store/actions/facebook';
 
 import { push } from 'react-router-redux';
 
-class FbParent extends Component {
-
-    componentDidMount() {
-
+class FbParent extends Component
+{
+    componentDidMount()
+    {
         if (!this.props.user) {
             // Initialie FB SDK and check login
             this.props.dispatch(FacebookActions.loadFacebookSDK());
@@ -31,6 +31,7 @@ class FbParent extends Component {
 FbParent.propTypes = {
     dispatch: PropTypes.func.isRequired,
     user: PropTypes.object,
+    children: PropTypes.object,
 };
 
 function mapStateToProps(state) {

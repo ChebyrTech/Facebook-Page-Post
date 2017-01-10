@@ -12,7 +12,7 @@ export function notifSend(id, message, kind, dismissAfter)
     {
         payload.id = new Date().getTime();
     }
-    dispatch({ type: ActionTypes.NOTIF_SEND, payload });
+    return { type: ActionTypes.NOTIF_SEND, payload };
 }
 
 /**

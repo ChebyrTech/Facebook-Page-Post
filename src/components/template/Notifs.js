@@ -4,7 +4,7 @@ import TransitionGroup from 'react-addons-css-transition-group';
 import Notif from './Notif';
 
 // This checks to see if object is immutable and properly access it
-const getter = (obj, propName) => (obj.get ? obj.get(propName) : obj[propName]);
+const getter = (obj, propName) => { return (obj.get ? obj.get(propName) : obj[propName]); };
 
 class Notifs extends Component
 {
@@ -14,32 +14,32 @@ class Notifs extends Component
 
         const transitionEnterTimeout = 600;
         const transitionLeaveTimeout = 600;
-        const classes = `notif__container`;
+        const classes = 'notif__container';
     }
 
     render()
     {
-        let notifications = this.props.notifications;
+        const notifications = this.props.notifications;
         const renderedNotifications = notifications.map((notification) =>
         {
             return (
                 <Notif
-                    {...props}
+                    {...this.props}
                     key={getter(notification, 'id') }
                     id={getter(notification, 'id') }
                     message={getter(notification, 'message') }
                     kind={getter(notification, 'kind') }
-                    />
+                />
             );
         });
 
         return (
             <div className={this.classes} >
                 <TransitionGroup
-                    transitionName='notif-transition'
+                    transitionName="notif-transition"
                     transitionEnterTimeout={600}
                     transitionLeaveTimeout={600}
-                    >
+                >
                     {renderedNotifications}
                 </TransitionGroup>
             </div>

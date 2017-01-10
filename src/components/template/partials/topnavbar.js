@@ -6,9 +6,9 @@ import { LinkContainer, IndexLinkContainer } from 'react-router-bootstrap';
 
 class TopNavbar extends Component {
 
-    logoout () {
+    logoout() {
         this.props.dispatch(FacebookActions.fbLogout());
-    };
+    }
 
     render() {
         return (

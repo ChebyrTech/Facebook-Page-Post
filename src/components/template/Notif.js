@@ -3,35 +3,35 @@ import { connect } from 'react-redux';
 
 class Notif extends Component
 {
-    //const = ({ kind, actionLabel, onActionClick, id, message }) =>
+    // const = ({ kind, actionLabel, onActionClick, id, message }) =>
 
     handleActionClick(ev)
     {
         ev.preventDefault();
 
-        if (!onActionClick)
+        if (!this.onActionClick)
         {
             return;
         }
 
-        onActionClick(this.id);
-    };
+        this.onActionClick(this.id);
+    }
 
     render()
     {
         return (
-            <div className = 'notif {this.kind}'>
-                <div className='notif__icon'/>
-                <div className= 'notif__content'>
-                    <span className='{notif__message}' > { this.message }</span >
+            <div className = "notif {this.kind}">
+                <div className="notif__icon" />
+                <div className= "notif__content">
+                    <span className="{notif__message}" > { this.message }</span >
                 </div >
 
                 {this.actionLabel &&
-                    <span className='notif__action'>
+                    <span className="notif__action">
                         <button onClick={this.handleActionClick}>{this.actionLabel}</button>
                     </span>
                 }
-                <div className='notif__close'/>
+                <div className="notif__close" />
             </div>
         );
     }

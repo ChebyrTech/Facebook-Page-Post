@@ -40,5 +40,3 @@ export const FB_UPLOAD_HIDE = 'FB_UPLOAD_HIDE';
 export const NOTIF_SEND = 'NOTIF_SEND';
 export const NOTIF_DISMISS = 'NOTIF_DISMISS';
 export const NOTIF_CLEAR = 'NOTIF_CLEAR';
-
-

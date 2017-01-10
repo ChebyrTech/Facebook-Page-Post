@@ -2,17 +2,30 @@
   "parser": "babel-eslint",
   "extends": "airbnb",
   "globals": {
-    "__DEV__": true
+    "__DEV__": true,
+    "FB": true,
+    "Config": true
   },
   "rules": {
-    "indent": "off",
-    "no-unused-vars": "off",
-    "brace-style": "off",
     "arrow-body-style": [ "error", "always" ],
+    "brace-style": "off",
+    "indent": "off",
+    "jsx-quotes": [ 2, "prefer-double" ],
+    "max-len": [
+      2,
+      200,
+      4,
+      { "ignoreUrls": true }
+    ],
     "no-console": "off",
+    "no-param-reassign": [
+      2,
+      { "props": false }
+    ],
+    "no-unused-vars": "off",
+    "prefer-template": "off",
     "react/jsx-quotes": 0,
-    "jsx-quotes": [2, "prefer-double"],
-    "max-len": [2, 200, 4, {"ignoreUrls": true}],
-    "no-param-reassign": [2, {"props": false}]
+    "react/jsx-indent-props": 0,
+    "react/prefer-stateless-function": 0
   }
 }

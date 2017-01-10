@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 export default class Photo extends React.Component {
     render() {
-        var photo = this.props.photo;
-
-        var src = photo.images[0].source;
+        const photo = this.props.photo;
+        const src = photo.images[0].source;
 
         return (
             <div className="photo-item col-xs-6 col-md-3">
@@ -16,3 +15,7 @@ export default class Photo extends React.Component {
         );
     }
 }
+
+Photo.propTypes = {
+    photo: PropTypes.object.isRequired,
+};
