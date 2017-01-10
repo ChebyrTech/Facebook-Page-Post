@@ -7,6 +7,12 @@ export default class FacebookActions {
         return { type: ActionTypes.FB_LOAD_SDK, };
     }
 
+    // Load FB SDK asynchronously
+    static facebookSDKLoaded()
+    {
+        return { type: ActionTypes.FB_LOAD_SDK_OK, };
+    }
+
     static fbInit() {
         return { type: ActionTypes.FB_INIT, };
     }
@@ -21,6 +27,31 @@ export default class FacebookActions {
 
     static fbLoginStatusOK(user) {
         return { type: ActionTypes.FB_LOGIN_STATUS_OK, user };
+    }
+
+    static fbUserConnected()
+    {
+        return { type: ActionTypes.FB_USER_CONNECTED, };
+    }
+
+    static fbUserNotAuthorized()
+    {
+        return { type: ActionTypes.FB_LOGIN_STATUS_OK, };
+    }
+
+    static fbUserUnknown()
+    {
+        return { type: ActionTypes.FB_LOGIN_STATUS_OK, };
+    }
+
+    static userProfileRequest()
+    {
+        return { type: ActionTypes.FB_USER_PROFILE_REQ };
+    }
+
+    static userProfileReceived()
+    {
+        return { type: ActionTypes.FB_USER_PROFILE_OK };
     }
 
     static fbLogin() {

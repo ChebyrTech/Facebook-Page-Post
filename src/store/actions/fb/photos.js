@@ -1,32 +1,34 @@
 import * as G from '../general';
 import FacebookActions from 'store/actions/facebook';
-//import { postImage } from 'fb-upload';
+// import { postImage } from 'fb-upload';
 
 /**
  * Load photos
  */
 export function fbLoadPhotos() {
-    return (dispatch, getState) => {
-
+    return (dispatch, getState) =>
+    {
         FB.api('/' + Config.FACEBOOK_PAGE_ID + '/photos',
-            { fields: 'images, name, permalink_url', type: 'uploaded', limit: Config.PHOTOS_LIMIT }, (result) => {
-                if (result.error) {
+            { fields: 'images, name, permalink_url', type: 'uploaded', limit: Config.PHOTOS_LIMIT }, (result) =>
+            {
+                if (result.error)
+                {
                     dispatch(G.error(result.error.message));
-                } else {
+                } else
+                {
                     dispatch(FacebookActions.fbLoadPhotosOK(result.data));
                 }
             });
 
         dispatch(FacebookActions.fbLoadPhotos());
-    }
+    };
 }
 
 /**
  * Upload photo
  */
-export function fbUploadPhoto({image, description}) {
+export function fbUploadPhoto({ image, description }) {
     return (dispatch, getState) => {
-
         if (!getState().fb.auth.page.access_token) {
             dispatch(G.error('Page access token is not loaded'));
 

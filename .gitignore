@@ -1,6 +1,8 @@
 # IDE specific files
 /.idea/
 /.vs/
+/bin
+/obj/Debug
 /Facebook-Page-Post.njsproj
 /Facebook-Page-Post.sln
 
@@ -13,6 +15,5 @@
 # Facebook app specific configuration
 /dist/config.js
 
-# Temporarily manual update during development till dependencies versions are frozen
-package.json
+# Node modules
 node_modules/

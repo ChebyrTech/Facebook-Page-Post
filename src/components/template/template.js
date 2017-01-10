@@ -15,11 +15,11 @@ class Template extends Component {
                 <div className={'main-spinner' + (this.props.loading ? ' active' : '') }>
                     <div className="middle">
                         <div className="middle-inner">
-                            <Spinner spinnerName='three-bounce' noFadeIn />
+                            <Spinner spinnerName="three-bounce" noFadeIn />
                         </div>
                     </div>
                 </div>
-                <Notifs/>
+                <Notifs />
             </div>
         );
     }
@@ -27,6 +27,8 @@ class Template extends Component {
 
 Template.propTypes = {
     dispatch: PropTypes.func.isRequired,
+    children: PropTypes.object,
+    loading: PropTypes.object,
 };
 
 function mapStateToProps(state) {

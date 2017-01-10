@@ -76,13 +76,15 @@ module.exports = {
     },
 
     module: {
+
         loaders: [
             {
                 test: /\.jsx?$/,
-                loaders: DEBUG ? ['react-hot', 'babel-loader'] : ['babel-loader'],
+                loaders: DEBUG ? ['react-hot', 'babel-loader', "eslint-loader"] : ['babel-loader'],
+                exclude: /node_modules/,
                 include: [
                     path.resolve(__dirname, 'src'),
-                    path.resolve(__dirname, 'node_modules/flash-notification-react-redux')
+                    //path.resolve(__dirname, 'node_modules/flash-notification-react-redux')
                 ],
             },
             { test: /\.scss$/, loader: DEBUG ? 'style!css!sass' : ExtractTextPlugin.extract('css!sass') },
@@ -108,6 +110,10 @@ module.exports = {
         contentBase: './dist',
         hot: true,
         inline: true,
+    },
+
+    eslint: {
+        configFile: './.eslintrc'
     },
 
     plugins: plugins,

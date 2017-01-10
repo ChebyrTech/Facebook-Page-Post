@@ -55,7 +55,9 @@ export function fbLoadPage() {
         FB.api('/' + Config.FACEBOOK_PAGE_ID + '/', { fields: 'name, access_token' }, (response) => {
             if (response.error) {
                 dispatch(G.error(response.error.message));
-            } else {
+            }
+            else
+            {
                 dispatch(dispatch(FacebookActions.fbLoadPageOK()));
 
                 if (!response.access_token) {

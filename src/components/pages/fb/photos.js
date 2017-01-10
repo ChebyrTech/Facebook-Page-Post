@@ -11,35 +11,36 @@ class Photos extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            filterText: ''
+            filterText: '',
         };
     }
 
-    refresh (e) {
-        e.preventDefault();
-        dispatch(FacebookActions.fbLoadPhotos());
-    };
-
-    upload (e) {
-        e.preventDefault();
-        dispatch(FacebookActions.fbUploadShow());
-
-    };
-
-    filter (e) {
-        e.preventDefault();
-        this.setState({ filterText: this.refs.filter.value })
-    };
-
-    componentDidMount() {
-        dispatch(FacebookActions.fbLoadPhotos());
+    componentDidMount()
+    {
+        this.dispatch(FacebookActions.fbLoadPhotos());
     }
 
-    componentDidUpdate() {
+    componentDidUpdate()
+    {
         // FB.XFBML.parse();
     }
 
-    renderPhotos() {
+    refresh(e) {
+        e.preventDefault();
+        this.dispatch(FacebookActions.fbLoadPhotos());
+    }
+
+    upload(e) {
+        e.preventDefault();
+        this.dispatch(FacebookActions.fbUploadShow());
+    }
+
+    filter(e) {
+        e.preventDefault();
+        this.setState({ filterText: this.refs.filter.value });
+    }
+
+     renderPhotos() {
         const photos = this.props.photos.filter((photo) => {
             return !this.state.filterText
                 || (photo.name && photo.name.toLowerCase().indexOf(this.state.filterText.toLowerCase()) !== -1);

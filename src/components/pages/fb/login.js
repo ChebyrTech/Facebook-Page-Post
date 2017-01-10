@@ -1,22 +1,23 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import * as A from 'store/actions/fb/auth';
+import FacebookActions from 'store/actions/facebook';
+
 import { Link } from 'react-router';
 
 class Login extends React.Component {
 
-    login (e) {
+    login(e) {
         e.preventDefault();
-        this.props.dispatch(A.fbLogin());
-    };
+        this.props.dispatch(FacebookActions.fbLogin());
+    }
 
     render() {
         return (
             <div>
                 <h1>Login</h1>
-                <hr/>
+                <hr />
                 <p>
-                    <a href="#" className="btn btn-primary" onClick={this.login}>Login with Facebook</a>
+                    <a href="#" className="btn btn-primary" onClick={(e) => { this.login(e) }}>Login with Facebook</a>
                 </p>
                 <p>
                     <Link to="/fb/privacy-policy">Privacy Policy</Link>

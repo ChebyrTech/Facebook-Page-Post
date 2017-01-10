@@ -36,9 +36,9 @@ class Notifs extends Component
         return (
             <div className={this.classes} >
                 <TransitionGroup
-                    transitionName={`notif-transition`}
-                    transitionEnterTimeout={this.transitionEnterTimeout}
-                    transitionLeaveTimeout={this.transitionLeaveTimeout}
+                    transitionName='notif-transition'
+                    transitionEnterTimeout={600}
+                    transitionLeaveTimeout={600}
                     >
                     {renderedNotifications}
                 </TransitionGroup>

@@ -3,7 +3,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import { hashHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
-import { routerMiddleware } from 'react-router-redux'
+import { routerMiddleware } from 'react-router-redux';
 import createSagaMiddleware from 'redux-saga';
 import logger from 'redux-logger';
 
@@ -11,7 +11,7 @@ import rootSaga from './sagas';
 import rootReducer from './reducers';
 import Routes from '../components/routes';
 
-export default class StoreClass {
+export default class Store {
     constructor() {
         this.sagaMiddleware = createSagaMiddleware();
         if (process.env.NODE_ENV === 'production') {
@@ -27,8 +27,9 @@ export default class StoreClass {
         this.provider = (
             <Provider store={this.store}>
             <Routes history={this.history} />
-            </Provider>)
-            ;
+            </Provider>);
+
+        window.store = this.store;
     }
 
     configureDev() {
@@ -40,7 +41,7 @@ export default class StoreClass {
             // Enable Webpack hot module replacement for reducers
             module.hot.accept('./reducers', () => {
                 const nextRootReducer = require('./reducers');
-                store.replaceReducer(nextRootReducer);
+                this.store.replaceReducer(nextRootReducer);
             });
         }
     }
