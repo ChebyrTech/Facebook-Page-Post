@@ -1,4 +1,4 @@
-﻿import * as ActionTypes from 'store/actions/types';
+﻿import * as ActionTypes from 'store/actions';
 import { takeEvery, call, put } from 'redux-saga/effects';
 import { delay } from 'redux-saga';
 

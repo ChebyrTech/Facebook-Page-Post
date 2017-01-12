@@ -1,12 +1,10 @@
 import { combineReducers } from 'redux';
 import { routerReducer as routing } from 'react-router-redux';
-import fb from './fb/index';
-import { general } from './general';
+import facebook from './facebook';
 import notify from './notify';
 
 export default combineReducers({
     routing,
-    general,
-    fb,
+    facebook,
     notify,
 });

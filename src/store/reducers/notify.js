@@ -1,4 +1,4 @@
-﻿import * as ActionTypes from 'store/actions/types';
+﻿import * as ActionTypes from 'store/actions';
 
 const initialState = {
     notifs: [],

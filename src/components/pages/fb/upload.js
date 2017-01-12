@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
-import * as PhotoActions from 'store/actions/fb/photos';
+import FacebookActions from 'store/actions/facebook';
 import { Modal, Button, FormGroup, ControlLabel, FormControl, HelpBlock } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -18,7 +18,7 @@ class Upload extends React.Component
             {
                 const contents = e.target.result;
                 // Fire Action
-                PhotoActions.fbUploadPhoto({
+                FacebookActions.fbUploadPhoto({
                     image: new Blob([contents], { type: file.type }),
                     description,
                 });
@@ -30,7 +30,7 @@ class Upload extends React.Component
     render()
     {
         return (
-            <Modal show={this.props.show} onHide={PhotoActions.fbUploadHide() }>
+            <Modal show={this.props.show} onHide={FacebookActions.fbUploadHide() }>
                 <Modal.Header>
                     <Modal.Title>New Photo</Modal.Title>
                 </Modal.Header>
@@ -48,7 +48,7 @@ class Upload extends React.Component
                 </Modal.Body>
 
                 <Modal.Footer>
-                    <Button onClick={PhotoActions.fbUploadHide() }>Close</Button>
+                    <Button onClick={FacebookActions.fbUploadHide() }>Close</Button>
                     <Button bsStyle="primary" onClick={this.upload}>Upload</Button>
                 </Modal.Footer>
 
@@ -69,7 +69,7 @@ function mapStateToProps(state)
 
 function mapActionCreatorsToProps(dispatch)
 {
-    return bindActionCreators(PhotoActions, dispatch);
+    return bindActionCreators(FacebookActions, dispatch);
 }
 
 export default connect(mapStateToProps, mapActionCreatorsToProps)(Upload);

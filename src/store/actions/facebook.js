@@ -1,4 +1,4 @@
-﻿import * as ActionTypes from 'store/actions/types';
+﻿import * as ActionTypes from 'store/actions';
 
 export default class FacebookActions
 {
@@ -21,57 +21,42 @@ export default class FacebookActions
         return { type: ActionTypes.FB_INIT_OK };
     }
 
-    static fbLoginStatus() {
-        return { type: ActionTypes.FB_LOGIN_STATUS };
-    }
-
-    static fbLoginStatusOK(user) {
-        return { type: ActionTypes.FB_LOGIN_STATUS_OK, user };
-    }
-
-    static fbUserConnected()
+    static fbUserConnected(authResponse)
     {
-        return { type: ActionTypes.FB_USER_CONNECTED };
+        return { type: ActionTypes.FB_USER_CONNECTED, authResponse };
     }
 
     static fbUserNotAuthorized()
     {
-        return { type: ActionTypes.FB_LOGIN_STATUS_OK };
+        return { type: ActionTypes.FB_USER_NOT_AUTHORIZED };
     }
 
     static fbUserUnknown()
     {
-        return { type: ActionTypes.FB_LOGIN_STATUS_OK };
+        return { type: ActionTypes.FB_USER_UNKNOWN };
     }
 
-    static userProfileRequest()
+    static getUserProfile()
     {
-        return { type: ActionTypes.FB_USER_PROFILE_REQ };
+        return { type: ActionTypes.FB_GET_USER_PROFILE };
     }
 
-    static userProfileReceived()
+    static userProfileReceived(user)
     {
-        return { type: ActionTypes.FB_USER_PROFILE_OK };
+        return { type: ActionTypes.FB_USER_PROFILE_OK, user };
+    }
+
+    static userProfileError(errorMessage)
+    {
+        return { type: ActionTypes.FB_USER_PROFILE_ERR, errorMessage };
     }
 
     static fbLogin() {
-        return { type: ActionTypes.FB_LOGIN };
-    }
-
-    static fbLoginOK(user) {
-        return { type: ActionTypes.FB_LOGIN_OK, user };
-    }
-
-    static fbLoading() {
-        return { type: ActionTypes.LOADING };
+        return { type: ActionTypes.FB_USER_LOGIN };
     }
 
     static fbLogout() {
-        return { type: ActionTypes.FB_LOGOUT };
-    }
-
-    static fbLogoutOK() {
-        return { type: ActionTypes.FB_LOGOUT_OK };
+        return { type: ActionTypes.FB_USER_LOGOUT };
     }
 
     static fbloadPage() {
@@ -82,6 +67,11 @@ export default class FacebookActions
         return { type: ActionTypes.FB_LOAD_PAGE_OK, page: response };
     }
 
+    static fbLoadPageErr(errorMessage)
+    {
+        return { type: ActionTypes.FB_LOAD_PAGE_ERR, errorMessage };
+    }
+
     static fbLoadPhotos() {
         return { type: ActionTypes.FB_LOAD_PHOTOS };
     }
@@ -90,12 +80,22 @@ export default class FacebookActions
         return { type: ActionTypes.FB_LOAD_PHOTOS_OK, photos };
     }
 
+    static fbLoadPhotosErr(errorMessage)
+    {
+        return { type: ActionTypes.FB_LOAD_PHOTOS_ERR, errorMessage };
+    }
+
     static fbUploadPhoto() {
         return { type: ActionTypes.FB_UPLOAD_PHOTO };
     }
 
     static fbUploadPhotoOK() {
         return { type: ActionTypes.FB_UPLOAD_PHOTO_OK };
+    }
+
+    static fbUploadPhotoErr(errorMessage)
+    {
+        return { type: ActionTypes.FB_UPLOAD_PHOTO_ERR, errorMessage };
     }
 
     /* Show upload window */

@@ -1,19 +1,22 @@
 ﻿import FacebookActions from 'store/actions/facebook';
 import notifSend from 'store/actions/notify';
 
-export default class Facebook {
-
+export default class Facebook
+{
     // You can determine whether or not the FB library has loaded by looking at window.fbAsyncInit.hasRun.
     // If window.fbAsyncInit.hasRun is true then the library has loaded (however, this doesn't indicate whether
     // or not the FB.init() has been called yet).
 
-    static loadSDK() {
-        window.fbAsyncInit = () => {
-            console.log('FB SDK loaded');
+    static loadSDK()
+    {
+        window.fbAsyncInit = () =>
+        {
+            // console.log('FB SDK loaded');
             window.store.dispatch(FacebookActions.facebookSDKLoaded());
         };
 
-        (function (d, s, id) {
+        (function (d, s, id)
+        {
             const fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) { return; }
             const js = d.createElement(s); js.id = id;
@@ -27,12 +30,14 @@ export default class Facebook {
     // when you call FB.init. To receive the response of this call, you must subscribe to the auth.statusChange event.The
     // response object passed by this event is identical to that which would be returned by calling
     // FB.getLoginStatus explicitly.
-    static initialize() {
-        if (typeof (FB) === 'object') {
-            FB.Event.subscribe('auth.statusChange', this.authstatusChange);
-
-            console.log('***Initialize Facebook app');
-
+    static initialize()
+    {
+        if (typeof (FB) === 'object')
+        {
+            // FB.Event.subscribe('auth.statusChange', this.authstatusChange);
+            //
+            // console.log('***Initialize Facebook app');
+            //
             FB.init({
                 appId: Config.FACEBOOK_APP_ID,
                 cookie: true,  // enable cookies to allow the server to access
@@ -47,8 +52,17 @@ export default class Facebook {
     {
         if (response.status === 'connected')
         {
-            // the user is logged into Facebook and has authenticated your application
-            window.store.dispatch(FacebookActions.fbUserConnected());
+            if (response.authResponse)
+            {
+                // the user is logged into Facebook and has authenticated your application
+                window.store.dispatch(FacebookActions.fbUserConnected(response.authResponse));
+            }
+            else
+            {
+                // If the authResponse object is not present, the user is either not logged into Facebook,
+                // or has not authorized your app.
+                window.store.dispatch(FacebookActions.fbUserUnknown());
+            }
         }
         else if (response.status === 'not_authorized')
         {
@@ -63,23 +77,10 @@ export default class Facebook {
         }
     }
 
-    static login()
+    static apiKeyValid()
     {
-        FB.login((response) =>
-        {
-            return response;
-        }, { scope: 'public_profile, email, user_photos, publish_actions, manage_pages, publish_pages' });
-    }
-
-    static apiKeyValid() {
-        console.log('Check for FB._apiKey:' + FB._apiKey);
+        // console.log('Check for FB._apiKey:' + FB._apiKey);
         return (FB._apiKey !== null);
-    }
-
-    static logout() {
-        FB.logout((response) => {
-            return response;
-        });
     }
 
     // To improve the performance of your application, not every call to check the status of the user will result in
@@ -89,16 +90,36 @@ export default class Facebook {
 
     static getLoginStatus()
     {
-        FB.getLoginStatus((response) =>
-        {
-            return response;
-        }, true);
+        FB.getLoginStatus(this.authstatusChange, true);
     }
 
-    static getUserProfile() {
-        FB.api('/me', { fields: 'id, name' }, (user) =>
+    static login()
+    {
+        FB.login(this.authstatusChange, { scope: 'public_profile, email, user_photos, publish_actions, manage_pages, publish_pages' });
+    }
+
+    static logout()
+    {
+        FB.logout(this.authstatusChange);
+    }
+
+    static getUserProfile()
+    {
+        FB.api('/me', { fields: 'id, name' }, (response) =>
         {
-            return user;
+            if (!response)
+            {
+                window.store.dispatch(FacebookActions.userProfileError('No response'));
+            }
+            else if (response.error)
+            {
+                window.store.dispatch(FacebookActions.userProfileError(response.error.message));
+            }
+            else
+            {
+                // success: 'response' is user profile
+                window.store.dispatch(FacebookActions.userProfileReceived(response));
+            }
         });
     }
 
@@ -106,24 +127,68 @@ export default class Facebook {
     {
         FB.api('/' + Config.FACEBOOK_PAGE_ID + '/', { fields: 'name, access_token' }, (response) =>
         {
-            if (response.error)
+            if (!response)
             {
-                window.store.dispatch(notifSend(response.error.message));
+                window.store.dispatch(FacebookActions.fbLoadPageErr('No response'));
+            }
+            else if (response.error)
+            {
+                window.store.dispatch(FacebookActions.fbLoadPageErr(response.error.message));
+            }
+            else if (!response.access_token)
+            {
+                window.store.dispatch(FacebookActions.fbLoadPageErr('Can\'t get page access_token, please check for manage_pages and publish_pages permissions.'));
             }
             else
             {
-                window.store.dispatch(FacebookActions.fbLoadPageOK());
-
-                if (!response.access_token)
-                {
-                    window.store.dispatch(notifSend('Can\'t get page access_token, please check for manage_pages and publish_pages permissions.'));
-                }
+                // success: 'response' is page
+                window.store.dispatch(FacebookActions.fbLoadPageOK(response));
             }
         });
     }
 
     static loadPhotos()
     {
-
+        FB.api('/' + Config.FACEBOOK_PAGE_ID + '/photos',
+            { fields: 'images, name, permalink_url', type: 'uploaded', limit: Config.PHOTOS_LIMIT }, (response) =>
+            {
+                if (!response)
+                {
+                    window.store.dispatch(FacebookActions.fbLoadPhotosErr('No response'));
+                }
+                else if (response.error)
+                {
+                    window.store.dispatch(FacebookActions.fbLoadPhotosErr(response.error.message));
+                }
+                else
+                {
+                    window.store.dispatch(FacebookActions.fbLoadPhotosOK(response.data));
+                }
+            });
     }
+
+    // Upload photo
+    static uploadPhoto(pageAccessToken, { image, description })
+    {
+        const data = new FormData();
+        data.append('access_token', pageAccessToken);
+        data.append('source', image);
+        data.append('message', description);
+
+        const apiUrl = '/' + Config.FACEBOOK_PAGE_ID + '/photos';
+
+        FB.api(apiUrl, 'POST', data, (response) =>
+        {
+            if (!response || response.error)
+            {
+                window.store.dispatch(FacebookActions.fbUploadPhotoErr(response.message));
+            }
+            else
+            {
+                window.store.dispatch(FacebookActions.fbUploadPhotoOK());
+                window.store.dispatch(FacebookActions.fbUploadHide());
+            }
+        });
+    }
+
 }

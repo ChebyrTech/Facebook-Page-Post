@@ -10123,7 +10123,7 @@ webpackJsonp([0],[
 	
 	var _reducers2 = _interopRequireDefault(_reducers);
 	
-	var _routes = __webpack_require__(/*! ../components/routes */ 680);
+	var _routes = __webpack_require__(/*! ../components/routes */ 677);
 	
 	var _routes2 = _interopRequireDefault(_routes);
 	
@@ -18824,9 +18824,9 @@ webpackJsonp([0],[
 	
 	var _reactRouterRedux = __webpack_require__(/*! react-router-redux */ 555);
 	
-	var _types = __webpack_require__(/*! store/actions/types */ 581);
+	var _actions = __webpack_require__(/*! store/actions */ 581);
 	
-	var ActionTypes = _interopRequireWildcard(_types);
+	var ActionTypes = _interopRequireWildcard(_actions);
 	
 	var _facebook = __webpack_require__(/*! api/facebook */ 585);
 	
@@ -18840,33 +18840,33 @@ webpackJsonp([0],[
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
-	var _marked = [loadFacebookSDK, facebookLogin, facebookLogout, facebookUserConnected, facebookUserNotAuthorized, facebookUserUnknown, facebookUserProfileReceived, loadPhotos, uploadPhoto, facebookSaga].map(regeneratorRuntime.mark);
+	var _marked = [loadFacebookSDK, facebookLogin, facebookLogout, facebookUserConnected, facebookUserNotAuthorized, facebookUserUnknown, facebookUserProfileReceived, loadPageOK, uploadPhoto, facebookSaga].map(regeneratorRuntime.mark);
 	
 	function loadFacebookSDK() {
 	    return regeneratorRuntime.wrap(function loadFacebookSDK$(_context) {
 	        while (1) {
 	            switch (_context.prev = _context.next) {
 	                case 0:
-	                    console.log('***Load Facebook SDK asynchronously');
+	                    // console.log('***Load Facebook SDK asynchronously');
 	                    // Load Facebook SDK asynchronously
 	                    _facebook2.default.loadSDK();
 	
-	                    console.log('***Wait till Facebook SDK is Loaded');
+	                    // console.log('***Wait till Facebook SDK is Loaded');
 	                    // Wait till Facebook SDK is Loaded
-	                    _context.next = 5;
+	                    _context.next = 3;
 	                    return (0, _effects.take)(ActionTypes.FB_LOAD_SDK_OK);
 	
-	                case 5:
-	                    _context.next = 7;
+	                case 3:
+	                    _context.next = 5;
 	                    return (0, _effects.put)(_facebook4.default.fbInit());
 	
-	                case 7:
+	                case 5:
 	                    _facebook2.default.initialize();
 	
-	                    console.log('***Wait for Facebook App initialization');
+	                    // console.log('***Wait for Facebook App initialization');
 	                    // Wait for Facebook App initialization
 	
-	                case 9:
+	                case 6:
 	                case 'end':
 	                    return _context.stop();
 	            }
@@ -18879,10 +18879,10 @@ webpackJsonp([0],[
 	        while (1) {
 	            switch (_context2.prev = _context2.next) {
 	                case 0:
-	                    console.log('***Login to Facebook');
+	                    // console.log('***Login to Facebook');
 	                    _facebook2.default.login();
 	
-	                case 2:
+	                case 1:
 	                case 'end':
 	                    return _context2.stop();
 	            }
@@ -18895,10 +18895,10 @@ webpackJsonp([0],[
 	        while (1) {
 	            switch (_context3.prev = _context3.next) {
 	                case 0:
-	                    console.log('***Logout from Facebook');
+	                    // console.log('***Logout from Facebook');
 	                    _facebook2.default.logout();
 	
-	                case 2:
+	                case 1:
 	                case 'end':
 	                    return _context3.stop();
 	            }
@@ -18912,7 +18912,7 @@ webpackJsonp([0],[
 	            switch (_context4.prev = _context4.next) {
 	                case 0:
 	                    _context4.next = 2;
-	                    return (0, _effects.put)(_facebook4.default.userProfileRequest());
+	                    return (0, _effects.put)(_facebook4.default.getUserProfile());
 	
 	                case 2:
 	                    _facebook2.default.getUserProfile();
@@ -18976,8 +18976,8 @@ webpackJsonp([0],[
 	    }, _marked[6], this);
 	}
 	
-	function loadPhotos() {
-	    return regeneratorRuntime.wrap(function loadPhotos$(_context8) {
+	function loadPageOK() {
+	    return regeneratorRuntime.wrap(function loadPageOK$(_context8) {
 	        while (1) {
 	            switch (_context8.prev = _context8.next) {
 	                case 0:
@@ -18989,6 +18989,9 @@ webpackJsonp([0],[
 	                    return (0, _effects.put)(_facebook4.default.fbLoadPhotos());
 	
 	                case 4:
+	                    _facebook2.default.loadPhotos();
+	
+	                case 5:
 	                case 'end':
 	                    return _context8.stop();
 	            }
@@ -18997,10 +19000,29 @@ webpackJsonp([0],[
 	}
 	
 	function uploadPhoto() {
+	    var pageAccessToken;
 	    return regeneratorRuntime.wrap(function uploadPhoto$(_context9) {
 	        while (1) {
 	            switch (_context9.prev = _context9.next) {
 	                case 0:
+	                    pageAccessToken = function pageAccessToken(state) {
+	                        return state.fb.auth.page.access_token;
+	                    };
+	
+	                    if (!pageAccessToken) {
+	                        _context9.next = 5;
+	                        break;
+	                    }
+	
+	                    _facebook2.default.uploadPhoto(pageAccessToken);
+	                    _context9.next = 7;
+	                    break;
+	
+	                case 5:
+	                    _context9.next = 7;
+	                    return (0, _effects.put)('Page access token is not loaded');
+	
+	                case 7:
 	                case 'end':
 	                    return _context9.stop();
 	            }
@@ -19015,7 +19037,7 @@ webpackJsonp([0],[
 	            switch (_context10.prev = _context10.next) {
 	                case 0:
 	                    _context10.next = 2;
-	                    return [(0, _effects.takeEvery)(ActionTypes.FB_LOAD_SDK, loadFacebookSDK), (0, _effects.takeEvery)(ActionTypes.FB_LOGIN, facebookLogin), (0, _effects.takeEvery)(ActionTypes.FB_LOGOUT, facebookLogout), (0, _effects.takeEvery)(ActionTypes.FB_USER_CONNECTED, facebookUserConnected), (0, _effects.takeEvery)(ActionTypes.FB_USER_NOT_AUTHORIZED, facebookUserNotAuthorized), (0, _effects.takeEvery)(ActionTypes.FB_USER_UNKNOWN, facebookUserUnknown), (0, _effects.takeEvery)(ActionTypes.FB_USER_PROFILE_OK, facebookUserProfileReceived), (0, _effects.takeEvery)(ActionTypes.FB_LOAD_PAGE_OK, loadPhotos), (0, _effects.takeEvery)(ActionTypes.FB_UPLOAD_PHOTO, loadPhotos)];
+	                    return [(0, _effects.takeEvery)(ActionTypes.FB_LOAD_SDK, loadFacebookSDK), (0, _effects.takeEvery)(ActionTypes.FB_USER_LOGIN, facebookLogin), (0, _effects.takeEvery)(ActionTypes.FB_USER_LOGOUT, facebookLogout), (0, _effects.takeEvery)(ActionTypes.FB_USER_CONNECTED, facebookUserConnected), (0, _effects.takeEvery)(ActionTypes.FB_USER_NOT_AUTHORIZED, facebookUserNotAuthorized), (0, _effects.takeEvery)(ActionTypes.FB_USER_UNKNOWN, facebookUserUnknown), (0, _effects.takeEvery)(ActionTypes.FB_USER_PROFILE_OK, facebookUserProfileReceived), (0, _effects.takeEvery)(ActionTypes.FB_LOAD_PAGE_OK, loadPageOK), (0, _effects.takeEvery)(ActionTypes.FB_UPLOAD_PHOTO, uploadPhoto)];
 	
 	                case 2:
 	                case 'end':
@@ -19031,7 +19053,7 @@ webpackJsonp([0],[
 /***/ },
 /* 581 */
 /*!************************************!*\
-  !*** ./src/store/actions/types.js ***!
+  !*** ./src/store/actions/index.js ***!
   \************************************/
 /***/ function(module, exports, __webpack_require__) {
 
@@ -19048,30 +19070,36 @@ webpackJsonp([0],[
 	
 	var FB_LOAD_SDK = exports.FB_LOAD_SDK = 'FB_LOAD_SDK';
 	var FB_LOAD_SDK_OK = exports.FB_LOAD_SDK_OK = 'FB_LOAD_SDK_OK';
+	var FB_LOAD_SDK_ERR = exports.FB_LOAD_SDK_ERR = 'FB_LOAD_SDK_ERR';
 	
 	var FB_INIT = exports.FB_INIT = 'FB_INIT';
 	var FB_INIT_OK = exports.FB_INIT_OK = 'FB_INIT_OK';
+	var FB_INIT_ERR = exports.FB_INIT_ERR = 'FB_INIT_ERR';
 	
+	var FB_USER_LOGIN = exports.FB_USER_LOGIN = 'FB_USER_LOGIN';
+	var FB_USER_LOGOUT = exports.FB_USER_LOGOUT = 'FB_USER_LOGOUT';
 	var FB_USER_CONNECTED = exports.FB_USER_CONNECTED = 'FB_USER_CONNECTED';
 	var FB_USER_NOT_AUTHORIZED = exports.FB_USER_NOT_AUTHORIZED = 'FB_USER_NOT_AUTHORIZED';
 	var FB_USER_UNKNOWN = exports.FB_USER_UNKNOWN = 'FB_USER_UNKNOWN';
+	var FB_USER_ERR = exports.FB_USER_ERR = 'FB_USER_ERR';
 	
-	var FB_LOGIN = exports.FB_LOGIN = 'FB_LOGIN';
-	var FB_LOGIN_OK = exports.FB_LOGIN_OK = 'FB_LOGIN_OK';
-	var FB_LOGOUT = exports.FB_LOGOUT = 'FB_LOGOUT';
 	var FB_LOGOUT_OK = exports.FB_LOGOUT_OK = 'FB_LOGOUT_OK';
-	var FB_LOGIN_STATUS_OK = exports.FB_LOGIN_STATUS_OK = 'FB_LOGIN_STATUS_OK';
 	
-	var FB_USER_PROFILE_REQ = exports.FB_USER_PROFILE_REQ = 'FB_USER_PROFILE_REQ';
+	var FB_GET_USER_PROFILE = exports.FB_GET_USER_PROFILE = 'FB_GET_USER_PROFILE';
 	var FB_USER_PROFILE_OK = exports.FB_USER_PROFILE_OK = 'FB_USER_PROFILE_OK';
+	var FB_USER_PROFILE_ERR = exports.FB_USER_PROFILE_ERR = 'FB_USER_PROFILE_ERR';
+	
+	var FB_LOAD_PAGE = exports.FB_LOAD_PAGE = 'FB_LOAD_PAGE';
+	var FB_LOAD_PAGE_OK = exports.FB_LOAD_PAGE_OK = 'FB_LOAD_PAGE_OK';
+	var FB_LOAD_PAGE_ERR = exports.FB_LOAD_PAGE_ERR = 'FB_LOAD_PAGE_ERR';
 	
 	var FB_LOAD_PHOTOS = exports.FB_LOAD_PHOTOS = 'FB_LOAD_PHOTOS';
 	var FB_LOAD_PHOTOS_OK = exports.FB_LOAD_PHOTOS_OK = 'FB_LOAD_PHOTOS_OK';
+	var FB_LOAD_PHOTOS_ERR = exports.FB_LOAD_PHOTOS_ERR = 'FB_LOAD_PHOTOS_ERR';
 	
 	var FB_UPLOAD_PHOTO = exports.FB_UPLOAD_PHOTO = 'FB_UPLOAD_PHOTO';
 	var FB_UPLOAD_PHOTO_OK = exports.FB_UPLOAD_PHOTO_OK = 'FB_UPLOAD_PHOTO_OK';
-	
-	var FB_LOAD_PAGE_OK = exports.FB_LOAD_PAGE_OK = 'FB_LOAD_PAGE_OK';
+	var FB_UPLOAD_PHOTO_ERR = exports.FB_UPLOAD_PHOTO_ERR = 'FB_UPLOAD_PHOTO_ERR';
 	
 	var FB_UPLOAD_SHOW = exports.FB_UPLOAD_SHOW = 'FB_UPLOAD_SHOW';
 	var FB_UPLOAD_HIDE = exports.FB_UPLOAD_HIDE = 'FB_UPLOAD_HIDE';
@@ -19081,7 +19109,7 @@ webpackJsonp([0],[
 	var NOTIF_DISMISS = exports.NOTIF_DISMISS = 'NOTIF_DISMISS';
 	var NOTIF_CLEAR = exports.NOTIF_CLEAR = 'NOTIF_CLEAR';
 	
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(/*! ./~/react-hot-loader/makeExportsHot.js */ 582); if (makeExportsHot(module, __webpack_require__(/*! react */ 362))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot apply hot update to " + "types.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(/*! ./~/react-hot-loader/makeExportsHot.js */ 582); if (makeExportsHot(module, __webpack_require__(/*! react */ 362))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot apply hot update to " + "index.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../../~/webpack/buildin/module.js */ 299)(module)))
 
 /***/ },
@@ -19260,14 +19288,13 @@ webpackJsonp([0],[
 	    _createClass(Facebook, null, [{
 	        key: 'loadSDK',
 	
-	
 	        // You can determine whether or not the FB library has loaded by looking at window.fbAsyncInit.hasRun.
 	        // If window.fbAsyncInit.hasRun is true then the library has loaded (however, this doesn't indicate whether
 	        // or not the FB.init() has been called yet).
 	
 	        value: function loadSDK() {
 	            window.fbAsyncInit = function () {
-	                console.log('FB SDK loaded');
+	                // console.log('FB SDK loaded');
 	                window.store.dispatch(_facebook2.default.facebookSDKLoaded());
 	            };
 	
@@ -19292,10 +19319,10 @@ webpackJsonp([0],[
 	        key: 'initialize',
 	        value: function initialize() {
 	            if ((typeof FB === 'undefined' ? 'undefined' : _typeof(FB)) === 'object') {
-	                FB.Event.subscribe('auth.statusChange', this.authstatusChange);
-	
-	                console.log('***Initialize Facebook app');
-	
+	                // FB.Event.subscribe('auth.statusChange', this.authstatusChange);
+	                //
+	                // console.log('***Initialize Facebook app');
+	                //
 	                FB.init({
 	                    appId: Config.FACEBOOK_APP_ID,
 	                    cookie: true, // enable cookies to allow the server to access
@@ -19309,8 +19336,14 @@ webpackJsonp([0],[
 	        key: 'authstatusChange',
 	        value: function authstatusChange(response) {
 	            if (response.status === 'connected') {
-	                // the user is logged into Facebook and has authenticated your application
-	                window.store.dispatch(_facebook2.default.fbUserConnected());
+	                if (response.authResponse) {
+	                    // the user is logged into Facebook and has authenticated your application
+	                    window.store.dispatch(_facebook2.default.fbUserConnected(response.authResponse));
+	                } else {
+	                    // If the authResponse object is not present, the user is either not logged into Facebook,
+	                    // or has not authorized your app.
+	                    window.store.dispatch(_facebook2.default.fbUserUnknown());
+	                }
 	            } else if (response.status === 'not_authorized') {
 	                // the user is logged into Facebook but has not authenticated your application
 	                window.store.dispatch(_facebook2.default.fbUserNotAuthorized());
@@ -19321,24 +19354,10 @@ webpackJsonp([0],[
 	            }
 	        }
 	    }, {
-	        key: 'login',
-	        value: function login() {
-	            FB.login(function (response) {
-	                return response;
-	            }, { scope: 'public_profile, email, user_photos, publish_actions, manage_pages, publish_pages' });
-	        }
-	    }, {
 	        key: 'apiKeyValid',
 	        value: function apiKeyValid() {
-	            console.log('Check for FB._apiKey:' + FB._apiKey);
+	            // console.log('Check for FB._apiKey:' + FB._apiKey);
 	            return FB._apiKey !== null;
-	        }
-	    }, {
-	        key: 'logout',
-	        value: function logout() {
-	            FB.logout(function (response) {
-	                return response;
-	            });
 	        }
 	
 	        // To improve the performance of your application, not every call to check the status of the user will result in
@@ -19349,35 +19368,86 @@ webpackJsonp([0],[
 	    }, {
 	        key: 'getLoginStatus',
 	        value: function getLoginStatus() {
-	            FB.getLoginStatus(function (response) {
-	                return response;
-	            }, true);
+	            FB.getLoginStatus(this.authstatusChange, true);
+	        }
+	    }, {
+	        key: 'login',
+	        value: function login() {
+	            FB.login(this.authstatusChange, { scope: 'public_profile, email, user_photos, publish_actions, manage_pages, publish_pages' });
+	        }
+	    }, {
+	        key: 'logout',
+	        value: function logout() {
+	            FB.logout(this.authstatusChange);
 	        }
 	    }, {
 	        key: 'getUserProfile',
 	        value: function getUserProfile() {
-	            FB.api('/me', { fields: 'id, name' }, function (user) {
-	                return user;
+	            FB.api('/me', { fields: 'id, name' }, function (response) {
+	                if (!response) {
+	                    window.store.dispatch(_facebook2.default.userProfileError('No response'));
+	                } else if (response.error) {
+	                    window.store.dispatch(_facebook2.default.userProfileError(response.error.message));
+	                } else {
+	                    // success: 'response' is user profile
+	                    window.store.dispatch(_facebook2.default.userProfileReceived(response));
+	                }
 	            });
 	        }
 	    }, {
 	        key: 'loadPage',
 	        value: function loadPage() {
 	            FB.api('/' + Config.FACEBOOK_PAGE_ID + '/', { fields: 'name, access_token' }, function (response) {
-	                if (response.error) {
-	                    window.store.dispatch((0, _notify2.default)(response.error.message));
+	                if (!response) {
+	                    window.store.dispatch(_facebook2.default.fbLoadPageErr('No response'));
+	                } else if (response.error) {
+	                    window.store.dispatch(_facebook2.default.fbLoadPageErr(response.error.message));
+	                } else if (!response.access_token) {
+	                    window.store.dispatch(_facebook2.default.fbLoadPageErr('Can\'t get page access_token, please check for manage_pages and publish_pages permissions.'));
 	                } else {
-	                    window.store.dispatch(_facebook2.default.fbLoadPageOK());
-	
-	                    if (!response.access_token) {
-	                        window.store.dispatch((0, _notify2.default)('Can\'t get page access_token, please check for manage_pages and publish_pages permissions.'));
-	                    }
+	                    // success: 'response' is page
+	                    window.store.dispatch(_facebook2.default.fbLoadPageOK(response));
 	                }
 	            });
 	        }
 	    }, {
 	        key: 'loadPhotos',
-	        value: function loadPhotos() {}
+	        value: function loadPhotos() {
+	            FB.api('/' + Config.FACEBOOK_PAGE_ID + '/photos', { fields: 'images, name, permalink_url', type: 'uploaded', limit: Config.PHOTOS_LIMIT }, function (response) {
+	                if (!response) {
+	                    window.store.dispatch(_facebook2.default.fbLoadPhotosErr('No response'));
+	                } else if (response.error) {
+	                    window.store.dispatch(_facebook2.default.fbLoadPhotosErr(response.error.message));
+	                } else {
+	                    window.store.dispatch(_facebook2.default.fbLoadPhotosOK(response.data));
+	                }
+	            });
+	        }
+	
+	        // Upload photo
+	
+	    }, {
+	        key: 'uploadPhoto',
+	        value: function uploadPhoto(pageAccessToken, _ref) {
+	            var image = _ref.image,
+	                description = _ref.description;
+	
+	            var data = new FormData();
+	            data.append('access_token', pageAccessToken);
+	            data.append('source', image);
+	            data.append('message', description);
+	
+	            var apiUrl = '/' + Config.FACEBOOK_PAGE_ID + '/photos';
+	
+	            FB.api(apiUrl, 'POST', data, function (response) {
+	                if (!response || response.error) {
+	                    window.store.dispatch(_facebook2.default.fbUploadPhotoErr(response.message));
+	                } else {
+	                    window.store.dispatch(_facebook2.default.fbUploadPhotoOK());
+	                    window.store.dispatch(_facebook2.default.fbUploadHide());
+	                }
+	            });
+	        }
 	    }]);
 	
 	    return Facebook;
@@ -19406,9 +19476,9 @@ webpackJsonp([0],[
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _types = __webpack_require__(/*! store/actions/types */ 581);
+	var _actions = __webpack_require__(/*! store/actions */ 581);
 	
-	var ActionTypes = _interopRequireWildcard(_types);
+	var ActionTypes = _interopRequireWildcard(_actions);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -19445,64 +19515,44 @@ webpackJsonp([0],[
 	            return { type: ActionTypes.FB_INIT_OK };
 	        }
 	    }, {
-	        key: 'fbLoginStatus',
-	        value: function fbLoginStatus() {
-	            return { type: ActionTypes.FB_LOGIN_STATUS };
-	        }
-	    }, {
-	        key: 'fbLoginStatusOK',
-	        value: function fbLoginStatusOK(user) {
-	            return { type: ActionTypes.FB_LOGIN_STATUS_OK, user: user };
-	        }
-	    }, {
 	        key: 'fbUserConnected',
-	        value: function fbUserConnected() {
-	            return { type: ActionTypes.FB_USER_CONNECTED };
+	        value: function fbUserConnected(authResponse) {
+	            return { type: ActionTypes.FB_USER_CONNECTED, authResponse: authResponse };
 	        }
 	    }, {
 	        key: 'fbUserNotAuthorized',
 	        value: function fbUserNotAuthorized() {
-	            return { type: ActionTypes.FB_LOGIN_STATUS_OK };
+	            return { type: ActionTypes.FB_USER_NOT_AUTHORIZED };
 	        }
 	    }, {
 	        key: 'fbUserUnknown',
 	        value: function fbUserUnknown() {
-	            return { type: ActionTypes.FB_LOGIN_STATUS_OK };
+	            return { type: ActionTypes.FB_USER_UNKNOWN };
 	        }
 	    }, {
-	        key: 'userProfileRequest',
-	        value: function userProfileRequest() {
-	            return { type: ActionTypes.FB_USER_PROFILE_REQ };
+	        key: 'getUserProfile',
+	        value: function getUserProfile() {
+	            return { type: ActionTypes.FB_GET_USER_PROFILE };
 	        }
 	    }, {
 	        key: 'userProfileReceived',
-	        value: function userProfileReceived() {
-	            return { type: ActionTypes.FB_USER_PROFILE_OK };
+	        value: function userProfileReceived(user) {
+	            return { type: ActionTypes.FB_USER_PROFILE_OK, user: user };
+	        }
+	    }, {
+	        key: 'userProfileError',
+	        value: function userProfileError(errorMessage) {
+	            return { type: ActionTypes.FB_USER_PROFILE_ERR, errorMessage: errorMessage };
 	        }
 	    }, {
 	        key: 'fbLogin',
 	        value: function fbLogin() {
-	            return { type: ActionTypes.FB_LOGIN };
-	        }
-	    }, {
-	        key: 'fbLoginOK',
-	        value: function fbLoginOK(user) {
-	            return { type: ActionTypes.FB_LOGIN_OK, user: user };
-	        }
-	    }, {
-	        key: 'fbLoading',
-	        value: function fbLoading() {
-	            return { type: ActionTypes.LOADING };
+	            return { type: ActionTypes.FB_USER_LOGIN };
 	        }
 	    }, {
 	        key: 'fbLogout',
 	        value: function fbLogout() {
-	            return { type: ActionTypes.FB_LOGOUT };
-	        }
-	    }, {
-	        key: 'fbLogoutOK',
-	        value: function fbLogoutOK() {
-	            return { type: ActionTypes.FB_LOGOUT_OK };
+	            return { type: ActionTypes.FB_USER_LOGOUT };
 	        }
 	    }, {
 	        key: 'fbloadPage',
@@ -19515,6 +19565,11 @@ webpackJsonp([0],[
 	            return { type: ActionTypes.FB_LOAD_PAGE_OK, page: response };
 	        }
 	    }, {
+	        key: 'fbLoadPageErr',
+	        value: function fbLoadPageErr(errorMessage) {
+	            return { type: ActionTypes.FB_LOAD_PAGE_ERR, errorMessage: errorMessage };
+	        }
+	    }, {
 	        key: 'fbLoadPhotos',
 	        value: function fbLoadPhotos() {
 	            return { type: ActionTypes.FB_LOAD_PHOTOS };
@@ -19525,6 +19580,11 @@ webpackJsonp([0],[
 	            return { type: ActionTypes.FB_LOAD_PHOTOS_OK, photos: photos };
 	        }
 	    }, {
+	        key: 'fbLoadPhotosErr',
+	        value: function fbLoadPhotosErr(errorMessage) {
+	            return { type: ActionTypes.FB_LOAD_PHOTOS_ERR, errorMessage: errorMessage };
+	        }
+	    }, {
 	        key: 'fbUploadPhoto',
 	        value: function fbUploadPhoto() {
 	            return { type: ActionTypes.FB_UPLOAD_PHOTO };
@@ -19533,6 +19593,11 @@ webpackJsonp([0],[
 	        key: 'fbUploadPhotoOK',
 	        value: function fbUploadPhotoOK() {
 	            return { type: ActionTypes.FB_UPLOAD_PHOTO_OK };
+	        }
+	    }, {
+	        key: 'fbUploadPhotoErr',
+	        value: function fbUploadPhotoErr(errorMessage) {
+	            return { type: ActionTypes.FB_UPLOAD_PHOTO_ERR, errorMessage: errorMessage };
 	        }
 	
 	        /* Show upload window */
@@ -19577,10 +19642,12 @@ webpackJsonp([0],[
 	exports.notifSend = notifSend;
 	exports.notifDismiss = notifDismiss;
 	exports.notifClear = notifClear;
+	exports.error = error;
+	exports.notify = notify;
 	
-	var _types = __webpack_require__(/*! store/actions/types */ 581);
+	var _actions = __webpack_require__(/*! store/actions */ 581);
 	
-	var ActionTypes = _interopRequireWildcard(_types);
+	var ActionTypes = _interopRequireWildcard(_actions);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -19611,6 +19678,32 @@ webpackJsonp([0],[
 	    return { type: ActionTypes.NOTIF_CLEAR };
 	}
 	
+	// Show error
+	function error(message) {
+	    return function (dispatch) {
+	        if (message) {
+	            dispatch({
+	                type: 'GROWLER__SHOW',
+	                growler: { text: message, type: 'growler--error' }
+	            });
+	        }
+	
+	        dispatch({ type: ActionTypes.ERROR });
+	    };
+	}
+	
+	// Show notification
+	function notify(message) {
+	    return function (dispatch) {
+	        if (message) {
+	            dispatch({
+	                type: 'GROWLER__SHOW',
+	                growler: { text: message, type: 'growler--success' }
+	            });
+	        }
+	    };
+	}
+	
 	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(/*! ./~/react-hot-loader/makeExportsHot.js */ 582); if (makeExportsHot(module, __webpack_require__(/*! react */ 362))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot apply hot update to " + "notify.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../../~/webpack/buildin/module.js */ 299)(module)))
 
@@ -19630,9 +19723,9 @@ webpackJsonp([0],[
 	});
 	exports.default = notifySaga;
 	
-	var _types = __webpack_require__(/*! store/actions/types */ 581);
+	var _actions = __webpack_require__(/*! store/actions */ 581);
 	
-	var ActionTypes = _interopRequireWildcard(_types);
+	var ActionTypes = _interopRequireWildcard(_actions);
 	
 	var _effects = __webpack_require__(/*! redux-saga/effects */ 579);
 	
@@ -19706,13 +19799,11 @@ webpackJsonp([0],[
 	
 	var _reactRouterRedux = __webpack_require__(/*! react-router-redux */ 555);
 	
-	var _index = __webpack_require__(/*! ./fb/index */ 590);
+	var _facebook = __webpack_require__(/*! ./facebook */ 590);
 	
-	var _index2 = _interopRequireDefault(_index);
+	var _facebook2 = _interopRequireDefault(_facebook);
 	
-	var _general = __webpack_require__(/*! ./general */ 678);
-	
-	var _notify = __webpack_require__(/*! ./notify */ 679);
+	var _notify = __webpack_require__(/*! ./notify */ 676);
 	
 	var _notify2 = _interopRequireDefault(_notify);
 	
@@ -19720,8 +19811,7 @@ webpackJsonp([0],[
 	
 	exports.default = (0, _redux.combineReducers)({
 	    routing: _reactRouterRedux.routerReducer,
-	    general: _general.general,
-	    fb: _index2.default,
+	    facebook: _facebook2.default,
 	    notify: _notify2.default
 	});
 	
@@ -19731,37 +19821,8 @@ webpackJsonp([0],[
 /***/ },
 /* 590 */
 /*!****************************************!*\
-  !*** ./src/store/reducers/fb/index.js ***!
+  !*** ./src/store/reducers/facebook.js ***!
   \****************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(/*! ./~/react-hot-api/modules/index.js */ 300), RootInstanceProvider = __webpack_require__(/*! ./~/react-hot-loader/RootInstanceProvider.js */ 308), ReactMount = __webpack_require__(/*! react/lib/ReactMount */ 310), React = __webpack_require__(/*! react */ 362); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
-	
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _redux = __webpack_require__(/*! redux */ 472);
-	
-	var _auth = __webpack_require__(/*! ./auth */ 591);
-	
-	var _photos = __webpack_require__(/*! ./photos */ 677);
-	
-	exports.default = (0, _redux.combineReducers)({
-	    auth: _auth.auth,
-	    photos: _photos.photos
-	});
-	
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(/*! ./~/react-hot-loader/makeExportsHot.js */ 582); if (makeExportsHot(module, __webpack_require__(/*! react */ 362))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot apply hot update to " + "index.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../../../~/webpack/buildin/module.js */ 299)(module)))
-
-/***/ },
-/* 591 */
-/*!***************************************!*\
-  !*** ./src/store/reducers/fb/auth.js ***!
-  \***************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(/*! ./~/react-hot-api/modules/index.js */ 300), RootInstanceProvider = __webpack_require__(/*! ./~/react-hot-loader/RootInstanceProvider.js */ 308), ReactMount = __webpack_require__(/*! react/lib/ReactMount */ 310), React = __webpack_require__(/*! react */ 362); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -19773,25 +19834,29 @@ webpackJsonp([0],[
 	});
 	exports.auth = auth;
 	
-	var _merge = __webpack_require__(/*! lodash/merge */ 592);
+	var _merge = __webpack_require__(/*! lodash/merge */ 591);
 	
 	var _merge2 = _interopRequireDefault(_merge);
 	
-	var _types = __webpack_require__(/*! store/actions/types */ 581);
+	var _actions = __webpack_require__(/*! store/actions */ 581);
 	
-	var ActionTypes = _interopRequireWildcard(_types);
+	var ActionTypes = _interopRequireWildcard(_actions);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var initialState = {
+	    appState: null,
+	    userState: null,
 	    user: null,
 	    page: {
 	        id: null,
 	        name: null,
 	        access_token: null
-	    }
+	    },
+	    photos: [],
+	    uploadShow: false
 	};
 	
 	function auth() {
@@ -19799,44 +19864,66 @@ webpackJsonp([0],[
 	    var action = arguments[1];
 	
 	    switch (action.type) {
+	        case ActionTypes.FB_LOAD_SDK:
+	            return (0, _merge2.default)({}, state, initialState, { appState: 'Loading Facebook SDK' });
 	
-	        case ActionTypes.FB_LOGIN_STATUS_OK:
-	            return (0, _merge2.default)({}, state, initialState, {
-	                user: action.user
-	            });
+	        case ActionTypes.FB_LOAD_SDK_OK:
+	            return (0, _merge2.default)({}, state, { appState: 'Facebook SDK Loaded' });
 	
-	        case ActionTypes.FB_LOGIN_OK:
-	            return (0, _merge2.default)({}, state, {
-	                user: action.user
-	            });
+	        case ActionTypes.FB_LOAD_SDK_ERR:
+	            return (0, _merge2.default)({}, state, { appState: 'Error Loading Facebook SDK' });
+	
+	        case ActionTypes.FB_INIT:
+	            return (0, _merge2.default)({}, state, { appState: 'Initializing Facebook app' });
+	
+	        case ActionTypes.FB_INIT_OK:
+	            return (0, _merge2.default)({}, state, { appState: 'Facebook App Initialized' });
+	
+	        case ActionTypes.FB_INIT_ERR:
+	            return (0, _merge2.default)({}, state, { appState: 'Facebook App Initialization error' });
+	
+	        case ActionTypes.FB_USER_CONNECTED:
+	            return (0, _merge2.default)({}, state, initialState, { user: action.user });
+	
+	        case ActionTypes.FB_USER_NOT_AUTHORIZED:
+	            return (0, _merge2.default)({}, state, initialState, { user: action.user });
+	
+	        case ActionTypes.FB_USER_UNKNOWN:
+	            return (0, _merge2.default)({}, state, initialState, { user: action.user });
 	
 	        case ActionTypes.FB_LOGOUT_OK:
-	            return (0, _merge2.default)({}, state, {
-	                user: null
-	            });
+	            return (0, _merge2.default)({}, state, { user: null });
 	
 	        case ActionTypes.FB_LOAD_PAGE_OK:
-	            return (0, _merge2.default)({}, state, {
-	                page: action.page
-	            });
+	            return (0, _merge2.default)({}, state, { page: action.page });
+	
+	        case ActionTypes.FB_UPLOAD_SHOW:
+	            return (0, _merge2.default)({}, state, { uploadShow: true });
+	
+	        case ActionTypes.FB_UPLOAD_HIDE:
+	            return (0, _merge2.default)({}, state, { uploadShow: false });
+	
+	        case ActionTypes.FB_LOAD_PHOTOS_OK:
+	            state.photos = action.photos;
+	            return (0, _merge2.default)({}, state);
 	
 	        default:
 	            return state;
 	    }
 	}
 	
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(/*! ./~/react-hot-loader/makeExportsHot.js */ 582); if (makeExportsHot(module, __webpack_require__(/*! react */ 362))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot apply hot update to " + "auth.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../../../~/webpack/buildin/module.js */ 299)(module)))
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(/*! ./~/react-hot-loader/makeExportsHot.js */ 582); if (makeExportsHot(module, __webpack_require__(/*! react */ 362))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot apply hot update to " + "facebook.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../../~/webpack/buildin/module.js */ 299)(module)))
 
 /***/ },
-/* 592 */
+/* 591 */
 /*!***************************!*\
   !*** ./~/lodash/merge.js ***!
   \***************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseMerge = __webpack_require__(/*! ./_baseMerge */ 593),
-	    createAssigner = __webpack_require__(/*! ./_createAssigner */ 667);
+	var baseMerge = __webpack_require__(/*! ./_baseMerge */ 592),
+	    createAssigner = __webpack_require__(/*! ./_createAssigner */ 666);
 	
 	/**
 	 * This method is like `_.assign` except that it recursively merges own and
@@ -19877,18 +19964,18 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 593 */
+/* 592 */
 /*!********************************!*\
   !*** ./~/lodash/_baseMerge.js ***!
   \********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var Stack = __webpack_require__(/*! ./_Stack */ 594),
-	    assignMergeValue = __webpack_require__(/*! ./_assignMergeValue */ 632),
-	    baseFor = __webpack_require__(/*! ./_baseFor */ 635),
-	    baseMergeDeep = __webpack_require__(/*! ./_baseMergeDeep */ 637),
-	    isObject = __webpack_require__(/*! ./isObject */ 612),
-	    keysIn = __webpack_require__(/*! ./keysIn */ 661);
+	var Stack = __webpack_require__(/*! ./_Stack */ 593),
+	    assignMergeValue = __webpack_require__(/*! ./_assignMergeValue */ 631),
+	    baseFor = __webpack_require__(/*! ./_baseFor */ 634),
+	    baseMergeDeep = __webpack_require__(/*! ./_baseMergeDeep */ 636),
+	    isObject = __webpack_require__(/*! ./isObject */ 611),
+	    keysIn = __webpack_require__(/*! ./keysIn */ 660);
 	
 	/**
 	 * The base implementation of `_.merge` without support for multiple sources.
@@ -19927,18 +20014,18 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 594 */
+/* 593 */
 /*!****************************!*\
   !*** ./~/lodash/_Stack.js ***!
   \****************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var ListCache = __webpack_require__(/*! ./_ListCache */ 595),
-	    stackClear = __webpack_require__(/*! ./_stackClear */ 603),
-	    stackDelete = __webpack_require__(/*! ./_stackDelete */ 604),
-	    stackGet = __webpack_require__(/*! ./_stackGet */ 605),
-	    stackHas = __webpack_require__(/*! ./_stackHas */ 606),
-	    stackSet = __webpack_require__(/*! ./_stackSet */ 607);
+	var ListCache = __webpack_require__(/*! ./_ListCache */ 594),
+	    stackClear = __webpack_require__(/*! ./_stackClear */ 602),
+	    stackDelete = __webpack_require__(/*! ./_stackDelete */ 603),
+	    stackGet = __webpack_require__(/*! ./_stackGet */ 604),
+	    stackHas = __webpack_require__(/*! ./_stackHas */ 605),
+	    stackSet = __webpack_require__(/*! ./_stackSet */ 606);
 	
 	/**
 	 * Creates a stack cache object to store key-value pairs.
@@ -19963,17 +20050,17 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 595 */
+/* 594 */
 /*!********************************!*\
   !*** ./~/lodash/_ListCache.js ***!
   \********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var listCacheClear = __webpack_require__(/*! ./_listCacheClear */ 596),
-	    listCacheDelete = __webpack_require__(/*! ./_listCacheDelete */ 597),
-	    listCacheGet = __webpack_require__(/*! ./_listCacheGet */ 600),
-	    listCacheHas = __webpack_require__(/*! ./_listCacheHas */ 601),
-	    listCacheSet = __webpack_require__(/*! ./_listCacheSet */ 602);
+	var listCacheClear = __webpack_require__(/*! ./_listCacheClear */ 595),
+	    listCacheDelete = __webpack_require__(/*! ./_listCacheDelete */ 596),
+	    listCacheGet = __webpack_require__(/*! ./_listCacheGet */ 599),
+	    listCacheHas = __webpack_require__(/*! ./_listCacheHas */ 600),
+	    listCacheSet = __webpack_require__(/*! ./_listCacheSet */ 601);
 	
 	/**
 	 * Creates an list cache object.
@@ -20004,7 +20091,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 596 */
+/* 595 */
 /*!*************************************!*\
   !*** ./~/lodash/_listCacheClear.js ***!
   \*************************************/
@@ -20026,13 +20113,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 597 */
+/* 596 */
 /*!**************************************!*\
   !*** ./~/lodash/_listCacheDelete.js ***!
   \**************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var assocIndexOf = __webpack_require__(/*! ./_assocIndexOf */ 598);
+	var assocIndexOf = __webpack_require__(/*! ./_assocIndexOf */ 597);
 	
 	/** Used for built-in method references. */
 	var arrayProto = Array.prototype;
@@ -20070,13 +20157,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 598 */
+/* 597 */
 /*!***********************************!*\
   !*** ./~/lodash/_assocIndexOf.js ***!
   \***********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var eq = __webpack_require__(/*! ./eq */ 599);
+	var eq = __webpack_require__(/*! ./eq */ 598);
 	
 	/**
 	 * Gets the index at which the `key` is found in `array` of key-value pairs.
@@ -20100,7 +20187,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 599 */
+/* 598 */
 /*!************************!*\
   !*** ./~/lodash/eq.js ***!
   \************************/
@@ -20146,13 +20233,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 600 */
+/* 599 */
 /*!***********************************!*\
   !*** ./~/lodash/_listCacheGet.js ***!
   \***********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var assocIndexOf = __webpack_require__(/*! ./_assocIndexOf */ 598);
+	var assocIndexOf = __webpack_require__(/*! ./_assocIndexOf */ 597);
 	
 	/**
 	 * Gets the list cache value for `key`.
@@ -20174,13 +20261,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 601 */
+/* 600 */
 /*!***********************************!*\
   !*** ./~/lodash/_listCacheHas.js ***!
   \***********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var assocIndexOf = __webpack_require__(/*! ./_assocIndexOf */ 598);
+	var assocIndexOf = __webpack_require__(/*! ./_assocIndexOf */ 597);
 	
 	/**
 	 * Checks if a list cache value for `key` exists.
@@ -20199,13 +20286,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 602 */
+/* 601 */
 /*!***********************************!*\
   !*** ./~/lodash/_listCacheSet.js ***!
   \***********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var assocIndexOf = __webpack_require__(/*! ./_assocIndexOf */ 598);
+	var assocIndexOf = __webpack_require__(/*! ./_assocIndexOf */ 597);
 	
 	/**
 	 * Sets the list cache `key` to `value`.
@@ -20234,13 +20321,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 603 */
+/* 602 */
 /*!*********************************!*\
   !*** ./~/lodash/_stackClear.js ***!
   \*********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var ListCache = __webpack_require__(/*! ./_ListCache */ 595);
+	var ListCache = __webpack_require__(/*! ./_ListCache */ 594);
 	
 	/**
 	 * Removes all key-value entries from the stack.
@@ -20258,7 +20345,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 604 */
+/* 603 */
 /*!**********************************!*\
   !*** ./~/lodash/_stackDelete.js ***!
   \**********************************/
@@ -20285,7 +20372,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 605 */
+/* 604 */
 /*!*******************************!*\
   !*** ./~/lodash/_stackGet.js ***!
   \*******************************/
@@ -20308,7 +20395,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 606 */
+/* 605 */
 /*!*******************************!*\
   !*** ./~/lodash/_stackHas.js ***!
   \*******************************/
@@ -20331,15 +20418,15 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 607 */
+/* 606 */
 /*!*******************************!*\
   !*** ./~/lodash/_stackSet.js ***!
   \*******************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var ListCache = __webpack_require__(/*! ./_ListCache */ 595),
-	    Map = __webpack_require__(/*! ./_Map */ 608),
-	    MapCache = __webpack_require__(/*! ./_MapCache */ 617);
+	var ListCache = __webpack_require__(/*! ./_ListCache */ 594),
+	    Map = __webpack_require__(/*! ./_Map */ 607),
+	    MapCache = __webpack_require__(/*! ./_MapCache */ 616);
 	
 	/** Used as the size to enable large array optimizations. */
 	var LARGE_ARRAY_SIZE = 200;
@@ -20374,13 +20461,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 608 */
+/* 607 */
 /*!**************************!*\
   !*** ./~/lodash/_Map.js ***!
   \**************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var getNative = __webpack_require__(/*! ./_getNative */ 609),
+	var getNative = __webpack_require__(/*! ./_getNative */ 608),
 	    root = __webpack_require__(/*! ./_root */ 477);
 	
 	/* Built-in method references that are verified to be native. */
@@ -20390,14 +20477,14 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 609 */
+/* 608 */
 /*!********************************!*\
   !*** ./~/lodash/_getNative.js ***!
   \********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseIsNative = __webpack_require__(/*! ./_baseIsNative */ 610),
-	    getValue = __webpack_require__(/*! ./_getValue */ 616);
+	var baseIsNative = __webpack_require__(/*! ./_baseIsNative */ 609),
+	    getValue = __webpack_require__(/*! ./_getValue */ 615);
 	
 	/**
 	 * Gets the native function at `key` of `object`.
@@ -20416,16 +20503,16 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 610 */
+/* 609 */
 /*!***********************************!*\
   !*** ./~/lodash/_baseIsNative.js ***!
   \***********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var isFunction = __webpack_require__(/*! ./isFunction */ 611),
-	    isMasked = __webpack_require__(/*! ./_isMasked */ 613),
-	    isObject = __webpack_require__(/*! ./isObject */ 612),
-	    toSource = __webpack_require__(/*! ./_toSource */ 615);
+	var isFunction = __webpack_require__(/*! ./isFunction */ 610),
+	    isMasked = __webpack_require__(/*! ./_isMasked */ 612),
+	    isObject = __webpack_require__(/*! ./isObject */ 611),
+	    toSource = __webpack_require__(/*! ./_toSource */ 614);
 	
 	/**
 	 * Used to match `RegExp`
@@ -20472,14 +20559,14 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 611 */
+/* 610 */
 /*!********************************!*\
   !*** ./~/lodash/isFunction.js ***!
   \********************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	var baseGetTag = __webpack_require__(/*! ./_baseGetTag */ 475),
-	    isObject = __webpack_require__(/*! ./isObject */ 612);
+	    isObject = __webpack_require__(/*! ./isObject */ 611);
 	
 	/** `Object#toString` result references. */
 	var asyncTag = '[object AsyncFunction]',
@@ -20518,7 +20605,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 612 */
+/* 611 */
 /*!******************************!*\
   !*** ./~/lodash/isObject.js ***!
   \******************************/
@@ -20558,13 +20645,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 613 */
+/* 612 */
 /*!*******************************!*\
   !*** ./~/lodash/_isMasked.js ***!
   \*******************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var coreJsData = __webpack_require__(/*! ./_coreJsData */ 614);
+	var coreJsData = __webpack_require__(/*! ./_coreJsData */ 613);
 	
 	/** Used to detect methods masquerading as native. */
 	var maskSrcKey = (function() {
@@ -20587,7 +20674,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 614 */
+/* 613 */
 /*!*********************************!*\
   !*** ./~/lodash/_coreJsData.js ***!
   \*********************************/
@@ -20602,7 +20689,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 615 */
+/* 614 */
 /*!*******************************!*\
   !*** ./~/lodash/_toSource.js ***!
   \*******************************/
@@ -20637,7 +20724,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 616 */
+/* 615 */
 /*!*******************************!*\
   !*** ./~/lodash/_getValue.js ***!
   \*******************************/
@@ -20659,17 +20746,17 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 617 */
+/* 616 */
 /*!*******************************!*\
   !*** ./~/lodash/_MapCache.js ***!
   \*******************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var mapCacheClear = __webpack_require__(/*! ./_mapCacheClear */ 618),
-	    mapCacheDelete = __webpack_require__(/*! ./_mapCacheDelete */ 626),
-	    mapCacheGet = __webpack_require__(/*! ./_mapCacheGet */ 629),
-	    mapCacheHas = __webpack_require__(/*! ./_mapCacheHas */ 630),
-	    mapCacheSet = __webpack_require__(/*! ./_mapCacheSet */ 631);
+	var mapCacheClear = __webpack_require__(/*! ./_mapCacheClear */ 617),
+	    mapCacheDelete = __webpack_require__(/*! ./_mapCacheDelete */ 625),
+	    mapCacheGet = __webpack_require__(/*! ./_mapCacheGet */ 628),
+	    mapCacheHas = __webpack_require__(/*! ./_mapCacheHas */ 629),
+	    mapCacheSet = __webpack_require__(/*! ./_mapCacheSet */ 630);
 	
 	/**
 	 * Creates a map cache object to store key-value pairs.
@@ -20700,15 +20787,15 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 618 */
+/* 617 */
 /*!************************************!*\
   !*** ./~/lodash/_mapCacheClear.js ***!
   \************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var Hash = __webpack_require__(/*! ./_Hash */ 619),
-	    ListCache = __webpack_require__(/*! ./_ListCache */ 595),
-	    Map = __webpack_require__(/*! ./_Map */ 608);
+	var Hash = __webpack_require__(/*! ./_Hash */ 618),
+	    ListCache = __webpack_require__(/*! ./_ListCache */ 594),
+	    Map = __webpack_require__(/*! ./_Map */ 607);
 	
 	/**
 	 * Removes all key-value entries from the map.
@@ -20730,17 +20817,17 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 619 */
+/* 618 */
 /*!***************************!*\
   !*** ./~/lodash/_Hash.js ***!
   \***************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var hashClear = __webpack_require__(/*! ./_hashClear */ 620),
-	    hashDelete = __webpack_require__(/*! ./_hashDelete */ 622),
-	    hashGet = __webpack_require__(/*! ./_hashGet */ 623),
-	    hashHas = __webpack_require__(/*! ./_hashHas */ 624),
-	    hashSet = __webpack_require__(/*! ./_hashSet */ 625);
+	var hashClear = __webpack_require__(/*! ./_hashClear */ 619),
+	    hashDelete = __webpack_require__(/*! ./_hashDelete */ 621),
+	    hashGet = __webpack_require__(/*! ./_hashGet */ 622),
+	    hashHas = __webpack_require__(/*! ./_hashHas */ 623),
+	    hashSet = __webpack_require__(/*! ./_hashSet */ 624);
 	
 	/**
 	 * Creates a hash object.
@@ -20771,13 +20858,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 620 */
+/* 619 */
 /*!********************************!*\
   !*** ./~/lodash/_hashClear.js ***!
   \********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var nativeCreate = __webpack_require__(/*! ./_nativeCreate */ 621);
+	var nativeCreate = __webpack_require__(/*! ./_nativeCreate */ 620);
 	
 	/**
 	 * Removes all key-value entries from the hash.
@@ -20795,13 +20882,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 621 */
+/* 620 */
 /*!***********************************!*\
   !*** ./~/lodash/_nativeCreate.js ***!
   \***********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var getNative = __webpack_require__(/*! ./_getNative */ 609);
+	var getNative = __webpack_require__(/*! ./_getNative */ 608);
 	
 	/* Built-in method references that are verified to be native. */
 	var nativeCreate = getNative(Object, 'create');
@@ -20810,7 +20897,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 622 */
+/* 621 */
 /*!*********************************!*\
   !*** ./~/lodash/_hashDelete.js ***!
   \*********************************/
@@ -20836,13 +20923,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 623 */
+/* 622 */
 /*!******************************!*\
   !*** ./~/lodash/_hashGet.js ***!
   \******************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var nativeCreate = __webpack_require__(/*! ./_nativeCreate */ 621);
+	var nativeCreate = __webpack_require__(/*! ./_nativeCreate */ 620);
 	
 	/** Used to stand-in for `undefined` hash values. */
 	var HASH_UNDEFINED = '__lodash_hash_undefined__';
@@ -20875,13 +20962,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 624 */
+/* 623 */
 /*!******************************!*\
   !*** ./~/lodash/_hashHas.js ***!
   \******************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var nativeCreate = __webpack_require__(/*! ./_nativeCreate */ 621);
+	var nativeCreate = __webpack_require__(/*! ./_nativeCreate */ 620);
 	
 	/** Used for built-in method references. */
 	var objectProto = Object.prototype;
@@ -20907,13 +20994,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 625 */
+/* 624 */
 /*!******************************!*\
   !*** ./~/lodash/_hashSet.js ***!
   \******************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var nativeCreate = __webpack_require__(/*! ./_nativeCreate */ 621);
+	var nativeCreate = __webpack_require__(/*! ./_nativeCreate */ 620);
 	
 	/** Used to stand-in for `undefined` hash values. */
 	var HASH_UNDEFINED = '__lodash_hash_undefined__';
@@ -20939,13 +21026,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 626 */
+/* 625 */
 /*!*************************************!*\
   !*** ./~/lodash/_mapCacheDelete.js ***!
   \*************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var getMapData = __webpack_require__(/*! ./_getMapData */ 627);
+	var getMapData = __webpack_require__(/*! ./_getMapData */ 626);
 	
 	/**
 	 * Removes `key` and its value from the map.
@@ -20966,13 +21053,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 627 */
+/* 626 */
 /*!*********************************!*\
   !*** ./~/lodash/_getMapData.js ***!
   \*********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var isKeyable = __webpack_require__(/*! ./_isKeyable */ 628);
+	var isKeyable = __webpack_require__(/*! ./_isKeyable */ 627);
 	
 	/**
 	 * Gets the data for `map`.
@@ -20993,7 +21080,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 628 */
+/* 627 */
 /*!********************************!*\
   !*** ./~/lodash/_isKeyable.js ***!
   \********************************/
@@ -21017,13 +21104,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 629 */
+/* 628 */
 /*!**********************************!*\
   !*** ./~/lodash/_mapCacheGet.js ***!
   \**********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var getMapData = __webpack_require__(/*! ./_getMapData */ 627);
+	var getMapData = __webpack_require__(/*! ./_getMapData */ 626);
 	
 	/**
 	 * Gets the map value for `key`.
@@ -21042,13 +21129,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 630 */
+/* 629 */
 /*!**********************************!*\
   !*** ./~/lodash/_mapCacheHas.js ***!
   \**********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var getMapData = __webpack_require__(/*! ./_getMapData */ 627);
+	var getMapData = __webpack_require__(/*! ./_getMapData */ 626);
 	
 	/**
 	 * Checks if a map value for `key` exists.
@@ -21067,13 +21154,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 631 */
+/* 630 */
 /*!**********************************!*\
   !*** ./~/lodash/_mapCacheSet.js ***!
   \**********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var getMapData = __webpack_require__(/*! ./_getMapData */ 627);
+	var getMapData = __webpack_require__(/*! ./_getMapData */ 626);
 	
 	/**
 	 * Sets the map `key` to `value`.
@@ -21098,14 +21185,14 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 632 */
+/* 631 */
 /*!***************************************!*\
   !*** ./~/lodash/_assignMergeValue.js ***!
   \***************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseAssignValue = __webpack_require__(/*! ./_baseAssignValue */ 633),
-	    eq = __webpack_require__(/*! ./eq */ 599);
+	var baseAssignValue = __webpack_require__(/*! ./_baseAssignValue */ 632),
+	    eq = __webpack_require__(/*! ./eq */ 598);
 	
 	/**
 	 * This function is like `assignValue` except that it doesn't assign
@@ -21127,13 +21214,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 633 */
+/* 632 */
 /*!**************************************!*\
   !*** ./~/lodash/_baseAssignValue.js ***!
   \**************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var defineProperty = __webpack_require__(/*! ./_defineProperty */ 634);
+	var defineProperty = __webpack_require__(/*! ./_defineProperty */ 633);
 	
 	/**
 	 * The base implementation of `assignValue` and `assignMergeValue` without
@@ -21161,13 +21248,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 634 */
+/* 633 */
 /*!*************************************!*\
   !*** ./~/lodash/_defineProperty.js ***!
   \*************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var getNative = __webpack_require__(/*! ./_getNative */ 609);
+	var getNative = __webpack_require__(/*! ./_getNative */ 608);
 	
 	var defineProperty = (function() {
 	  try {
@@ -21181,13 +21268,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 635 */
+/* 634 */
 /*!******************************!*\
   !*** ./~/lodash/_baseFor.js ***!
   \******************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var createBaseFor = __webpack_require__(/*! ./_createBaseFor */ 636);
+	var createBaseFor = __webpack_require__(/*! ./_createBaseFor */ 635);
 	
 	/**
 	 * The base implementation of `baseForOwn` which iterates over `object`
@@ -21206,7 +21293,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 636 */
+/* 635 */
 /*!************************************!*\
   !*** ./~/lodash/_createBaseFor.js ***!
   \************************************/
@@ -21240,26 +21327,26 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 637 */
+/* 636 */
 /*!************************************!*\
   !*** ./~/lodash/_baseMergeDeep.js ***!
   \************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var assignMergeValue = __webpack_require__(/*! ./_assignMergeValue */ 632),
-	    cloneBuffer = __webpack_require__(/*! ./_cloneBuffer */ 638),
-	    cloneTypedArray = __webpack_require__(/*! ./_cloneTypedArray */ 639),
-	    copyArray = __webpack_require__(/*! ./_copyArray */ 642),
-	    initCloneObject = __webpack_require__(/*! ./_initCloneObject */ 643),
-	    isArguments = __webpack_require__(/*! ./isArguments */ 646),
-	    isArray = __webpack_require__(/*! ./isArray */ 648),
-	    isArrayLikeObject = __webpack_require__(/*! ./isArrayLikeObject */ 649),
-	    isBuffer = __webpack_require__(/*! ./isBuffer */ 652),
-	    isFunction = __webpack_require__(/*! ./isFunction */ 611),
-	    isObject = __webpack_require__(/*! ./isObject */ 612),
+	var assignMergeValue = __webpack_require__(/*! ./_assignMergeValue */ 631),
+	    cloneBuffer = __webpack_require__(/*! ./_cloneBuffer */ 637),
+	    cloneTypedArray = __webpack_require__(/*! ./_cloneTypedArray */ 638),
+	    copyArray = __webpack_require__(/*! ./_copyArray */ 641),
+	    initCloneObject = __webpack_require__(/*! ./_initCloneObject */ 642),
+	    isArguments = __webpack_require__(/*! ./isArguments */ 645),
+	    isArray = __webpack_require__(/*! ./isArray */ 647),
+	    isArrayLikeObject = __webpack_require__(/*! ./isArrayLikeObject */ 648),
+	    isBuffer = __webpack_require__(/*! ./isBuffer */ 651),
+	    isFunction = __webpack_require__(/*! ./isFunction */ 610),
+	    isObject = __webpack_require__(/*! ./isObject */ 611),
 	    isPlainObject = __webpack_require__(/*! ./isPlainObject */ 474),
-	    isTypedArray = __webpack_require__(/*! ./isTypedArray */ 654),
-	    toPlainObject = __webpack_require__(/*! ./toPlainObject */ 658);
+	    isTypedArray = __webpack_require__(/*! ./isTypedArray */ 653),
+	    toPlainObject = __webpack_require__(/*! ./toPlainObject */ 657);
 	
 	/**
 	 * A specialized version of `baseMerge` for arrays and objects which performs
@@ -21342,7 +21429,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 638 */
+/* 637 */
 /*!**********************************!*\
   !*** ./~/lodash/_cloneBuffer.js ***!
   \**********************************/
@@ -21387,13 +21474,13 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../webpack/buildin/module.js */ 299)(module)))
 
 /***/ },
-/* 639 */
+/* 638 */
 /*!**************************************!*\
   !*** ./~/lodash/_cloneTypedArray.js ***!
   \**************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var cloneArrayBuffer = __webpack_require__(/*! ./_cloneArrayBuffer */ 640);
+	var cloneArrayBuffer = __webpack_require__(/*! ./_cloneArrayBuffer */ 639);
 	
 	/**
 	 * Creates a clone of `typedArray`.
@@ -21412,13 +21499,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 640 */
+/* 639 */
 /*!***************************************!*\
   !*** ./~/lodash/_cloneArrayBuffer.js ***!
   \***************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var Uint8Array = __webpack_require__(/*! ./_Uint8Array */ 641);
+	var Uint8Array = __webpack_require__(/*! ./_Uint8Array */ 640);
 	
 	/**
 	 * Creates a clone of `arrayBuffer`.
@@ -21437,7 +21524,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 641 */
+/* 640 */
 /*!*********************************!*\
   !*** ./~/lodash/_Uint8Array.js ***!
   \*********************************/
@@ -21452,7 +21539,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 642 */
+/* 641 */
 /*!********************************!*\
   !*** ./~/lodash/_copyArray.js ***!
   \********************************/
@@ -21481,15 +21568,15 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 643 */
+/* 642 */
 /*!**************************************!*\
   !*** ./~/lodash/_initCloneObject.js ***!
   \**************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseCreate = __webpack_require__(/*! ./_baseCreate */ 644),
+	var baseCreate = __webpack_require__(/*! ./_baseCreate */ 643),
 	    getPrototype = __webpack_require__(/*! ./_getPrototype */ 481),
-	    isPrototype = __webpack_require__(/*! ./_isPrototype */ 645);
+	    isPrototype = __webpack_require__(/*! ./_isPrototype */ 644);
 	
 	/**
 	 * Initializes an object clone.
@@ -21508,13 +21595,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 644 */
+/* 643 */
 /*!*********************************!*\
   !*** ./~/lodash/_baseCreate.js ***!
   \*********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(/*! ./isObject */ 612);
+	var isObject = __webpack_require__(/*! ./isObject */ 611);
 	
 	/** Built-in value references. */
 	var objectCreate = Object.create;
@@ -21547,7 +21634,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 645 */
+/* 644 */
 /*!**********************************!*\
   !*** ./~/lodash/_isPrototype.js ***!
   \**********************************/
@@ -21574,13 +21661,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 646 */
+/* 645 */
 /*!*********************************!*\
   !*** ./~/lodash/isArguments.js ***!
   \*********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseIsArguments = __webpack_require__(/*! ./_baseIsArguments */ 647),
+	var baseIsArguments = __webpack_require__(/*! ./_baseIsArguments */ 646),
 	    isObjectLike = __webpack_require__(/*! ./isObjectLike */ 483);
 	
 	/** Used for built-in method references. */
@@ -21619,7 +21706,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 647 */
+/* 646 */
 /*!**************************************!*\
   !*** ./~/lodash/_baseIsArguments.js ***!
   \**************************************/
@@ -21646,7 +21733,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 648 */
+/* 647 */
 /*!*****************************!*\
   !*** ./~/lodash/isArray.js ***!
   \*****************************/
@@ -21681,13 +21768,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 649 */
+/* 648 */
 /*!***************************************!*\
   !*** ./~/lodash/isArrayLikeObject.js ***!
   \***************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var isArrayLike = __webpack_require__(/*! ./isArrayLike */ 650),
+	var isArrayLike = __webpack_require__(/*! ./isArrayLike */ 649),
 	    isObjectLike = __webpack_require__(/*! ./isObjectLike */ 483);
 	
 	/**
@@ -21723,14 +21810,14 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 650 */
+/* 649 */
 /*!*********************************!*\
   !*** ./~/lodash/isArrayLike.js ***!
   \*********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var isFunction = __webpack_require__(/*! ./isFunction */ 611),
-	    isLength = __webpack_require__(/*! ./isLength */ 651);
+	var isFunction = __webpack_require__(/*! ./isFunction */ 610),
+	    isLength = __webpack_require__(/*! ./isLength */ 650);
 	
 	/**
 	 * Checks if `value` is array-like. A value is considered array-like if it's
@@ -21765,7 +21852,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 651 */
+/* 650 */
 /*!******************************!*\
   !*** ./~/lodash/isLength.js ***!
   \******************************/
@@ -21809,14 +21896,14 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 652 */
+/* 651 */
 /*!******************************!*\
   !*** ./~/lodash/isBuffer.js ***!
   \******************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(/*! ./_root */ 477),
-	    stubFalse = __webpack_require__(/*! ./stubFalse */ 653);
+	    stubFalse = __webpack_require__(/*! ./stubFalse */ 652);
 	
 	/** Detect free variable `exports`. */
 	var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
@@ -21857,7 +21944,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../webpack/buildin/module.js */ 299)(module)))
 
 /***/ },
-/* 653 */
+/* 652 */
 /*!*******************************!*\
   !*** ./~/lodash/stubFalse.js ***!
   \*******************************/
@@ -21884,15 +21971,15 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 654 */
+/* 653 */
 /*!**********************************!*\
   !*** ./~/lodash/isTypedArray.js ***!
   \**********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseIsTypedArray = __webpack_require__(/*! ./_baseIsTypedArray */ 655),
-	    baseUnary = __webpack_require__(/*! ./_baseUnary */ 656),
-	    nodeUtil = __webpack_require__(/*! ./_nodeUtil */ 657);
+	var baseIsTypedArray = __webpack_require__(/*! ./_baseIsTypedArray */ 654),
+	    baseUnary = __webpack_require__(/*! ./_baseUnary */ 655),
+	    nodeUtil = __webpack_require__(/*! ./_nodeUtil */ 656);
 	
 	/* Node.js helper references. */
 	var nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
@@ -21920,14 +22007,14 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 655 */
+/* 654 */
 /*!***************************************!*\
   !*** ./~/lodash/_baseIsTypedArray.js ***!
   \***************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	var baseGetTag = __webpack_require__(/*! ./_baseGetTag */ 475),
-	    isLength = __webpack_require__(/*! ./isLength */ 651),
+	    isLength = __webpack_require__(/*! ./isLength */ 650),
 	    isObjectLike = __webpack_require__(/*! ./isObjectLike */ 483);
 	
 	/** `Object#toString` result references. */
@@ -21989,7 +22076,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 656 */
+/* 655 */
 /*!********************************!*\
   !*** ./~/lodash/_baseUnary.js ***!
   \********************************/
@@ -22012,7 +22099,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 657 */
+/* 656 */
 /*!*******************************!*\
   !*** ./~/lodash/_nodeUtil.js ***!
   \*******************************/
@@ -22044,14 +22131,14 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../webpack/buildin/module.js */ 299)(module)))
 
 /***/ },
-/* 658 */
+/* 657 */
 /*!***********************************!*\
   !*** ./~/lodash/toPlainObject.js ***!
   \***********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var copyObject = __webpack_require__(/*! ./_copyObject */ 659),
-	    keysIn = __webpack_require__(/*! ./keysIn */ 661);
+	var copyObject = __webpack_require__(/*! ./_copyObject */ 658),
+	    keysIn = __webpack_require__(/*! ./keysIn */ 660);
 	
 	/**
 	 * Converts `value` to a plain object flattening inherited enumerable string
@@ -22085,14 +22172,14 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 659 */
+/* 658 */
 /*!*********************************!*\
   !*** ./~/lodash/_copyObject.js ***!
   \*********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var assignValue = __webpack_require__(/*! ./_assignValue */ 660),
-	    baseAssignValue = __webpack_require__(/*! ./_baseAssignValue */ 633);
+	var assignValue = __webpack_require__(/*! ./_assignValue */ 659),
+	    baseAssignValue = __webpack_require__(/*! ./_baseAssignValue */ 632);
 	
 	/**
 	 * Copies properties of `source` to `object`.
@@ -22134,14 +22221,14 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 660 */
+/* 659 */
 /*!**********************************!*\
   !*** ./~/lodash/_assignValue.js ***!
   \**********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseAssignValue = __webpack_require__(/*! ./_baseAssignValue */ 633),
-	    eq = __webpack_require__(/*! ./eq */ 599);
+	var baseAssignValue = __webpack_require__(/*! ./_baseAssignValue */ 632),
+	    eq = __webpack_require__(/*! ./eq */ 598);
 	
 	/** Used for built-in method references. */
 	var objectProto = Object.prototype;
@@ -22171,15 +22258,15 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 661 */
+/* 660 */
 /*!****************************!*\
   !*** ./~/lodash/keysIn.js ***!
   \****************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var arrayLikeKeys = __webpack_require__(/*! ./_arrayLikeKeys */ 662),
-	    baseKeysIn = __webpack_require__(/*! ./_baseKeysIn */ 665),
-	    isArrayLike = __webpack_require__(/*! ./isArrayLike */ 650);
+	var arrayLikeKeys = __webpack_require__(/*! ./_arrayLikeKeys */ 661),
+	    baseKeysIn = __webpack_require__(/*! ./_baseKeysIn */ 664),
+	    isArrayLike = __webpack_require__(/*! ./isArrayLike */ 649);
 	
 	/**
 	 * Creates an array of the own and inherited enumerable property names of `object`.
@@ -22212,18 +22299,18 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 662 */
+/* 661 */
 /*!************************************!*\
   !*** ./~/lodash/_arrayLikeKeys.js ***!
   \************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseTimes = __webpack_require__(/*! ./_baseTimes */ 663),
-	    isArguments = __webpack_require__(/*! ./isArguments */ 646),
-	    isArray = __webpack_require__(/*! ./isArray */ 648),
-	    isBuffer = __webpack_require__(/*! ./isBuffer */ 652),
-	    isIndex = __webpack_require__(/*! ./_isIndex */ 664),
-	    isTypedArray = __webpack_require__(/*! ./isTypedArray */ 654);
+	var baseTimes = __webpack_require__(/*! ./_baseTimes */ 662),
+	    isArguments = __webpack_require__(/*! ./isArguments */ 645),
+	    isArray = __webpack_require__(/*! ./isArray */ 647),
+	    isBuffer = __webpack_require__(/*! ./isBuffer */ 651),
+	    isIndex = __webpack_require__(/*! ./_isIndex */ 663),
+	    isTypedArray = __webpack_require__(/*! ./isTypedArray */ 653);
 	
 	/** Used for built-in method references. */
 	var objectProto = Object.prototype;
@@ -22270,7 +22357,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 663 */
+/* 662 */
 /*!********************************!*\
   !*** ./~/lodash/_baseTimes.js ***!
   \********************************/
@@ -22299,7 +22386,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 664 */
+/* 663 */
 /*!******************************!*\
   !*** ./~/lodash/_isIndex.js ***!
   \******************************/
@@ -22330,15 +22417,15 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 665 */
+/* 664 */
 /*!*********************************!*\
   !*** ./~/lodash/_baseKeysIn.js ***!
   \*********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(/*! ./isObject */ 612),
-	    isPrototype = __webpack_require__(/*! ./_isPrototype */ 645),
-	    nativeKeysIn = __webpack_require__(/*! ./_nativeKeysIn */ 666);
+	var isObject = __webpack_require__(/*! ./isObject */ 611),
+	    isPrototype = __webpack_require__(/*! ./_isPrototype */ 644),
+	    nativeKeysIn = __webpack_require__(/*! ./_nativeKeysIn */ 665);
 	
 	/** Used for built-in method references. */
 	var objectProto = Object.prototype;
@@ -22372,7 +22459,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 666 */
+/* 665 */
 /*!***********************************!*\
   !*** ./~/lodash/_nativeKeysIn.js ***!
   \***********************************/
@@ -22401,14 +22488,14 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 667 */
+/* 666 */
 /*!*************************************!*\
   !*** ./~/lodash/_createAssigner.js ***!
   \*************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseRest = __webpack_require__(/*! ./_baseRest */ 668),
-	    isIterateeCall = __webpack_require__(/*! ./_isIterateeCall */ 676);
+	var baseRest = __webpack_require__(/*! ./_baseRest */ 667),
+	    isIterateeCall = __webpack_require__(/*! ./_isIterateeCall */ 675);
 	
 	/**
 	 * Creates a function like `_.assign`.
@@ -22447,15 +22534,15 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 668 */
+/* 667 */
 /*!*******************************!*\
   !*** ./~/lodash/_baseRest.js ***!
   \*******************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var identity = __webpack_require__(/*! ./identity */ 669),
-	    overRest = __webpack_require__(/*! ./_overRest */ 670),
-	    setToString = __webpack_require__(/*! ./_setToString */ 672);
+	var identity = __webpack_require__(/*! ./identity */ 668),
+	    overRest = __webpack_require__(/*! ./_overRest */ 669),
+	    setToString = __webpack_require__(/*! ./_setToString */ 671);
 	
 	/**
 	 * The base implementation of `_.rest` which doesn't validate or coerce arguments.
@@ -22473,7 +22560,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 669 */
+/* 668 */
 /*!******************************!*\
   !*** ./~/lodash/identity.js ***!
   \******************************/
@@ -22503,13 +22590,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 670 */
+/* 669 */
 /*!*******************************!*\
   !*** ./~/lodash/_overRest.js ***!
   \*******************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var apply = __webpack_require__(/*! ./_apply */ 671);
+	var apply = __webpack_require__(/*! ./_apply */ 670);
 	
 	/* Built-in method references for those with the same name as other `lodash` methods. */
 	var nativeMax = Math.max;
@@ -22548,7 +22635,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 671 */
+/* 670 */
 /*!****************************!*\
   !*** ./~/lodash/_apply.js ***!
   \****************************/
@@ -22578,14 +22665,14 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 672 */
+/* 671 */
 /*!**********************************!*\
   !*** ./~/lodash/_setToString.js ***!
   \**********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseSetToString = __webpack_require__(/*! ./_baseSetToString */ 673),
-	    shortOut = __webpack_require__(/*! ./_shortOut */ 675);
+	var baseSetToString = __webpack_require__(/*! ./_baseSetToString */ 672),
+	    shortOut = __webpack_require__(/*! ./_shortOut */ 674);
 	
 	/**
 	 * Sets the `toString` method of `func` to return `string`.
@@ -22601,15 +22688,15 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 673 */
+/* 672 */
 /*!**************************************!*\
   !*** ./~/lodash/_baseSetToString.js ***!
   \**************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var constant = __webpack_require__(/*! ./constant */ 674),
-	    defineProperty = __webpack_require__(/*! ./_defineProperty */ 634),
-	    identity = __webpack_require__(/*! ./identity */ 669);
+	var constant = __webpack_require__(/*! ./constant */ 673),
+	    defineProperty = __webpack_require__(/*! ./_defineProperty */ 633),
+	    identity = __webpack_require__(/*! ./identity */ 668);
 	
 	/**
 	 * The base implementation of `setToString` without support for hot loop shorting.
@@ -22632,7 +22719,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 674 */
+/* 673 */
 /*!******************************!*\
   !*** ./~/lodash/constant.js ***!
   \******************************/
@@ -22667,7 +22754,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 675 */
+/* 674 */
 /*!*******************************!*\
   !*** ./~/lodash/_shortOut.js ***!
   \*******************************/
@@ -22713,16 +22800,16 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 676 */
+/* 675 */
 /*!*************************************!*\
   !*** ./~/lodash/_isIterateeCall.js ***!
   \*************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var eq = __webpack_require__(/*! ./eq */ 599),
-	    isArrayLike = __webpack_require__(/*! ./isArrayLike */ 650),
-	    isIndex = __webpack_require__(/*! ./_isIndex */ 664),
-	    isObject = __webpack_require__(/*! ./isObject */ 612);
+	var eq = __webpack_require__(/*! ./eq */ 598),
+	    isArrayLike = __webpack_require__(/*! ./isArrayLike */ 649),
+	    isIndex = __webpack_require__(/*! ./_isIndex */ 663),
+	    isObject = __webpack_require__(/*! ./isObject */ 611);
 	
 	/**
 	 * Checks if the given arguments are from an iteratee call.
@@ -22752,123 +22839,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 677 */
-/*!*****************************************!*\
-  !*** ./src/store/reducers/fb/photos.js ***!
-  \*****************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(/*! ./~/react-hot-api/modules/index.js */ 300), RootInstanceProvider = __webpack_require__(/*! ./~/react-hot-loader/RootInstanceProvider.js */ 308), ReactMount = __webpack_require__(/*! react/lib/ReactMount */ 310), React = __webpack_require__(/*! react */ 362); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
-	
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.photos = photos;
-	
-	var _merge = __webpack_require__(/*! lodash/merge */ 592);
-	
-	var _merge2 = _interopRequireDefault(_merge);
-	
-	var _types = __webpack_require__(/*! store/actions/types */ 581);
-	
-	var ActionTypes = _interopRequireWildcard(_types);
-	
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var initialState = {
-	    photos: [],
-	    uploadShow: false
-	};
-	
-	function photos() {
-	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
-	    var action = arguments[1];
-	
-	    switch (action.type) {
-	
-	        case ActionTypes.FB_UPLOAD_SHOW:
-	            return (0, _merge2.default)({}, state, { uploadShow: true });
-	        case ActionTypes.FB_UPLOAD_HIDE:
-	            return (0, _merge2.default)({}, state, { uploadShow: false });
-	
-	        case ActionTypes.FB_LOAD_PHOTOS_OK:
-	            state.photos = action.photos;
-	            return (0, _merge2.default)({}, state);
-	
-	        default:
-	            return state;
-	    }
-	}
-	
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(/*! ./~/react-hot-loader/makeExportsHot.js */ 582); if (makeExportsHot(module, __webpack_require__(/*! react */ 362))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot apply hot update to " + "photos.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../../../~/webpack/buildin/module.js */ 299)(module)))
-
-/***/ },
-/* 678 */
-/*!***************************************!*\
-  !*** ./src/store/reducers/general.js ***!
-  \***************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(/*! ./~/react-hot-api/modules/index.js */ 300), RootInstanceProvider = __webpack_require__(/*! ./~/react-hot-loader/RootInstanceProvider.js */ 308), ReactMount = __webpack_require__(/*! react/lib/ReactMount */ 310), React = __webpack_require__(/*! react */ 362); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
-	
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.general = general;
-	
-	var _merge = __webpack_require__(/*! lodash/merge */ 592);
-	
-	var _merge2 = _interopRequireDefault(_merge);
-	
-	var _types = __webpack_require__(/*! store/actions/types */ 581);
-	
-	var ActionTypes = _interopRequireWildcard(_types);
-	
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var initialState = {
-	    loading: false
-	};
-	
-	function general() {
-	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
-	    var action = arguments[1];
-	
-	    switch (action.type) {
-	
-	        case ActionTypes.LOADING:
-	        case ActionTypes.FB_LOGIN:
-	        case ActionTypes.FB_LOAD_PHOTOS:
-	        case ActionTypes.FB_UPLOAD_PHOTO:
-	            return (0, _merge2.default)({}, state, { loading: true });
-	
-	        case ActionTypes.STOP_LOADING:
-	        case ActionTypes.ERROR:
-	        case ActionTypes.FB_LOGIN_STATUS_OK:
-	        case ActionTypes.FB_LOGIN_OK:
-	        case ActionTypes.FB_LOAD_PHOTOS_OK:
-	        case ActionTypes.FB_UPLOAD_PHOTO_OK:
-	            return (0, _merge2.default)({}, state, { loading: false });
-	
-	        default:
-	            return state;
-	    }
-	}
-	
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(/*! ./~/react-hot-loader/makeExportsHot.js */ 582); if (makeExportsHot(module, __webpack_require__(/*! react */ 362))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot apply hot update to " + "general.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../../~/webpack/buildin/module.js */ 299)(module)))
-
-/***/ },
-/* 679 */
+/* 676 */
 /*!**************************************!*\
   !*** ./src/store/reducers/notify.js ***!
   \**************************************/
@@ -22883,9 +22854,9 @@ webpackJsonp([0],[
 	});
 	exports.default = notifs;
 	
-	var _types = __webpack_require__(/*! store/actions/types */ 581);
+	var _actions = __webpack_require__(/*! store/actions */ 581);
 	
-	var ActionTypes = _interopRequireWildcard(_types);
+	var ActionTypes = _interopRequireWildcard(_actions);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -22923,7 +22894,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../../~/webpack/buildin/module.js */ 299)(module)))
 
 /***/ },
-/* 680 */
+/* 677 */
 /*!**********************************!*\
   !*** ./src/components/routes.js ***!
   \**********************************/
@@ -22947,35 +22918,35 @@ webpackJsonp([0],[
 	
 	var _reactRouter = __webpack_require__(/*! react-router */ 501);
 	
-	var _photos = __webpack_require__(/*! ./pages/fb/photos */ 681);
+	var _photos = __webpack_require__(/*! ./pages/fb/photos */ 678);
 	
 	var _photos2 = _interopRequireDefault(_photos);
 	
-	var _login = __webpack_require__(/*! ./pages/fb/login */ 963);
+	var _login = __webpack_require__(/*! ./pages/fb/login */ 957);
 	
 	var _login2 = _interopRequireDefault(_login);
 	
-	var _template = __webpack_require__(/*! ./template/template */ 964);
+	var _template = __webpack_require__(/*! ./template/template */ 958);
 	
 	var _template2 = _interopRequireDefault(_template);
 	
-	var _home = __webpack_require__(/*! ./pages/home */ 1002);
+	var _home = __webpack_require__(/*! ./pages/home */ 996);
 	
 	var _home2 = _interopRequireDefault(_home);
 	
-	var _fbParent = __webpack_require__(/*! ./pages/fb/fb-parent */ 1003);
+	var _fbParent = __webpack_require__(/*! ./pages/fb/fb-parent */ 997);
 	
 	var _fbParent2 = _interopRequireDefault(_fbParent);
 	
-	var _page = __webpack_require__(/*! ./pages/page404 */ 1004);
+	var _page = __webpack_require__(/*! ./pages/page404 */ 998);
 	
 	var _page2 = _interopRequireDefault(_page);
 	
-	var _privacyPolicy = __webpack_require__(/*! ./pages/fb/privacy-policy */ 1005);
+	var _privacyPolicy = __webpack_require__(/*! ./pages/fb/privacy-policy */ 999);
 	
 	var _privacyPolicy2 = _interopRequireDefault(_privacyPolicy);
 	
-	var _aboutUs = __webpack_require__(/*! ./pages/about-us */ 1006);
+	var _aboutUs = __webpack_require__(/*! ./pages/about-us */ 1000);
 	
 	var _aboutUs2 = _interopRequireDefault(_aboutUs);
 	
@@ -23066,7 +23037,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../~/webpack/buildin/module.js */ 299)(module)))
 
 /***/ },
-/* 681 */
+/* 678 */
 /*!*******************************************!*\
   !*** ./src/components/pages/fb/photos.js ***!
   \*******************************************/
@@ -23092,19 +23063,19 @@ webpackJsonp([0],[
 	
 	var _facebook2 = _interopRequireDefault(_facebook);
 	
-	var _photo = __webpack_require__(/*! ./partials/photo */ 682);
+	var _photo = __webpack_require__(/*! ./partials/photo */ 679);
 	
 	var _photo2 = _interopRequireDefault(_photo);
 	
-	var _embeddedPhoto = __webpack_require__(/*! ./partials/embedded-photo */ 683);
+	var _embeddedPhoto = __webpack_require__(/*! ./partials/embedded-photo */ 680);
 	
 	var _embeddedPhoto2 = _interopRequireDefault(_embeddedPhoto);
 	
-	var _reactMasonryComponent = __webpack_require__(/*! react-masonry-component */ 684);
+	var _reactMasonryComponent = __webpack_require__(/*! react-masonry-component */ 681);
 	
 	var _reactMasonryComponent2 = _interopRequireDefault(_reactMasonryComponent);
 	
-	var _upload = __webpack_require__(/*! ./upload */ 709);
+	var _upload = __webpack_require__(/*! ./upload */ 706);
 	
 	var _upload2 = _interopRequireDefault(_upload);
 	
@@ -23280,7 +23251,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../../../~/webpack/buildin/module.js */ 299)(module)))
 
 /***/ },
-/* 682 */
+/* 679 */
 /*!***************************************************!*\
   !*** ./src/components/pages/fb/partials/photo.js ***!
   \***************************************************/
@@ -23355,7 +23326,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../../../../~/webpack/buildin/module.js */ 299)(module)))
 
 /***/ },
-/* 683 */
+/* 680 */
 /*!************************************************************!*\
   !*** ./src/components/pages/fb/partials/embedded-photo.js ***!
   \************************************************************/
@@ -23423,7 +23394,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../../../../~/webpack/buildin/module.js */ 299)(module)))
 
 /***/ },
-/* 684 */
+/* 681 */
 /*!************************************************!*\
   !*** ./~/react-masonry-component/lib/index.js ***!
   \************************************************/
@@ -23434,12 +23405,12 @@ webpackJsonp([0],[
 	(function() {
 	
 	var isBrowser = typeof window !== 'undefined';
-	var Masonry = isBrowser ? window.Masonry || __webpack_require__(/*! masonry-layout */ 685) : null;
-	var imagesloaded = isBrowser ? __webpack_require__(/*! imagesloaded */ 692) : null;
-	var assign = __webpack_require__(/*! lodash.assign */ 693);
-	var elementResizeDetectorMaker = __webpack_require__(/*! element-resize-detector */ 694);
-	var debounce = __webpack_require__(/*! lodash.debounce */ 707);
-	var omit = __webpack_require__(/*! lodash.omit */ 708);
+	var Masonry = isBrowser ? window.Masonry || __webpack_require__(/*! masonry-layout */ 682) : null;
+	var imagesloaded = isBrowser ? __webpack_require__(/*! imagesloaded */ 689) : null;
+	var assign = __webpack_require__(/*! lodash.assign */ 690);
+	var elementResizeDetectorMaker = __webpack_require__(/*! element-resize-detector */ 691);
+	var debounce = __webpack_require__(/*! lodash.debounce */ 704);
+	var omit = __webpack_require__(/*! lodash.omit */ 705);
 	var React = __webpack_require__(/*! react */ 362);
 	var refName = 'masonryContainer';
 	
@@ -23686,7 +23657,7 @@ webpackJsonp([0],[
 	}.call(window));
 
 /***/ },
-/* 685 */
+/* 682 */
 /*!*************************************!*\
   !*** ./~/masonry-layout/masonry.js ***!
   \*************************************/
@@ -23717,8 +23688,8 @@ webpackJsonp([0],[
 	  } else if ( typeof module == 'object' && module.exports ) {
 	    // CommonJS
 	    module.exports = factory(
-	      __webpack_require__(/*! outlayer */ 686),
-	      __webpack_require__(/*! get-size */ 688)
+	      __webpack_require__(/*! outlayer */ 683),
+	      __webpack_require__(/*! get-size */ 685)
 	    );
 	  } else {
 	    // browser global
@@ -23905,7 +23876,7 @@ webpackJsonp([0],[
 	}.call(window));
 
 /***/ },
-/* 686 */
+/* 683 */
 /*!********************************!*\
   !*** ./~/outlayer/outlayer.js ***!
   \********************************/
@@ -23941,10 +23912,10 @@ webpackJsonp([0],[
 	    // CommonJS - Browserify, Webpack
 	    module.exports = factory(
 	      window,
-	      __webpack_require__(/*! ev-emitter */ 687),
-	      __webpack_require__(/*! get-size */ 688),
-	      __webpack_require__(/*! fizzy-ui-utils */ 689),
-	      __webpack_require__(/*! ./item */ 691)
+	      __webpack_require__(/*! ev-emitter */ 684),
+	      __webpack_require__(/*! get-size */ 685),
+	      __webpack_require__(/*! fizzy-ui-utils */ 686),
+	      __webpack_require__(/*! ./item */ 688)
 	    );
 	  } else {
 	    // browser global
@@ -24858,7 +24829,7 @@ webpackJsonp([0],[
 	}.call(window));
 
 /***/ },
-/* 687 */
+/* 684 */
 /*!************************************!*\
   !*** ./~/ev-emitter/ev-emitter.js ***!
   \************************************/
@@ -24976,7 +24947,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 688 */
+/* 685 */
 /*!********************************!*\
   !*** ./~/get-size/get-size.js ***!
   \********************************/
@@ -25199,7 +25170,7 @@ webpackJsonp([0],[
 	}.call(window));
 
 /***/ },
-/* 689 */
+/* 686 */
 /*!***********************************!*\
   !*** ./~/fizzy-ui-utils/utils.js ***!
   \***********************************/
@@ -25231,7 +25202,7 @@ webpackJsonp([0],[
 	    // CommonJS
 	    module.exports = factory(
 	      window,
-	      __webpack_require__(/*! desandro-matches-selector */ 690)
+	      __webpack_require__(/*! desandro-matches-selector */ 687)
 	    );
 	  } else {
 	    // browser global
@@ -25450,7 +25421,7 @@ webpackJsonp([0],[
 	}.call(window));
 
 /***/ },
-/* 690 */
+/* 687 */
 /*!*********************************************************!*\
   !*** ./~/desandro-matches-selector/matches-selector.js ***!
   \*********************************************************/
@@ -25517,7 +25488,7 @@ webpackJsonp([0],[
 	}.call(window));
 
 /***/ },
-/* 691 */
+/* 688 */
 /*!****************************!*\
   !*** ./~/outlayer/item.js ***!
   \****************************/
@@ -25545,8 +25516,8 @@ webpackJsonp([0],[
 	  } else if ( typeof module == 'object' && module.exports ) {
 	    // CommonJS - Browserify, Webpack
 	    module.exports = factory(
-	      __webpack_require__(/*! ev-emitter */ 687),
-	      __webpack_require__(/*! get-size */ 688)
+	      __webpack_require__(/*! ev-emitter */ 684),
+	      __webpack_require__(/*! get-size */ 685)
 	    );
 	  } else {
 	    // browser global
@@ -26084,7 +26055,7 @@ webpackJsonp([0],[
 	}.call(window));
 
 /***/ },
-/* 692 */
+/* 689 */
 /*!****************************************!*\
   !*** ./~/imagesloaded/imagesloaded.js ***!
   \****************************************/
@@ -26116,7 +26087,7 @@ webpackJsonp([0],[
 	    // CommonJS
 	    module.exports = factory(
 	      window,
-	      __webpack_require__(/*! ev-emitter */ 687)
+	      __webpack_require__(/*! ev-emitter */ 684)
 	    );
 	  } else {
 	    // browser global
@@ -26468,7 +26439,7 @@ webpackJsonp([0],[
 	}.call(window));
 
 /***/ },
-/* 693 */
+/* 690 */
 /*!**********************************!*\
   !*** ./~/lodash.assign/index.js ***!
   \**********************************/
@@ -27114,7 +27085,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 694 */
+/* 691 */
 /*!******************************************************************!*\
   !*** ./~/element-resize-detector/src/element-resize-detector.js ***!
   \******************************************************************/
@@ -27122,19 +27093,19 @@ webpackJsonp([0],[
 
 	"use strict";
 	
-	var forEach                 = __webpack_require__(/*! ./collection-utils */ 695).forEach;
-	var elementUtilsMaker       = __webpack_require__(/*! ./element-utils */ 696);
-	var listenerHandlerMaker    = __webpack_require__(/*! ./listener-handler */ 697);
-	var idGeneratorMaker        = __webpack_require__(/*! ./id-generator */ 698);
-	var idHandlerMaker          = __webpack_require__(/*! ./id-handler */ 699);
-	var reporterMaker           = __webpack_require__(/*! ./reporter */ 700);
-	var browserDetector         = __webpack_require__(/*! ./browser-detector */ 701);
-	var batchProcessorMaker     = __webpack_require__(/*! batch-processor */ 702);
-	var stateHandler            = __webpack_require__(/*! ./state-handler */ 704);
+	var forEach                 = __webpack_require__(/*! ./collection-utils */ 692).forEach;
+	var elementUtilsMaker       = __webpack_require__(/*! ./element-utils */ 693);
+	var listenerHandlerMaker    = __webpack_require__(/*! ./listener-handler */ 694);
+	var idGeneratorMaker        = __webpack_require__(/*! ./id-generator */ 695);
+	var idHandlerMaker          = __webpack_require__(/*! ./id-handler */ 696);
+	var reporterMaker           = __webpack_require__(/*! ./reporter */ 697);
+	var browserDetector         = __webpack_require__(/*! ./browser-detector */ 698);
+	var batchProcessorMaker     = __webpack_require__(/*! batch-processor */ 699);
+	var stateHandler            = __webpack_require__(/*! ./state-handler */ 701);
 	
 	//Detection strategies.
-	var objectStrategyMaker     = __webpack_require__(/*! ./detection-strategy/object.js */ 705);
-	var scrollStrategyMaker     = __webpack_require__(/*! ./detection-strategy/scroll.js */ 706);
+	var objectStrategyMaker     = __webpack_require__(/*! ./detection-strategy/object.js */ 702);
+	var scrollStrategyMaker     = __webpack_require__(/*! ./detection-strategy/scroll.js */ 703);
 	
 	function isCollection(obj) {
 	    return Array.isArray(obj) || obj.length !== undefined;
@@ -27444,7 +27415,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 695 */
+/* 692 */
 /*!***********************************************************!*\
   !*** ./~/element-resize-detector/src/collection-utils.js ***!
   \***********************************************************/
@@ -27472,7 +27443,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 696 */
+/* 693 */
 /*!********************************************************!*\
   !*** ./~/element-resize-detector/src/element-utils.js ***!
   \********************************************************/
@@ -27533,7 +27504,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 697 */
+/* 694 */
 /*!***********************************************************!*\
   !*** ./~/element-resize-detector/src/listener-handler.js ***!
   \***********************************************************/
@@ -27602,7 +27573,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 698 */
+/* 695 */
 /*!*******************************************************!*\
   !*** ./~/element-resize-detector/src/id-generator.js ***!
   \*******************************************************/
@@ -27629,7 +27600,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 699 */
+/* 696 */
 /*!*****************************************************!*\
   !*** ./~/element-resize-detector/src/id-handler.js ***!
   \*****************************************************/
@@ -27685,7 +27656,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 700 */
+/* 697 */
 /*!***************************************************!*\
   !*** ./~/element-resize-detector/src/reporter.js ***!
   \***************************************************/
@@ -27736,7 +27707,7 @@ webpackJsonp([0],[
 	};
 
 /***/ },
-/* 701 */
+/* 698 */
 /*!***********************************************************!*\
   !*** ./~/element-resize-detector/src/browser-detector.js ***!
   \***********************************************************/
@@ -27784,7 +27755,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 702 */
+/* 699 */
 /*!**************************************************!*\
   !*** ./~/batch-processor/src/batch-processor.js ***!
   \**************************************************/
@@ -27792,7 +27763,7 @@ webpackJsonp([0],[
 
 	"use strict";
 	
-	var utils = __webpack_require__(/*! ./utils */ 703);
+	var utils = __webpack_require__(/*! ./utils */ 700);
 	
 	module.exports = function batchProcessorMaker(options) {
 	    options             = options || {};
@@ -27931,7 +27902,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 703 */
+/* 700 */
 /*!****************************************!*\
   !*** ./~/batch-processor/src/utils.js ***!
   \****************************************/
@@ -27955,7 +27926,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 704 */
+/* 701 */
 /*!********************************************************!*\
   !*** ./~/element-resize-detector/src/state-handler.js ***!
   \********************************************************/
@@ -27986,7 +27957,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 705 */
+/* 702 */
 /*!********************************************************************!*\
   !*** ./~/element-resize-detector/src/detection-strategy/object.js ***!
   \********************************************************************/
@@ -27999,7 +27970,7 @@ webpackJsonp([0],[
 	
 	"use strict";
 	
-	var browserDetector = __webpack_require__(/*! ../browser-detector */ 701);
+	var browserDetector = __webpack_require__(/*! ../browser-detector */ 698);
 	
 	module.exports = function(options) {
 	    options             = options || {};
@@ -28209,7 +28180,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 706 */
+/* 703 */
 /*!********************************************************************!*\
   !*** ./~/element-resize-detector/src/detection-strategy/scroll.js ***!
   \********************************************************************/
@@ -28222,7 +28193,7 @@ webpackJsonp([0],[
 	
 	"use strict";
 	
-	var forEach = __webpack_require__(/*! ../collection-utils */ 695).forEach;
+	var forEach = __webpack_require__(/*! ../collection-utils */ 692).forEach;
 	
 	module.exports = function(options) {
 	    options             = options || {};
@@ -28839,7 +28810,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 707 */
+/* 704 */
 /*!************************************!*\
   !*** ./~/lodash.debounce/index.js ***!
   \************************************/
@@ -29226,7 +29197,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 708 */
+/* 705 */
 /*!********************************!*\
   !*** ./~/lodash.omit/index.js ***!
   \********************************/
@@ -30724,7 +30695,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 709 */
+/* 706 */
 /*!*******************************************!*\
   !*** ./src/components/pages/fb/upload.js ***!
   \*******************************************/
@@ -30748,17 +30719,15 @@ webpackJsonp([0],[
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _photos = __webpack_require__(/*! store/actions/fb/photos */ 710);
+	var _facebook = __webpack_require__(/*! store/actions/facebook */ 586);
 	
-	var PhotoActions = _interopRequireWildcard(_photos);
+	var _facebook2 = _interopRequireDefault(_facebook);
 	
-	var _reactBootstrap = __webpack_require__(/*! react-bootstrap */ 713);
+	var _reactBootstrap = __webpack_require__(/*! react-bootstrap */ 707);
 	
 	var _reactRedux = __webpack_require__(/*! react-redux */ 492);
 	
 	var _redux = __webpack_require__(/*! redux */ 472);
-	
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -30787,7 +30756,7 @@ webpackJsonp([0],[
 	                reader.onload = function (e) {
 	                    var contents = e.target.result;
 	                    // Fire Action
-	                    PhotoActions.fbUploadPhoto({
+	                    _facebook2.default.fbUploadPhoto({
 	                        image: new Blob([contents], { type: file.type }),
 	                        description: description
 	                    });
@@ -30802,7 +30771,7 @@ webpackJsonp([0],[
 	
 	            return _react2.default.createElement(
 	                _reactBootstrap.Modal,
-	                { show: this.props.show, onHide: PhotoActions.fbUploadHide() },
+	                { show: this.props.show, onHide: _facebook2.default.fbUploadHide() },
 	                _react2.default.createElement(
 	                    _reactBootstrap.Modal.Header,
 	                    null,
@@ -30848,7 +30817,7 @@ webpackJsonp([0],[
 	                    null,
 	                    _react2.default.createElement(
 	                        _reactBootstrap.Button,
-	                        { onClick: PhotoActions.fbUploadHide() },
+	                        { onClick: _facebook2.default.fbUploadHide() },
 	                        'Close'
 	                    ),
 	                    _react2.default.createElement(
@@ -30874,7 +30843,7 @@ webpackJsonp([0],[
 	}
 	
 	function mapActionCreatorsToProps(dispatch) {
-	    return (0, _redux.bindActionCreators)(PhotoActions, dispatch);
+	    return (0, _redux.bindActionCreators)(_facebook2.default, dispatch);
 	}
 	
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapActionCreatorsToProps)(Upload);
@@ -30883,197 +30852,12 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../../../~/webpack/buildin/module.js */ 299)(module)))
 
 /***/ },
-/* 710 */
-/*!****************************************!*\
-  !*** ./src/store/actions/fb/photos.js ***!
-  \****************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(/*! ./~/react-hot-api/modules/index.js */ 300), RootInstanceProvider = __webpack_require__(/*! ./~/react-hot-loader/RootInstanceProvider.js */ 308), ReactMount = __webpack_require__(/*! react/lib/ReactMount */ 310), React = __webpack_require__(/*! react */ 362); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
-	
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.fbLoadPhotos = fbLoadPhotos;
-	exports.fbUploadPhoto = fbUploadPhoto;
-	
-	var _general = __webpack_require__(/*! ../general */ 711);
-	
-	var G = _interopRequireWildcard(_general);
-	
-	var _facebook = __webpack_require__(/*! store/actions/facebook */ 586);
-	
-	var _facebook2 = _interopRequireDefault(_facebook);
-	
-	var _upload = __webpack_require__(/*! ./upload */ 712);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-	
-	/**
-	 * Load photos
-	 */
-	function fbLoadPhotos() {
-	    return function (dispatch, getState) {
-	        FB.api('/' + Config.FACEBOOK_PAGE_ID + '/photos', { fields: 'images, name, permalink_url', type: 'uploaded', limit: Config.PHOTOS_LIMIT }, function (result) {
-	            if (result.error) {
-	                dispatch(G.error(result.error.message));
-	            } else {
-	                dispatch(_facebook2.default.fbLoadPhotosOK(result.data));
-	            }
-	        });
-	
-	        dispatch(_facebook2.default.fbLoadPhotos());
-	    };
-	}
-	
-	/**
-	 * Upload photo
-	 */
-	function fbUploadPhoto(_ref) {
-	    var image = _ref.image,
-	        description = _ref.description;
-	
-	    return function (dispatch, getState) {
-	        if (!getState().fb.auth.page.access_token) {
-	            dispatch(G.error('Page access token is not loaded'));
-	
-	            return;
-	        }
-	
-	        (0, _upload.postImage)({
-	            apiUrl: '/' + Config.FACEBOOK_PAGE_ID + '/photos',
-	            accessToken: getState().fb.auth.page.access_token,
-	            image: image,
-	            description: description,
-	            success: function success(result) {
-	                dispatch(_facebook2.default.fbUploadPhotoOK());
-	
-	                dispatch(_facebook2.default.fbUploadHide());
-	                dispatch(fbLoadPhotos());
-	            },
-	            error: function error(response) {
-	                dispatch(G.error(response.message));
-	            }
-	        });
-	
-	        dispatch(_facebook2.default.fbUploadPhoto());
-	    };
-	}
-	
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(/*! ./~/react-hot-loader/makeExportsHot.js */ 582); if (makeExportsHot(module, __webpack_require__(/*! react */ 362))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot apply hot update to " + "photos.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../../../~/webpack/buildin/module.js */ 299)(module)))
-
-/***/ },
-/* 711 */
-/*!**************************************!*\
-  !*** ./src/store/actions/general.js ***!
-  \**************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(/*! ./~/react-hot-api/modules/index.js */ 300), RootInstanceProvider = __webpack_require__(/*! ./~/react-hot-loader/RootInstanceProvider.js */ 308), ReactMount = __webpack_require__(/*! react/lib/ReactMount */ 310), React = __webpack_require__(/*! react */ 362); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
-	
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.error = error;
-	exports.notify = notify;
-	
-	var _types = __webpack_require__(/*! store/actions/types */ 581);
-	
-	var ActionTypes = _interopRequireWildcard(_types);
-	
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-	
-	/**
-	 * Show error
-	 */
-	function error(message) {
-	    return function (dispatch) {
-	        if (message) {
-	            dispatch({
-	                type: 'GROWLER__SHOW',
-	                growler: { text: message, type: 'growler--error' }
-	            });
-	        }
-	
-	        dispatch({ type: ActionTypes.ERROR });
-	    };
-	}
-	
-	/**
-	 * Show notification
-	 */
-	function notify(message) {
-	    return function (dispatch) {
-	        if (message) {
-	            dispatch({
-	                type: 'GROWLER__SHOW',
-	                growler: { text: message, type: 'growler--success' }
-	            });
-	        }
-	    };
-	}
-	
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(/*! ./~/react-hot-loader/makeExportsHot.js */ 582); if (makeExportsHot(module, __webpack_require__(/*! react */ 362))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot apply hot update to " + "general.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../../~/webpack/buildin/module.js */ 299)(module)))
-
-/***/ },
-/* 712 */
-/*!****************************************!*\
-  !*** ./src/store/actions/fb/upload.js ***!
-  \****************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(/*! ./~/react-hot-api/modules/index.js */ 300), RootInstanceProvider = __webpack_require__(/*! ./~/react-hot-loader/RootInstanceProvider.js */ 308), ReactMount = __webpack_require__(/*! react/lib/ReactMount */ 310), React = __webpack_require__(/*! react */ 362); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
-	
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.postImage = postImage;
-	
-	var _types = __webpack_require__(/*! store/actions/types */ 581);
-	
-	var ActionTypes = _interopRequireWildcard(_types);
-	
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-	
-	/**
-	 * Post image to facebook
-	 */
-	function postImage(_ref) {
-	    var apiUrl = _ref.apiUrl,
-	        accessToken = _ref.accessToken,
-	        image = _ref.image,
-	        description = _ref.description,
-	        success = _ref.success,
-	        error = _ref.error;
-	
-	    var data = new FormData();
-	    data.append('access_token', accessToken);
-	    data.append('source', image);
-	    data.append('message', description);
-	
-	    FB.api(apiUrl, 'POST', data, function (response) {
-	        if (!response || response.error) {
-	            error(response);
-	        } else {
-	            success(response);
-	        }
-	    });
-	}
-	
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(/*! ./~/react-hot-loader/makeExportsHot.js */ 582); if (makeExportsHot(module, __webpack_require__(/*! react */ 362))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot apply hot update to " + "upload.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../../../~/webpack/buildin/module.js */ 299)(module)))
-
-/***/ },
+/* 707 */,
+/* 708 */,
+/* 709 */,
+/* 710 */,
+/* 711 */,
+/* 712 */,
 /* 713 */,
 /* 714 */,
 /* 715 */,
@@ -31318,13 +31102,7 @@ webpackJsonp([0],[
 /* 954 */,
 /* 955 */,
 /* 956 */,
-/* 957 */,
-/* 958 */,
-/* 959 */,
-/* 960 */,
-/* 961 */,
-/* 962 */,
-/* 963 */
+/* 957 */
 /*!******************************************!*\
   !*** ./src/components/pages/fb/login.js ***!
   \******************************************/
@@ -31430,7 +31208,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../../../~/webpack/buildin/module.js */ 299)(module)))
 
 /***/ },
-/* 964 */
+/* 958 */
 /*!*********************************************!*\
   !*** ./src/components/template/template.js ***!
   \*********************************************/
@@ -31452,15 +31230,15 @@ webpackJsonp([0],[
 	
 	var _reactRedux = __webpack_require__(/*! react-redux */ 492);
 	
-	var _topnavbar = __webpack_require__(/*! ./partials/topnavbar */ 965);
+	var _topnavbar = __webpack_require__(/*! ./partials/topnavbar */ 959);
 	
 	var _topnavbar2 = _interopRequireDefault(_topnavbar);
 	
-	var _reactSpinkit = __webpack_require__(/*! react-spinkit */ 969);
+	var _reactSpinkit = __webpack_require__(/*! react-spinkit */ 963);
 	
 	var _reactSpinkit2 = _interopRequireDefault(_reactSpinkit);
 	
-	var _Notifs = __webpack_require__(/*! ./Notifs */ 993);
+	var _Notifs = __webpack_require__(/*! ./Notifs */ 987);
 	
 	var _Notifs2 = _interopRequireDefault(_Notifs);
 	
@@ -31495,7 +31273,7 @@ webpackJsonp([0],[
 	                ),
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'main-spinner' + (this.props.loading ? ' active' : '') },
+	                    { className: 'main-spinner' + (this.props.appState ? ' active' : '') },
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'middle' },
@@ -31517,12 +31295,12 @@ webpackJsonp([0],[
 	Template.propTypes = {
 	    dispatch: _react.PropTypes.func.isRequired,
 	    children: _react.PropTypes.object,
-	    loading: _react.PropTypes.object
+	    appState: _react.PropTypes.object
 	};
 	
 	function mapStateToProps(state) {
 	    return {
-	        loading: state.general.loading
+	        appState: state.facebook.appState
 	    };
 	}
 	
@@ -31532,7 +31310,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../../~/webpack/buildin/module.js */ 299)(module)))
 
 /***/ },
-/* 965 */
+/* 959 */
 /*!*******************************************************!*\
   !*** ./src/components/template/partials/topnavbar.js ***!
   \*******************************************************/
@@ -31554,13 +31332,13 @@ webpackJsonp([0],[
 	
 	var _reactRedux = __webpack_require__(/*! react-redux */ 492);
 	
-	var _reactBootstrap = __webpack_require__(/*! react-bootstrap */ 713);
+	var _reactBootstrap = __webpack_require__(/*! react-bootstrap */ 707);
 	
 	var _facebook = __webpack_require__(/*! store/actions/facebook */ 586);
 	
 	var _facebook2 = _interopRequireDefault(_facebook);
 	
-	var _reactRouterBootstrap = __webpack_require__(/*! react-router-bootstrap */ 966);
+	var _reactRouterBootstrap = __webpack_require__(/*! react-router-bootstrap */ 960);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -31679,7 +31457,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../../../~/webpack/buildin/module.js */ 299)(module)))
 
 /***/ },
-/* 966 */
+/* 960 */
 /*!***********************************************!*\
   !*** ./~/react-router-bootstrap/lib/index.js ***!
   \***********************************************/
@@ -31690,11 +31468,11 @@ webpackJsonp([0],[
 	exports.__esModule = true;
 	exports.LinkContainer = exports.IndexLinkContainer = undefined;
 	
-	var _IndexLinkContainer2 = __webpack_require__(/*! ./IndexLinkContainer */ 967);
+	var _IndexLinkContainer2 = __webpack_require__(/*! ./IndexLinkContainer */ 961);
 	
 	var _IndexLinkContainer3 = _interopRequireDefault(_IndexLinkContainer2);
 	
-	var _LinkContainer2 = __webpack_require__(/*! ./LinkContainer */ 968);
+	var _LinkContainer2 = __webpack_require__(/*! ./LinkContainer */ 962);
 	
 	var _LinkContainer3 = _interopRequireDefault(_LinkContainer2);
 	
@@ -31704,7 +31482,7 @@ webpackJsonp([0],[
 	exports.LinkContainer = _LinkContainer3.default;
 
 /***/ },
-/* 967 */
+/* 961 */
 /*!************************************************************!*\
   !*** ./~/react-router-bootstrap/lib/IndexLinkContainer.js ***!
   \************************************************************/
@@ -31720,7 +31498,7 @@ webpackJsonp([0],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _LinkContainer = __webpack_require__(/*! ./LinkContainer */ 968);
+	var _LinkContainer = __webpack_require__(/*! ./LinkContainer */ 962);
 	
 	var _LinkContainer2 = _interopRequireDefault(_LinkContainer);
 	
@@ -31756,7 +31534,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 968 */
+/* 962 */
 /*!*******************************************************!*\
   !*** ./~/react-router-bootstrap/lib/LinkContainer.js ***!
   \*******************************************************/
@@ -31894,7 +31672,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 969 */
+/* 963 */
 /*!***************************************!*\
   !*** ./~/react-spinkit/dist/index.js ***!
   \***************************************/
@@ -31910,35 +31688,35 @@ webpackJsonp([0],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _classnames = __webpack_require__(/*! classnames */ 800);
+	var _classnames = __webpack_require__(/*! classnames */ 794);
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _objectAssign = __webpack_require__(/*! object-assign */ 970);
+	var _objectAssign = __webpack_require__(/*! object-assign */ 964);
 	
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 	
-	__webpack_require__(/*! ../css/fade-in.css */ 971);
+	__webpack_require__(/*! ../css/fade-in.css */ 965);
 	
-	__webpack_require__(/*! ../css/chasing-dots.css */ 973);
+	__webpack_require__(/*! ../css/chasing-dots.css */ 967);
 	
-	__webpack_require__(/*! ../css/circle.css */ 975);
+	__webpack_require__(/*! ../css/circle.css */ 969);
 	
-	__webpack_require__(/*! ../css/cube-grid.css */ 977);
+	__webpack_require__(/*! ../css/cube-grid.css */ 971);
 	
-	__webpack_require__(/*! ../css/double-bounce.css */ 979);
+	__webpack_require__(/*! ../css/double-bounce.css */ 973);
 	
-	__webpack_require__(/*! ../css/pulse.css */ 981);
+	__webpack_require__(/*! ../css/pulse.css */ 975);
 	
-	__webpack_require__(/*! ../css/rotating-plane.css */ 983);
+	__webpack_require__(/*! ../css/rotating-plane.css */ 977);
 	
-	__webpack_require__(/*! ../css/three-bounce.css */ 985);
+	__webpack_require__(/*! ../css/three-bounce.css */ 979);
 	
-	__webpack_require__(/*! ../css/wandering-cubes.css */ 987);
+	__webpack_require__(/*! ../css/wandering-cubes.css */ 981);
 	
-	__webpack_require__(/*! ../css/wave.css */ 989);
+	__webpack_require__(/*! ../css/wave.css */ 983);
 	
-	__webpack_require__(/*! ../css/wordpress.css */ 991);
+	__webpack_require__(/*! ../css/wordpress.css */ 985);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -32111,7 +31889,7 @@ webpackJsonp([0],[
 	module.exports = Spinner;
 
 /***/ },
-/* 970 */
+/* 964 */
 /*!**************************************************!*\
   !*** ./~/react-spinkit/~/object-assign/index.js ***!
   \**************************************************/
@@ -32203,7 +31981,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 971 */
+/* 965 */
 /*!*****************************************!*\
   !*** ./~/react-spinkit/css/fade-in.css ***!
   \*****************************************/
@@ -32212,7 +31990,7 @@ webpackJsonp([0],[
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../css-loader!./fade-in.css */ 972);
+	var content = __webpack_require__(/*! !./../../css-loader!./fade-in.css */ 966);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(/*! ./../../style-loader/addStyles.js */ 469)(content, {});
@@ -32221,8 +31999,8 @@ webpackJsonp([0],[
 	if(true) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept(/*! !./../../css-loader!./fade-in.css */ 972, function() {
-				var newContent = __webpack_require__(/*! !./../../css-loader!./fade-in.css */ 972);
+			module.hot.accept(/*! !./../../css-loader!./fade-in.css */ 966, function() {
+				var newContent = __webpack_require__(/*! !./../../css-loader!./fade-in.css */ 966);
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -32232,7 +32010,7 @@ webpackJsonp([0],[
 	}
 
 /***/ },
-/* 972 */
+/* 966 */
 /*!********************************************************!*\
   !*** ./~/css-loader!./~/react-spinkit/css/fade-in.css ***!
   \********************************************************/
@@ -32249,7 +32027,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 973 */
+/* 967 */
 /*!**********************************************!*\
   !*** ./~/react-spinkit/css/chasing-dots.css ***!
   \**********************************************/
@@ -32258,7 +32036,7 @@ webpackJsonp([0],[
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../css-loader!./chasing-dots.css */ 974);
+	var content = __webpack_require__(/*! !./../../css-loader!./chasing-dots.css */ 968);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(/*! ./../../style-loader/addStyles.js */ 469)(content, {});
@@ -32267,8 +32045,8 @@ webpackJsonp([0],[
 	if(true) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept(/*! !./../../css-loader!./chasing-dots.css */ 974, function() {
-				var newContent = __webpack_require__(/*! !./../../css-loader!./chasing-dots.css */ 974);
+			module.hot.accept(/*! !./../../css-loader!./chasing-dots.css */ 968, function() {
+				var newContent = __webpack_require__(/*! !./../../css-loader!./chasing-dots.css */ 968);
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -32278,7 +32056,7 @@ webpackJsonp([0],[
 	}
 
 /***/ },
-/* 974 */
+/* 968 */
 /*!*************************************************************!*\
   !*** ./~/css-loader!./~/react-spinkit/css/chasing-dots.css ***!
   \*************************************************************/
@@ -32295,7 +32073,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 975 */
+/* 969 */
 /*!****************************************!*\
   !*** ./~/react-spinkit/css/circle.css ***!
   \****************************************/
@@ -32304,7 +32082,7 @@ webpackJsonp([0],[
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../css-loader!./circle.css */ 976);
+	var content = __webpack_require__(/*! !./../../css-loader!./circle.css */ 970);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(/*! ./../../style-loader/addStyles.js */ 469)(content, {});
@@ -32313,8 +32091,8 @@ webpackJsonp([0],[
 	if(true) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept(/*! !./../../css-loader!./circle.css */ 976, function() {
-				var newContent = __webpack_require__(/*! !./../../css-loader!./circle.css */ 976);
+			module.hot.accept(/*! !./../../css-loader!./circle.css */ 970, function() {
+				var newContent = __webpack_require__(/*! !./../../css-loader!./circle.css */ 970);
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -32324,7 +32102,7 @@ webpackJsonp([0],[
 	}
 
 /***/ },
-/* 976 */
+/* 970 */
 /*!*******************************************************!*\
   !*** ./~/css-loader!./~/react-spinkit/css/circle.css ***!
   \*******************************************************/
@@ -32341,7 +32119,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 977 */
+/* 971 */
 /*!*******************************************!*\
   !*** ./~/react-spinkit/css/cube-grid.css ***!
   \*******************************************/
@@ -32350,7 +32128,7 @@ webpackJsonp([0],[
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../css-loader!./cube-grid.css */ 978);
+	var content = __webpack_require__(/*! !./../../css-loader!./cube-grid.css */ 972);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(/*! ./../../style-loader/addStyles.js */ 469)(content, {});
@@ -32359,8 +32137,8 @@ webpackJsonp([0],[
 	if(true) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept(/*! !./../../css-loader!./cube-grid.css */ 978, function() {
-				var newContent = __webpack_require__(/*! !./../../css-loader!./cube-grid.css */ 978);
+			module.hot.accept(/*! !./../../css-loader!./cube-grid.css */ 972, function() {
+				var newContent = __webpack_require__(/*! !./../../css-loader!./cube-grid.css */ 972);
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -32370,7 +32148,7 @@ webpackJsonp([0],[
 	}
 
 /***/ },
-/* 978 */
+/* 972 */
 /*!**********************************************************!*\
   !*** ./~/css-loader!./~/react-spinkit/css/cube-grid.css ***!
   \**********************************************************/
@@ -32387,7 +32165,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 979 */
+/* 973 */
 /*!***********************************************!*\
   !*** ./~/react-spinkit/css/double-bounce.css ***!
   \***********************************************/
@@ -32396,7 +32174,7 @@ webpackJsonp([0],[
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../css-loader!./double-bounce.css */ 980);
+	var content = __webpack_require__(/*! !./../../css-loader!./double-bounce.css */ 974);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(/*! ./../../style-loader/addStyles.js */ 469)(content, {});
@@ -32405,8 +32183,8 @@ webpackJsonp([0],[
 	if(true) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept(/*! !./../../css-loader!./double-bounce.css */ 980, function() {
-				var newContent = __webpack_require__(/*! !./../../css-loader!./double-bounce.css */ 980);
+			module.hot.accept(/*! !./../../css-loader!./double-bounce.css */ 974, function() {
+				var newContent = __webpack_require__(/*! !./../../css-loader!./double-bounce.css */ 974);
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -32416,7 +32194,7 @@ webpackJsonp([0],[
 	}
 
 /***/ },
-/* 980 */
+/* 974 */
 /*!**************************************************************!*\
   !*** ./~/css-loader!./~/react-spinkit/css/double-bounce.css ***!
   \**************************************************************/
@@ -32433,7 +32211,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 981 */
+/* 975 */
 /*!***************************************!*\
   !*** ./~/react-spinkit/css/pulse.css ***!
   \***************************************/
@@ -32442,7 +32220,7 @@ webpackJsonp([0],[
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../css-loader!./pulse.css */ 982);
+	var content = __webpack_require__(/*! !./../../css-loader!./pulse.css */ 976);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(/*! ./../../style-loader/addStyles.js */ 469)(content, {});
@@ -32451,8 +32229,8 @@ webpackJsonp([0],[
 	if(true) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept(/*! !./../../css-loader!./pulse.css */ 982, function() {
-				var newContent = __webpack_require__(/*! !./../../css-loader!./pulse.css */ 982);
+			module.hot.accept(/*! !./../../css-loader!./pulse.css */ 976, function() {
+				var newContent = __webpack_require__(/*! !./../../css-loader!./pulse.css */ 976);
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -32462,7 +32240,7 @@ webpackJsonp([0],[
 	}
 
 /***/ },
-/* 982 */
+/* 976 */
 /*!******************************************************!*\
   !*** ./~/css-loader!./~/react-spinkit/css/pulse.css ***!
   \******************************************************/
@@ -32479,7 +32257,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 983 */
+/* 977 */
 /*!************************************************!*\
   !*** ./~/react-spinkit/css/rotating-plane.css ***!
   \************************************************/
@@ -32488,7 +32266,7 @@ webpackJsonp([0],[
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../css-loader!./rotating-plane.css */ 984);
+	var content = __webpack_require__(/*! !./../../css-loader!./rotating-plane.css */ 978);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(/*! ./../../style-loader/addStyles.js */ 469)(content, {});
@@ -32497,8 +32275,8 @@ webpackJsonp([0],[
 	if(true) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept(/*! !./../../css-loader!./rotating-plane.css */ 984, function() {
-				var newContent = __webpack_require__(/*! !./../../css-loader!./rotating-plane.css */ 984);
+			module.hot.accept(/*! !./../../css-loader!./rotating-plane.css */ 978, function() {
+				var newContent = __webpack_require__(/*! !./../../css-loader!./rotating-plane.css */ 978);
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -32508,7 +32286,7 @@ webpackJsonp([0],[
 	}
 
 /***/ },
-/* 984 */
+/* 978 */
 /*!***************************************************************!*\
   !*** ./~/css-loader!./~/react-spinkit/css/rotating-plane.css ***!
   \***************************************************************/
@@ -32525,7 +32303,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 985 */
+/* 979 */
 /*!**********************************************!*\
   !*** ./~/react-spinkit/css/three-bounce.css ***!
   \**********************************************/
@@ -32534,7 +32312,7 @@ webpackJsonp([0],[
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../css-loader!./three-bounce.css */ 986);
+	var content = __webpack_require__(/*! !./../../css-loader!./three-bounce.css */ 980);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(/*! ./../../style-loader/addStyles.js */ 469)(content, {});
@@ -32543,8 +32321,8 @@ webpackJsonp([0],[
 	if(true) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept(/*! !./../../css-loader!./three-bounce.css */ 986, function() {
-				var newContent = __webpack_require__(/*! !./../../css-loader!./three-bounce.css */ 986);
+			module.hot.accept(/*! !./../../css-loader!./three-bounce.css */ 980, function() {
+				var newContent = __webpack_require__(/*! !./../../css-loader!./three-bounce.css */ 980);
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -32554,7 +32332,7 @@ webpackJsonp([0],[
 	}
 
 /***/ },
-/* 986 */
+/* 980 */
 /*!*************************************************************!*\
   !*** ./~/css-loader!./~/react-spinkit/css/three-bounce.css ***!
   \*************************************************************/
@@ -32571,7 +32349,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 987 */
+/* 981 */
 /*!*************************************************!*\
   !*** ./~/react-spinkit/css/wandering-cubes.css ***!
   \*************************************************/
@@ -32580,7 +32358,7 @@ webpackJsonp([0],[
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../css-loader!./wandering-cubes.css */ 988);
+	var content = __webpack_require__(/*! !./../../css-loader!./wandering-cubes.css */ 982);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(/*! ./../../style-loader/addStyles.js */ 469)(content, {});
@@ -32589,8 +32367,8 @@ webpackJsonp([0],[
 	if(true) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept(/*! !./../../css-loader!./wandering-cubes.css */ 988, function() {
-				var newContent = __webpack_require__(/*! !./../../css-loader!./wandering-cubes.css */ 988);
+			module.hot.accept(/*! !./../../css-loader!./wandering-cubes.css */ 982, function() {
+				var newContent = __webpack_require__(/*! !./../../css-loader!./wandering-cubes.css */ 982);
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -32600,7 +32378,7 @@ webpackJsonp([0],[
 	}
 
 /***/ },
-/* 988 */
+/* 982 */
 /*!****************************************************************!*\
   !*** ./~/css-loader!./~/react-spinkit/css/wandering-cubes.css ***!
   \****************************************************************/
@@ -32617,7 +32395,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 989 */
+/* 983 */
 /*!**************************************!*\
   !*** ./~/react-spinkit/css/wave.css ***!
   \**************************************/
@@ -32626,7 +32404,7 @@ webpackJsonp([0],[
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../css-loader!./wave.css */ 990);
+	var content = __webpack_require__(/*! !./../../css-loader!./wave.css */ 984);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(/*! ./../../style-loader/addStyles.js */ 469)(content, {});
@@ -32635,8 +32413,8 @@ webpackJsonp([0],[
 	if(true) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept(/*! !./../../css-loader!./wave.css */ 990, function() {
-				var newContent = __webpack_require__(/*! !./../../css-loader!./wave.css */ 990);
+			module.hot.accept(/*! !./../../css-loader!./wave.css */ 984, function() {
+				var newContent = __webpack_require__(/*! !./../../css-loader!./wave.css */ 984);
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -32646,7 +32424,7 @@ webpackJsonp([0],[
 	}
 
 /***/ },
-/* 990 */
+/* 984 */
 /*!*****************************************************!*\
   !*** ./~/css-loader!./~/react-spinkit/css/wave.css ***!
   \*****************************************************/
@@ -32663,7 +32441,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 991 */
+/* 985 */
 /*!*******************************************!*\
   !*** ./~/react-spinkit/css/wordpress.css ***!
   \*******************************************/
@@ -32672,7 +32450,7 @@ webpackJsonp([0],[
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../css-loader!./wordpress.css */ 992);
+	var content = __webpack_require__(/*! !./../../css-loader!./wordpress.css */ 986);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(/*! ./../../style-loader/addStyles.js */ 469)(content, {});
@@ -32681,8 +32459,8 @@ webpackJsonp([0],[
 	if(true) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept(/*! !./../../css-loader!./wordpress.css */ 992, function() {
-				var newContent = __webpack_require__(/*! !./../../css-loader!./wordpress.css */ 992);
+			module.hot.accept(/*! !./../../css-loader!./wordpress.css */ 986, function() {
+				var newContent = __webpack_require__(/*! !./../../css-loader!./wordpress.css */ 986);
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -32692,7 +32470,7 @@ webpackJsonp([0],[
 	}
 
 /***/ },
-/* 992 */
+/* 986 */
 /*!**********************************************************!*\
   !*** ./~/css-loader!./~/react-spinkit/css/wordpress.css ***!
   \**********************************************************/
@@ -32709,7 +32487,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 993 */
+/* 987 */
 /*!*******************************************!*\
   !*** ./src/components/template/Notifs.js ***!
   \*******************************************/
@@ -32733,11 +32511,11 @@ webpackJsonp([0],[
 	
 	var _reactRedux = __webpack_require__(/*! react-redux */ 492);
 	
-	var _reactAddonsCssTransitionGroup = __webpack_require__(/*! react-addons-css-transition-group */ 994);
+	var _reactAddonsCssTransitionGroup = __webpack_require__(/*! react-addons-css-transition-group */ 988);
 	
 	var _reactAddonsCssTransitionGroup2 = _interopRequireDefault(_reactAddonsCssTransitionGroup);
 	
-	var _Notif = __webpack_require__(/*! ./Notif */ 1001);
+	var _Notif = __webpack_require__(/*! ./Notif */ 995);
 	
 	var _Notif2 = _interopRequireDefault(_Notif);
 	
@@ -32818,16 +32596,16 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../../~/webpack/buildin/module.js */ 299)(module)))
 
 /***/ },
-/* 994 */
+/* 988 */
 /*!******************************************************!*\
   !*** ./~/react-addons-css-transition-group/index.js ***!
   \******************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(/*! react/lib/ReactCSSTransitionGroup */ 995);
+	module.exports = __webpack_require__(/*! react/lib/ReactCSSTransitionGroup */ 989);
 
 /***/ },
-/* 995 */
+/* 989 */
 /*!************************************************!*\
   !*** ./~/react/lib/ReactCSSTransitionGroup.js ***!
   \************************************************/
@@ -32851,8 +32629,8 @@ webpackJsonp([0],[
 	
 	var assign = __webpack_require__(/*! ./Object.assign */ 327);
 	
-	var ReactTransitionGroup = __webpack_require__(/*! ./ReactTransitionGroup */ 996);
-	var ReactCSSTransitionGroupChild = __webpack_require__(/*! ./ReactCSSTransitionGroupChild */ 998);
+	var ReactTransitionGroup = __webpack_require__(/*! ./ReactTransitionGroup */ 990);
+	var ReactCSSTransitionGroupChild = __webpack_require__(/*! ./ReactCSSTransitionGroupChild */ 992);
 	
 	function createTransitionTimeoutPropValidator(transitionType) {
 	  var timeoutPropName = 'transition' + transitionType + 'Timeout';
@@ -32918,7 +32696,7 @@ webpackJsonp([0],[
 	module.exports = ReactCSSTransitionGroup;
 
 /***/ },
-/* 996 */
+/* 990 */
 /*!*********************************************!*\
   !*** ./~/react/lib/ReactTransitionGroup.js ***!
   \*********************************************/
@@ -32938,7 +32716,7 @@ webpackJsonp([0],[
 	'use strict';
 	
 	var React = __webpack_require__(/*! ./React */ 363);
-	var ReactTransitionChildMapping = __webpack_require__(/*! ./ReactTransitionChildMapping */ 997);
+	var ReactTransitionChildMapping = __webpack_require__(/*! ./ReactTransitionChildMapping */ 991);
 	
 	var assign = __webpack_require__(/*! ./Object.assign */ 327);
 	var emptyFunction = __webpack_require__(/*! fbjs/lib/emptyFunction */ 321);
@@ -33131,7 +32909,7 @@ webpackJsonp([0],[
 	module.exports = ReactTransitionGroup;
 
 /***/ },
-/* 997 */
+/* 991 */
 /*!****************************************************!*\
   !*** ./~/react/lib/ReactTransitionChildMapping.js ***!
   \****************************************************/
@@ -33237,7 +33015,7 @@ webpackJsonp([0],[
 	module.exports = ReactTransitionChildMapping;
 
 /***/ },
-/* 998 */
+/* 992 */
 /*!*****************************************************!*\
   !*** ./~/react/lib/ReactCSSTransitionGroupChild.js ***!
   \*****************************************************/
@@ -33260,8 +33038,8 @@ webpackJsonp([0],[
 	var React = __webpack_require__(/*! ./React */ 363);
 	var ReactDOM = __webpack_require__(/*! ./ReactDOM */ 364);
 	
-	var CSSCore = __webpack_require__(/*! fbjs/lib/CSSCore */ 999);
-	var ReactTransitionEvents = __webpack_require__(/*! ./ReactTransitionEvents */ 1000);
+	var CSSCore = __webpack_require__(/*! fbjs/lib/CSSCore */ 993);
+	var ReactTransitionEvents = __webpack_require__(/*! ./ReactTransitionEvents */ 994);
 	
 	var onlyChild = __webpack_require__(/*! ./onlyChild */ 464);
 	
@@ -33410,7 +33188,7 @@ webpackJsonp([0],[
 	module.exports = ReactCSSTransitionGroupChild;
 
 /***/ },
-/* 999 */
+/* 993 */
 /*!*******************************!*\
   !*** ./~/fbjs/lib/CSSCore.js ***!
   \*******************************/
@@ -33515,7 +33293,7 @@ webpackJsonp([0],[
 	module.exports = CSSCore;
 
 /***/ },
-/* 1000 */
+/* 994 */
 /*!**********************************************!*\
   !*** ./~/react/lib/ReactTransitionEvents.js ***!
   \**********************************************/
@@ -33632,7 +33410,7 @@ webpackJsonp([0],[
 	module.exports = ReactTransitionEvents;
 
 /***/ },
-/* 1001 */
+/* 995 */
 /*!******************************************!*\
   !*** ./src/components/template/Notif.js ***!
   \******************************************/
@@ -33738,7 +33516,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../../~/webpack/buildin/module.js */ 299)(module)))
 
 /***/ },
-/* 1002 */
+/* 996 */
 /*!**************************************!*\
   !*** ./src/components/pages/home.js ***!
   \**************************************/
@@ -33813,7 +33591,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../../~/webpack/buildin/module.js */ 299)(module)))
 
 /***/ },
-/* 1003 */
+/* 997 */
 /*!**********************************************!*\
   !*** ./src/components/pages/fb/fb-parent.js ***!
   \**********************************************/
@@ -33901,7 +33679,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../../../~/webpack/buildin/module.js */ 299)(module)))
 
 /***/ },
-/* 1004 */
+/* 998 */
 /*!*****************************************!*\
   !*** ./src/components/pages/page404.js ***!
   \*****************************************/
@@ -33976,7 +33754,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../../~/webpack/buildin/module.js */ 299)(module)))
 
 /***/ },
-/* 1005 */
+/* 999 */
 /*!***************************************************!*\
   !*** ./src/components/pages/fb/privacy-policy.js ***!
   \***************************************************/
@@ -34040,7 +33818,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../../../~/webpack/buildin/module.js */ 299)(module)))
 
 /***/ },
-/* 1006 */
+/* 1000 */
 /*!******************************************!*\
   !*** ./src/components/pages/about-us.js ***!
   \******************************************/
