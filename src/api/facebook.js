@@ -42,7 +42,7 @@ export default class Facebook
                 appId: Config.FACEBOOK_APP_ID,
                 cookie: true,  // enable cookies to allow the server to access
                 xfbml: true,  // parse social plugins on this page
-                status: true,
+                // status: true,
                 version: 'v2.8',
             });
         }
@@ -149,22 +149,23 @@ export default class Facebook
 
     static loadPhotos()
     {
-        FB.api('/' + Config.FACEBOOK_PAGE_ID + '/photos',
-            { fields: 'images, name, permalink_url', type: 'uploaded', limit: Config.PHOTOS_LIMIT }, (response) =>
+        const path = '/' + Config.FACEBOOK_PAGE_ID + '/photos';
+        const params = { fields: 'images, name, permalink_url', type: 'uploaded', limit: Config.PHOTOS_LIMIT };
+        FB.api(path, params, (response) =>
+        {
+            if (!response)
             {
-                if (!response)
-                {
-                    window.store.dispatch(FacebookActions.fbLoadPhotosErr('No response'));
-                }
-                else if (response.error)
-                {
-                    window.store.dispatch(FacebookActions.fbLoadPhotosErr(response.error.message));
-                }
-                else
-                {
-                    window.store.dispatch(FacebookActions.fbLoadPhotosOK(response.data));
-                }
-            });
+                window.store.dispatch(FacebookActions.fbLoadPhotosErr('No response'));
+            }
+            else if (response.error)
+            {
+                window.store.dispatch(FacebookActions.fbLoadPhotosErr(response.error.message));
+            }
+            else
+            {
+                window.store.dispatch(FacebookActions.fbLoadPhotosOK(response.data));
+            }
+        });
     }
 
     // Upload photo

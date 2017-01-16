@@ -31,10 +31,12 @@ class Routes extends Component {
         return false;
     }
 
-    checkFbAuth(nextState, replace) {
-        if (!this.props.fb_user) {
+    checkFbAuth(nextState, replace)
+    {
+        /* if (!nextState.facebook.user) {
             replace(this.FACEBOOK_HOME);
-        }
+            onEnter={this.checkFbAuth}
+        } */
     }
 
     render() {
@@ -47,7 +49,7 @@ class Routes extends Component {
                     <Route path={this.FACEBOOK_CHILD} component={FbParent}>
                         <IndexRoute component={LoginPage} />
                         <Route path={this.FACEBOOK_PRIVACY_POLICY} component={FbPrivacyPolicy} />
-                        <Route path={this.FACEBOOK_PHOTOS} component={PhotosPage} onEnter={this.checkFbAuth} />
+                        <Route path={this.FACEBOOK_PHOTOS} component={PhotosPage} />
                     </Route>
 
                     <Route path={this.UNKNOWN} component={Page404} />
@@ -64,9 +66,10 @@ Routes.propTypes = {
     history: PropTypes.object.isRequired,
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state)
+{
     return {
-        fb_user: state.fb.auth.user,
+        fb_user: state.facebook.user,
     };
 }
 

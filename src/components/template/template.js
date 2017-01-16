@@ -12,7 +12,7 @@ class Template extends Component {
                 <div className="container">
                     {this.props.children}
                 </div>
-                <div className={'main-spinner' + (this.props.appState ? ' active' : '') }>
+                <div className={'main-spinner' + (!this.props.children ? ' active' : '') }>
                     <div className="middle">
                         <div className="middle-inner">
                             <Spinner spinnerName="three-bounce" noFadeIn />
@@ -28,7 +28,7 @@ class Template extends Component {
 Template.propTypes = {
     dispatch: PropTypes.func.isRequired,
     children: PropTypes.object,
-    appState: PropTypes.object,
+    appState: PropTypes.string,
 };
 
 function mapStateToProps(state) {

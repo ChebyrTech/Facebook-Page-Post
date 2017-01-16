@@ -36,7 +36,7 @@ FbParent.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        user: state.fb.auth.user,
+        user: state.facebook.user,
     };
 }
 

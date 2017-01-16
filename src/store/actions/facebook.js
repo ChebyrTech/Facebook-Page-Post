@@ -59,7 +59,7 @@ export default class FacebookActions
         return { type: ActionTypes.FB_USER_LOGOUT };
     }
 
-    static fbloadPage() {
+    static fbLoadPage() {
         return { type: ActionTypes.FB_LOAD_PAGE };
     }
 

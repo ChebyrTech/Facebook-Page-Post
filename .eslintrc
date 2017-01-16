@@ -24,6 +24,7 @@
     ],
     "no-unused-vars": "off",
     "prefer-template": "off",
+    "react/jsx-boolean-value": 0,
     "react/jsx-quotes": 0,
     "react/jsx-indent-props": 0,
     "react/prefer-stateless-function": 0

@@ -17,7 +17,7 @@ class Photos extends React.Component {
 
     componentDidMount()
     {
-        this.dispatch(FacebookActions.fbLoadPhotos());
+        // this.dispatch(FacebookActions.fbLoadPhotos());
     }
 
     componentDidUpdate()
@@ -87,9 +87,9 @@ class Photos extends React.Component {
 
                 <hr />
                 <Masonry
-                    className={'row'} // default ''
-                    disableImagesLoaded="false" // default false
-                    updateOnEachImageLoad="true" // default false and works only if disableImagesLoaded is false
+                    className={'row'}
+                    disableImagesLoaded={false}
+                    updateOnEachImageLoad={true}
                 >
                     {this.renderPhotos() }
                 </Masonry>
@@ -107,8 +107,8 @@ Photos.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        photos: state.fb.photos.photos,
-        uploadShow: state.fb.photos.uploadShow,
+        photos: state.facebook.photos,
+        uploadShow: state.facebook.uploadShow,
     };
 }
 

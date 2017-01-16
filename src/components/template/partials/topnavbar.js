@@ -47,8 +47,8 @@ TopNavbar.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        fb_user: state.fb.auth.user,
-        fb_page: state.fb.auth.page,
+        fb_user: state.facebook.user,
+        fb_page: state.facebook.page,
         routing: state.routing, // Fix for active menu links (to update component when route was changed)
     };
 }
