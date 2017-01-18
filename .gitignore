@@ -17,3 +17,4 @@
 
 # Node modules
 node_modules/
+/dist/facebook-sdk.js

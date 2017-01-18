@@ -22,6 +22,7 @@ export default class Facebook
             if (d.getElementById(id)) { return; }
             const js = d.createElement(s); js.id = id;
             js.src = '//connect.facebook.net/en_US/sdk.js';
+            // js.src = '//connect.facebook.net/en_US/sdk/debug.js';
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
     }
@@ -42,7 +43,7 @@ export default class Facebook
             FB.init({
                 appId: Config.FACEBOOK_APP_ID,
                 cookie: true,  // enable cookies to allow the server to access
-                xfbml: true,  // parse social plugins on this page
+                xfbml: false,  // parse social plugins on this page
                 // status: true,
                 version: 'v2.8',
             });
@@ -174,26 +175,46 @@ export default class Facebook
     {
         FileOperations.readImageFile(fileObj.file, (image) =>
         {
-            const data = new FormData();
-            data.append('access_token', pageAccessToken);
-            data.append('source', image);
-            data.append('message', fileObj.description);
+            const facebookGraph = 'https://graph.facebook.com';
+            const path = '/' + Config.FACEBOOK_PAGE_ID + '/photos';
 
-            const apiUrl = '/' + Config.FACEBOOK_PAGE_ID + '/photos';
+            const formData = new FormData();
+            formData.append('access_token', pageAccessToken);
+            formData.append('source', image);
+            formData.append('message', fileObj.description);
 
-            FB.api(apiUrl, 'POST', data, (response) =>
+            const endpoint = facebookGraph + path;
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', endpoint, true);
+            xhr.onload = () =>
+            {
+                const response = xhr.response;
+                window.store.dispatch(FacebookActions.fbUploadPhotoOK());
+            };
+            xhr.ontimeout = () =>
+            {
+                window.store.dispatch(FacebookActions.fbUploadPhotoErr('Could not connect with Facebook'));
+            };
+            xhr.onerror = () =>
+            {
+                window.store.dispatch(FacebookActions.fbUploadPhotoErr(xhr.response.error.message));
+            };
+
+            xhr.send(formData);
+
+
+            /* FB.api(path, 'POST', formData, (response) =>
             {
                 if (!response || response.error)
                 {
-                    window.store.dispatch(FacebookActions.fbUploadPhotoErr(response.message));
+                    window.store.dispatch(FacebookActions.fbUploadPhotoErr(response.error.message));
                 }
                 else
                 {
                     window.store.dispatch(FacebookActions.fbUploadPhotoOK());
-                    window.store.dispatch(FacebookActions.fbUploadHide());
                 }
-            });
+            }); */
         });
     }
-
 }
