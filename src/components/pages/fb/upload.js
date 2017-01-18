@@ -11,26 +11,19 @@ class Upload extends React.Component
     {
         const file = ReactDOM.findDOMNode(this.refs.photo).files[0];
         const description = ReactDOM.findDOMNode(this.refs.description).value || '';
-        if (file)
-        {
-            const reader = new FileReader();
-            reader.onload = (e) =>
-            {
-                const contents = e.target.result;
-                // Fire Action
-                FacebookActions.fbUploadPhoto({
-                    image: new Blob([contents], { type: file.type }),
-                    description,
-                });
-            };
-            reader.readAsArrayBuffer(file);
-        }
+        this.props.dispatch(FacebookActions.uploadPhoto({ file, description }));
+        this.close();
+    }
+
+    close()
+    {
+        this.props.dispatch(FacebookActions.fbUploadHide());
     }
 
     render()
     {
         return (
-            <Modal show={this.props.show} onHide={FacebookActions.fbUploadHide() }>
+            <Modal show={this.props.show} onHide={this.close}>
                 <Modal.Header>
                     <Modal.Title>New Photo</Modal.Title>
                 </Modal.Header>
@@ -48,8 +41,8 @@ class Upload extends React.Component
                 </Modal.Body>
 
                 <Modal.Footer>
-                    <Button onClick={FacebookActions.fbUploadHide() }>Close</Button>
-                    <Button bsStyle="primary" onClick={this.upload}>Upload</Button>
+                    <Button onClick={(e) => { this.close(e); }}>Close</Button>
+                    <Button bsStyle="primary" onClick={(e) => { this.upload(e); }}>Upload</Button>
                 </Modal.Footer>
 
             </Modal>
@@ -64,12 +57,9 @@ Upload.propTypes = {
 
 function mapStateToProps(state)
 {
-    return {};
+    return {
+        show: state.facebook.uploadShow,
+    };
 }
 
-function mapActionCreatorsToProps(dispatch)
-{
-    return bindActionCreators(FacebookActions, dispatch);
-}
-
-export default connect(mapStateToProps, mapActionCreatorsToProps)(Upload);
+export default connect(mapStateToProps)(Upload);

@@ -62,8 +62,19 @@ export default function facebook(state = initialState, action) {
             return merge({}, state, { appState: action.type, appStateDesc: 'Load Facebook Photos' });
 
         case ActionTypes.FB_LOAD_PHOTOS_OK:
-            state.photos = action.photos;
-            return merge({}, state);
+            return merge({}, state, { photos: action.photos });
+
+        case ActionTypes.FB_LOAD_PHOTOS_ERR:
+            return merge({}, state, { appState: action.type, appStateDesc: 'Load Facebook Photos Error' });
+
+        case ActionTypes.FB_UPLOAD_PHOTO:
+            return merge({}, state, { appState: action.type, appStateDesc: 'Read and Upload Photo from file' });
+
+        case ActionTypes.FB_UPLOAD_PHOTO_OK:
+            return merge({}, state, { appState: action.type, appStateDesc: 'Upload Facebook Photo OK' });
+
+        case ActionTypes.FB_UPLOAD_PHOTO_ERR:
+            return merge({}, state, { appState: action.type, appStateDesc: 'Upload Facebook Photo Error' });
 
         case ActionTypes.FB_UPLOAD_SHOW:
             return merge({}, state, { uploadShow: true });

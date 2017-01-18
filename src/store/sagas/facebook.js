@@ -64,8 +64,8 @@ function* facebookUserProfileReceived()
 
 function* loadPageOK()
 {
-    // yield put(push('/fb/photos'));
-    yield put(push('/about-us'));
+    yield put(push('/fb/photos'));
+    // yield put(push('/about-us'));
     yield put(FacebookActions.fbLoadPhotos());
 }
 
@@ -74,13 +74,13 @@ function* loadPhotos()
     Facebook.loadPhotos();
 }
 
-function* uploadPhoto()
+function* uploadPhoto(action)
 {
-    const getPageAccessToken = (state) => { return state.fb.auth.page.access_token; };
+    const getPageAccessToken = (state) => { return state.facebook.page.access_token; };
     const pageAccessToken = yield select(getPageAccessToken);
     if (pageAccessToken)
     {
-        Facebook.uploadPhoto(pageAccessToken);
+        Facebook.uploadPhoto(pageAccessToken, action.fileObj);
     }
     else
     {

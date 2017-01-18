@@ -1,4 +1,5 @@
-﻿import FacebookActions from 'store/actions/facebook';
+﻿import FileOperations from './file-operations';
+import FacebookActions from 'store/actions/facebook';
 import notifSend from 'store/actions/notify';
 
 export default class Facebook
@@ -169,26 +170,29 @@ export default class Facebook
     }
 
     // Upload photo
-    static uploadPhoto(pageAccessToken, { image, description })
+    static uploadPhoto(pageAccessToken, fileObj)
     {
-        const data = new FormData();
-        data.append('access_token', pageAccessToken);
-        data.append('source', image);
-        data.append('message', description);
-
-        const apiUrl = '/' + Config.FACEBOOK_PAGE_ID + '/photos';
-
-        FB.api(apiUrl, 'POST', data, (response) =>
+        FileOperations.readImageFile(fileObj.file, (image) =>
         {
-            if (!response || response.error)
+            const data = new FormData();
+            data.append('access_token', pageAccessToken);
+            data.append('source', image);
+            data.append('message', fileObj.description);
+
+            const apiUrl = '/' + Config.FACEBOOK_PAGE_ID + '/photos';
+
+            FB.api(apiUrl, 'POST', data, (response) =>
             {
-                window.store.dispatch(FacebookActions.fbUploadPhotoErr(response.message));
-            }
-            else
-            {
-                window.store.dispatch(FacebookActions.fbUploadPhotoOK());
-                window.store.dispatch(FacebookActions.fbUploadHide());
-            }
+                if (!response || response.error)
+                {
+                    window.store.dispatch(FacebookActions.fbUploadPhotoErr(response.message));
+                }
+                else
+                {
+                    window.store.dispatch(FacebookActions.fbUploadPhotoOK());
+                    window.store.dispatch(FacebookActions.fbUploadHide());
+                }
+            });
         });
     }
 

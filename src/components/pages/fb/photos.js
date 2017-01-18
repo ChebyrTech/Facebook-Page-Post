@@ -25,22 +25,26 @@ class Photos extends React.Component {
         // FB.XFBML.parse();
     }
 
-    refresh(e) {
+    refresh(e)
+    {
         e.preventDefault();
-        this.dispatch(FacebookActions.fbLoadPhotos());
+        this.props.dispatch(FacebookActions.fbLoadPhotos());
     }
 
-    upload(e) {
+    upload(e)
+    {
         e.preventDefault();
-        this.dispatch(FacebookActions.fbUploadShow());
+        this.props.dispatch(FacebookActions.fbUploadShow());
     }
 
-    filter(e) {
+    filter(e)
+    {
         e.preventDefault();
         this.setState({ filterText: this.refs.filter.value });
     }
 
-     renderPhotos() {
+    renderPhotos()
+    {
         const photos = this.props.photos.filter((photo) => {
             return !this.state.filterText
                 || (photo.name && photo.name.toLowerCase().indexOf(this.state.filterText.toLowerCase()) !== -1);
@@ -66,7 +70,7 @@ class Photos extends React.Component {
                 <hr />
                 <div className="row">
                     <div className="col-sm-4">
-                        <a href="#" className="btn btn-default" onClick={this.refresh}>Refresh</a>
+                        <a href="#" className="btn btn-default" onClick={(e) => { this.refresh(e); }}>Refresh</a>
                     </div>
                     <div className="col-sm-4 text-center">
                         <div className="form-inline">
@@ -74,14 +78,14 @@ class Photos extends React.Component {
                                 <div className="input-group">
                                     <input type="text" ref="filter" className="form-control" />
                                     <span className="input-group-btn">
-                                        <a href="#" className="btn btn-default" onClick={this.filter}>Filter</a>
+                                        <a href="#" className="btn btn-default" onClick={(e) => { this.filter(e); }}>Filter</a>
                                     </span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div className="col-sm-4 text-right">
-                        <a href="#" className="btn btn-primary" onClick={this.upload}>Upload</a>
+                        <a href="#" className="btn btn-primary" onClick={(e) => { this.upload(e); }}>Upload</a>
                     </div>
                 </div>
 
@@ -93,7 +97,7 @@ class Photos extends React.Component {
                 >
                     {this.renderPhotos() }
                 </Masonry>
-                <Upload show={this.props.uploadShow} dispatch={this.props.dispatch} />
+                <Upload />
             </div>
         );
     }
@@ -102,13 +106,11 @@ class Photos extends React.Component {
 Photos.propTypes = {
     dispatch: PropTypes.func.isRequired,
     photos: PropTypes.array.isRequired,
-    uploadShow: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps(state) {
     return {
         photos: state.facebook.photos,
-        uploadShow: state.facebook.uploadShow,
     };
 }
 

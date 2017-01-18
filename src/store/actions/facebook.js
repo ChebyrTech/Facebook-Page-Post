@@ -85,11 +85,13 @@ export default class FacebookActions
         return { type: ActionTypes.FB_LOAD_PHOTOS_ERR, errorMessage };
     }
 
-    static fbUploadPhoto() {
-        return { type: ActionTypes.FB_UPLOAD_PHOTO };
+    static uploadPhoto(fileObj)
+    {
+        return { type: ActionTypes.FB_UPLOAD_PHOTO, fileObj };
     }
 
-    static fbUploadPhotoOK() {
+    static fbUploadPhotoOK()
+    {
         return { type: ActionTypes.FB_UPLOAD_PHOTO_OK };
     }
 
@@ -100,12 +102,12 @@ export default class FacebookActions
 
     /* Show upload window */
     static fbUploadShow() {
-        return { type: ActionTypes.ActionTypes.FB_UPLOAD_SHOW };
+        return { type: ActionTypes.FB_UPLOAD_SHOW };
     }
 
     /* Hide upload window */
     static fbUploadHide() {
-        return { type: ActionTypes.ActionTypes.FB_UPLOAD_HIDE };
+        return { type: ActionTypes.FB_UPLOAD_HIDE };
     }
 
 }
