@@ -1,26 +1,27 @@
 import '../sass/style.scss';
 import 'babel-polyfill';
-import React from 'react';
-import { Component } from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-import Store from './store';
+import StoreProvider from './store';
 
-export default class App extends Component {
+class App extends Component {
 
     constructor() {
         super();
 
-        this.store = new Store();
+        this.storeProvider = new StoreProvider();
+        window.store = this.storeProvider.getStore();
     }
 
     render()
     {
-        const provider = this.store.getProvider();
         const docRoot = document.getElementById('root');
+        const provider = this.storeProvider.getProvider();
         return ReactDOM.render(provider, docRoot);
     }
 }
 
 const theApp = new App();
 theApp.render();
+export default theApp;

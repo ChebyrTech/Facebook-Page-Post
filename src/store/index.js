@@ -1,56 +1,59 @@
-﻿import React from 'react';
-import { createStore, applyMiddleware, compose } from 'redux';
-import { Provider } from 'react-redux';
+﻿import { Provider } from 'react-redux';
 import { hashHistory } from 'react-router';
-import { syncHistoryWithStore } from 'react-router-redux';
-import { routerMiddleware } from 'react-router-redux';
+import { routerMiddleware, syncHistoryWithStore } from 'react-router-redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import logger from 'redux-logger';
+import React from 'react';
 
 import rootSaga from './sagas';
 import rootReducer from './reducers';
-import Routes from '../components/routes';
+import Routes from 'components/routes';
 
-export default class Store {
-    constructor() {
-        this.sagaMiddleware = createSagaMiddleware();
-        if (process.env.NODE_ENV === 'production') {
-            this.configureProd();
-        }
-        else {
-            this.configureDev();
-        }
-        this.sagaMiddleware.run(rootSaga);
+export default class StoreProvider
+{
+    constructor()
+    {
+        const componentRouter = routerMiddleware(hashHistory);
+        const sagaMiddleware = createSagaMiddleware();
 
-        this.history = syncHistoryWithStore(hashHistory, this.store);
+        if (process.env.NODE_ENV === 'production')
+        {
+            this.store = createStore(rootReducer, applyMiddleware(sagaMiddleware, componentRouter));
+        }
+        else
+        {
+            const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+            this.store = createStore(rootReducer, applyMiddleware(sagaMiddleware, logger(), componentRouter));
+
+            if (module.hot)
+            {
+                // Enable Webpack hot module replacement for reducers
+                module.hot.accept('./reducers', () =>
+                {
+                    const nextRootReducer = require('./reducers');
+                    this.store.replaceReducer(nextRootReducer);
+                });
+            }
+        }
+        sagaMiddleware.run(rootSaga);
+
+        const history = syncHistoryWithStore(hashHistory, this.store);
 
         this.provider = (
             <Provider store={this.store}>
-            <Routes history={this.history} />
+                <Routes history={history} />
             </Provider>);
-
-        window.store = this.store;
     }
 
-    configureDev() {
-        const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
-        this.store = createStore(rootReducer, applyMiddleware(this.sagaMiddleware, logger(), routerMiddleware(hashHistory)));
-
-        if (module.hot) {
-            // Enable Webpack hot module replacement for reducers
-            module.hot.accept('./reducers', () => {
-                const nextRootReducer = require('./reducers');
-                this.store.replaceReducer(nextRootReducer);
-            });
-        }
+    getStore()
+    {
+        return this.store;
     }
 
-    configureProd() {
-        this.store = createStore(rootReducer, applyMiddleware(this.sagaMiddleware, routerMiddleware(hashHistory)));
-    }
-
-    getProvider() {
+    getProvider()
+    {
         return this.provider;
     }
 }
